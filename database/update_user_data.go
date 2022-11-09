@@ -5,6 +5,8 @@ import (
 	"errors"
 )
 
+// UpdateUserData receives the database, a map[string]string and a user_id and updates user_id's columns
+// specified in the map. If the update is not possible for any reason, the function returns an error.
 func UpdateUserData(db *sql.DB, data map[string]string, user_id string) error {
 	query := "UPDATE users SET"
 	count := 0

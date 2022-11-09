@@ -1,7 +1,23 @@
 package server
 
-import "fmt"
+import (
+	"fmt"
+	"net/http"
+	"text/template"
+)
 
-func Test() {
-	fmt.Println("Hi from server package")
+func ServerHandler(w http.ResponseWriter, r *http.Request) {
+	// checking if the path is not correct and returning 400
+	if r.URL.Path != "/" {
+		fmt.Fprint(w, "404 page not found")
+		return
+	}
+	// parsing the html file
+	t, err := template.ParseFiles("server/public_html/index.html")
+	if err != nil {
+		fmt.Println(err)
+		fmt.Fprint(w, "500 - Interal Server Error")
+		return
+	}
+	t.Execute(w, nil)
 }

@@ -11,6 +11,10 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Users struct {
+	User_id   int
+	
+}
 func createTable(db *sql.DB) error {
 	// users table
 	createUsersTable := `CREATE TABLE users (
@@ -319,21 +323,21 @@ func exampleDbData(forumdb *sql.DB) {
 	insertPostCategory(forumdb, 1, 1)
 }
 
-func QueryResultDisplay(db *sql.DB) {
-	row, err := db.Query(`
-		SELECT users.name, posts.heading
-		FROM users
-		INNER JOIN posts ON users.user_id=posts.user_id
-		WHERE users.user_id == 1;`)
-	// Query the Database
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer row.Close()
-	for row.Next() { // Iterate and fetch the records
-		var name string
-		var heading string
-		row.Scan(&name, &heading)                 // Fetch the record
-		fmt.Println("user: ", name, "|", heading) // Print the record
-	}
-}
+// func QueryResultDisplay(db *sql.DB) {
+// 	row, err := db.Query(`
+// 		SELECT users.name, posts.heading
+// 		FROM users
+// 		INNER JOIN posts ON users.user_id=posts.user_id
+// 		WHERE users.user_id == 1;`)
+// 	// Query the Database
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	defer row.Close()
+// 	for row.Next() { // Iterate and fetch the records
+// 		var name string
+// 		var heading string
+// 		row.Scan(&name, &heading)                 // Fetch the record
+// 		fmt.Println("user: ", name, "|", heading) // Print the record
+// 	}
+// }

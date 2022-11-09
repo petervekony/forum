@@ -17,6 +17,17 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	u := d.Users{
+		User_id:    1,
+		Name:       "femi",
+		Email:      "femi@gritlab.ax",
+		Password:   "letsgohomenow",
+		Deactive:   0,
+		User_level: 1,
+	}
+	fmt.Println(u.GetEmail())
+	fmt.Println(u.GetName())
+
 	// DISPLAY INSERTED RECORDS
 	// d.QueryResultDisplay(forumdb)
 	fmt.Println()

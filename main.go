@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	// I delete the file to avoid duplicated records.
+	// checking if the database is exists or not
+	// then creating it
 	forumdb, err := g.DatabaseExist()
 	if err != nil {
 		fmt.Println(err.Error())

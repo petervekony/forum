@@ -12,9 +12,22 @@ import (
 )
 
 type Users struct {
-	User_id   int
-	
+	User_id    int
+	Name       string
+	Email      string
+	Password   string
+	Deactive   int
+	User_level int
 }
+
+func (u *Users) GetName() string {
+	return u.Name
+}
+
+func (u *Users) GetEmail() string {
+	return u.Email
+}
+
 func createTable(db *sql.DB) error {
 	// users table
 	createUsersTable := `CREATE TABLE users (
@@ -118,88 +131,96 @@ func createTable(db *sql.DB) error {
 }
 
 // insertUsers function inserts a record in the users table
-func insertUsers(db *sql.DB, name string, email string, password string, user_level int) {
+func insertUsers(db *sql.DB, name string, email string, password string, user_level int) (int, error) {
 	Password, _ := HashPassword(password)
 	insertUsers := `INSERT INTO users(name, email, Password, user_level) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertUsers) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return 0, err
 	}
-	_, err = statement.Exec(name, email, Password, user_level) // Execute statement with parameters
+	eff, err := statement.Exec(name, email, Password, user_level) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return 0, err
 	}
+	insertId, _ := eff.LastInsertId()
+	return int(insertId), nil
 }
 
 // function adds posts to the database
-func insertPost(db *sql.DB, user_id int, heading string, body string, insert_time string, image string) {
+func insertPost(db *sql.DB, user_id int, heading string, body string, insert_time string, image string) error {
 	insertPost := `INSERT INTO posts(user_id, heading, body, insert_time, image) VALUES (?, ?, ?, ?, ?)`
 	statement, err := db.Prepare(insertPost) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 	_, err = statement.Exec(user_id, heading, body, insert_time, image) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	return nil
 }
 
 // function inserts categories into the database
-func insertCategory(db *sql.DB, category_name string) {
+func insertCategory(db *sql.DB, category_name string) error {
 	insertCategory := `INSERT INTO categories(category_name) VALUES (?)`
 	statement, err := db.Prepare(insertCategory) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 	_, err = statement.Exec(category_name) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	return nil
 }
 
 // function inserts comments into the database
-func insertComment(db *sql.DB, post_id int, user_id int, body string, insert_time string) {
+func insertComment(db *sql.DB, post_id int, user_id int, body string, insert_time string) error {
 	insertComment := `INSERT INTO comments(post_id, user_id, body, insert_time) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertComment) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 	_, err = statement.Exec(post_id, user_id, body, insert_time) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	return nil
 }
 
 // function inserts reaction into the database
-func insertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reaction string) {
+func insertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reaction string) error {
 	insertReaction := `INSERT INTO reaction(user_id, post_id, comment_id, reaction) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertReaction) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
-	_, err = statement.Exec(user_id, post_id, comment_id, reaction) // Execute statement with parameters
+	val, err := statement.Exec(user_id, post_id, comment_id, reaction) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	fmt.Println(val.LastInsertId())
+	return nil
 }
 
 // function inserts post category into the database
-func insertPostCategory(db *sql.DB, post_id int, category_id int) {
+func insertPostCategory(db *sql.DB, post_id int, category_id int) error {
 	insertPostCategory := `INSERT INTO postscategory(post_id, category_id) VALUES (?, ?)`
 	statement, err := db.Prepare(insertPostCategory) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
 	_, err = statement.Exec(post_id, category_id) // Execute statement with parameters
 	if err != nil {
-		fmt.Println(err.Error())
+		return err
 	}
+	return nil
 }
 
 // hash password returned the password string as a hash to be stored in the database
@@ -323,21 +344,21 @@ func exampleDbData(forumdb *sql.DB) {
 	insertPostCategory(forumdb, 1, 1)
 }
 
-// func QueryResultDisplay(db *sql.DB) {
-// 	row, err := db.Query(`
-// 		SELECT users.name, posts.heading
-// 		FROM users
-// 		INNER JOIN posts ON users.user_id=posts.user_id
-// 		WHERE users.user_id == 1;`)
-// 	// Query the Database
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	defer row.Close()
-// 	for row.Next() { // Iterate and fetch the records
-// 		var name string
-// 		var heading string
-// 		row.Scan(&name, &heading)                 // Fetch the record
-// 		fmt.Println("user: ", name, "|", heading) // Print the record
-// 	}
-// }
+func QueryResultDisplay(db *sql.DB) {
+	row, err := db.Query(`
+		SELECT users.name, posts.heading
+		FROM users
+		INNER JOIN posts ON users.user_id=posts.user_id
+		WHERE users.user_id == 1;`)
+	// Query the Database
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer row.Close()
+	for row.Next() { // Iterate and fetch the records
+		var name string
+		var heading string
+		row.Scan(&name, &heading)                 // Fetch the record
+		fmt.Println("user: ", name, "|", heading) // Print the record
+	}
+}

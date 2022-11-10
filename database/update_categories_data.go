@@ -5,12 +5,17 @@ import (
 	"errors"
 )
 
+// UpdateCategoriesData updates the category with the correct category_id with data specified
+// in a map[string]string. If category_id doesn't exist or there is something wrong with the statement,
+// the function returns an error.
 func UpdateCategoriesData(db *sql.DB, data map[string]string, category_id string) error {
+	// Checking if category_id exists
 	search := "SELECT * FROM categories WHERE category_id=?"
 	err := db.QueryRow(search, category_id).Scan()
 	if err == sql.ErrNoRows {
 		return err
 	}
+
 	query := "UPDATE categories SET"
 	counter := 0
 	for key, value := range data {

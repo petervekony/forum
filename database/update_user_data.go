@@ -8,6 +8,13 @@ import (
 // UpdateUserData receives the database, a map[string]string and a user_id and updates user_id's columns
 // specified in the map. If the update is not possible for any reason, the function returns an error.
 func UpdateUserData(db *sql.DB, data map[string]string, user_id string) error {
+	// Checking if post_id exists
+	search := "SELECT * FROM users WHERE user_id=?"
+	err := db.QueryRow(search, user_id).Scan()
+	if err == sql.ErrNoRows {
+		return err
+	}
+
 	query := "UPDATE users SET"
 	count := 0
 	for key, val := range data {

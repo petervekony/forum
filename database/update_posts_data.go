@@ -16,6 +16,7 @@ func UpdatePostsData(db *sql.DB, data map[string]string, post_id string) error {
 	if err == sql.ErrNoRows {
 		return err
 	}
+
 	time := time.Now().Format("2006-01-02 15:04:05")
 	query := "UPDATE posts SET"
 	count := 0

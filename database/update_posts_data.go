@@ -29,8 +29,7 @@ func UpdatePostsData(db *sql.DB, data map[string]string, post_id string) error {
 		query += " " + key + "='" + val + "'"
 		count++
 	}
-	query += ",update_time='" + time + "'"
-	query += " WHERE post_id=" + post_id
+	query += ", update_time='" + time + "' WHERE post_id=" + post_id
 	statement, err := db.Prepare(query)
 	if err != nil {
 		return err

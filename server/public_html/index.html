@@ -8,17 +8,11 @@
         <link rel="stylesheet" href="css/bootstrap-icons.css">
     </head>
     <body class="bg-dark">
-        <nav class="navbar navbar-expand-md navbar-dark bg-secondary">
+        <nav class="navbar navbar-expand-md navbar-light bg-info">
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="index.html">GRITFACE</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
                     </li>
                 </ul>
                 <ul class="nav navbar-nav">
@@ -32,6 +26,11 @@
                                 </div>
                             </div>
                         </form>
+                    </li>
+                    <li class="nav-item active offset-2">
+                        <button class="btn bg-dark navbar-light text-end"><a class=nav-link href="#"></a>Sign up</button>
+                        <button class="btn bg-dark"><a class=nav-link href="#"></a>Login</button>
+                        
                     </li>
                 </ul>
             </div>
@@ -60,22 +59,25 @@
                 <div class="col-8 offset-2 text-white border rounded my-2 py-2" id="post_div">
                     <div class="col-10 offset-1 my-2" id="post_heading">This is the first post!</div>
                     <div class="col-10 offset-1" id="post_body">
-                        <div class="border bg-warning" id="post_image">image</div>
+                        <div class="border bg-info text-center" id="post_image">image</div>
                         <div class="text-justify my-2">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque vehicula arcu, sed molestie dui facilisis a. Nam vestibulum eu sapien eu suscipit. Maecenas at nulla orci. In auctor nisl quis congue commodo. Maecenas sodales nisi augue, at bibendum ipsum euismod non. Praesent rhoncus dui justo, sed vulputate dui laoreet ac. Fusce ultricies eros ut pulvinar egestas. Suspendisse tristique risus eu luctus congue. Suspendisse velit est, ullamcorper et lorem in, egestas ullamcorper ipsum. Etiam venenatis mauris justo, maximus fermentum lacus mattis sed. Mauris ac suscipit massa. Vestibulum quis ligula ac erat ornare convallis. Quisque sed tellus vitae erat molestie facilisis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Maecenas id urna justo.
                         <div class="row">
-                        <div class="col-2 order-0 text-left" id="post_insert_time">12.11</div>
-                        <div class="col-2 offset-8 order-1 text-center" id="post_mod_time">01.19</div>
+                        <div class="col-6 order-0 text-left" id="post_insert_time">12.11</div>
+                        <div class="col-6 order-1 text-end" id="post_mod_time">01.19</div>
                         </div>
                     </div>
-                    <div class="col-3 mr-2 bg-secondary text-left" id="post_reactions">👍 👎 💛 19</div>
+                    <div class="row">
+                    <div class="col-5 mx-1" id="post_reactions"><button class="btn border rounded bg-dark">👍</button>17
+                        <button class="btn border rounded bg-dark">👎</button>5
+                        <button class="btn border rounded bg-dark">💛</button>9</div>
+                    </div>
                     <div class="row my-2" id="post_comments">
-                        <div class="col-2 mx-1 bg-warning">img</div>
-                        <div class="col-9 bg-secondary" id="post_comments">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque vehicula arcu, sed molestie dui facilisis a.</div>
+                        <div class="col-2 mx-1 border rounded bg-info">img</div>
+                        <div class="col-9 border rounded bg-secondary" id="post_comments">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse scelerisque vehicula arcu, sed molestie dui facilisis a.</div>
                     </div>
                 
-
-                </div>
+                    </div>
                 </div>
 
 

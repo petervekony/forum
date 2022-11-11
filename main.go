@@ -23,7 +23,7 @@ func main() {
 		Email:      "femi@gritlab.ax",
 		Password:   "letsgohomenow",
 		Deactive:   0,
-		User_level: 1,
+		User_level: "admin",
 	}
 	fmt.Println(u.GetEmail())
 	fmt.Println(u.GetName())

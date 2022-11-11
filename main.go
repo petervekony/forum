@@ -33,7 +33,7 @@ func main() {
 	fmt.Println()
 	fs := http.FileServer(http.Dir("server/public_html/static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-	http.HandleFunc("/", s.ServerHandler)
+	http.HandleFunc("/", s.FrontPage)
 	fmt.Println("forum loaded in ", time.Since(start))
 	fmt.Println()
 	fmt.Println("Server is running on port 80...")

@@ -2,7 +2,9 @@ async function initPage() {
     await fetch("/posts")
       .then((response) => response.json())
       .then(function (json) {
-        json.map(function (postJSON) {
+        console.log(json)
+        for (const [key, postJSON] of Object.entries(json)) {
+
           const postSection = document.getElementById("post_section");
   
           const postDiv = document.createElement("div");
@@ -45,7 +47,7 @@ async function initPage() {
           postHeading.textContent = postJSON.heading;
           postInsertTime.textContent = postJSON.insert_time;
           postModTime.textContent = postJSON.update_time;
-          postComments.textContent = postJSON.post_comments;
+          postComments.textContent = JSON.stringify(postJSON.comments);
           postReactions.textContent = postJSON.post_reactions;
           postImage.textContent = postJSON.image;
   
@@ -61,7 +63,7 @@ async function initPage() {
           postReactions.appendChild(postLike);
           postReactions.appendChild(postHeart);
           console.log(postJSON)
-        });
+        };
       });
   }
   

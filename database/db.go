@@ -42,7 +42,7 @@ func CheckPasswordHash(password, hash string) bool {
 }
 
 // Connect to database
-func dbConnect() (*sql.DB, error) {
+func DbConnect() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
 

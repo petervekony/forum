@@ -4,7 +4,6 @@ import (
 	"fmt"
 	d "gritface/database"
 	s "gritface/server"
-	"log"
 	"net/http"
 	"time"
 )
@@ -37,5 +36,8 @@ func main() {
 	fmt.Println("forum loaded in ", time.Since(start))
 	fmt.Println()
 	fmt.Println("Server is running on port 80...")
-	go log.Fatalln(http.ListenAndServe("0.0.0.0:80", nil))
+	err = http.ListenAndServe(":80", nil)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
 }

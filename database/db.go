@@ -28,211 +28,6 @@ func (u *Users) GetEmail() string {
 	return u.Email
 }
 
-func createTable(db *sql.DB) error {
-	// users table
-	createUsersTable := `CREATE TABLE users (
-		"user_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,		
-		"name" TEXT NOT NULL UNIQUE,
-		"email" TEXT NOT NULL UNIQUE,
-		"password" TEXT NOT NULL,
-		"deactive" INTEGER DEFAULT 0,
-		"user_level" TEXT
-	  );`
-
-	usersStatement, err := db.Prepare(createUsersTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	usersStatement.Exec() // Execute SQL Statements
-
-	// posts tables
-	createPostsTable := `CREATE TABLE posts (
-		"post_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
-		"user_id" INTEGER NOT NULL,		
-		"heading" TEXT NOT NULL,
-		"body" TEXT NOT NULL,
-		"closed_user" INTEGER default '0',
-		"closed_admin" INTEGER default '0',
-		"closed_date" TEXT DEFAULT '',
-		"insert_time" TEXT NOT NULL,
-		"update_time" TEXT NOT NULL DEFAULT '', 
-		"image" TEXT
-	  );`
-	postsStatement, err := db.Prepare(createPostsTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	postsStatement.Exec() // Execute SQL Statements
-
-	// comments table
-	createcommentsTable := `CREATE TABLE comments (
-		"comment_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
-		"post_id" INTEGER NOT NULL,
-		"user_id" INTEGER NOT NULL,
-		"body" TEXT NOT NULL,
-		"insert_time" TEXT NOT NULL
-	  );`
-
-	commentsStatement, err := db.Prepare(createcommentsTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	commentsStatement.Exec() // Execute SQL Statements
-
-	// categories table
-	createcategoriesTable := `CREATE TABLE categories (
-		"category_id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
-		"category_name" TEXT NOT NULL UNIQUE,
-		"closed" INTEGER default 0
-	  );`
-	categoriesStatement, err := db.Prepare(createcategoriesTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	categoriesStatement.Exec() // Execute SQL Statements
-
-	// reaction table
-	createreactionTable := `CREATE TABLE reaction (
-		"user_id" INTEGER NOT NULL,
-		"post_id" INTEGER NOT NULL,
-		"comment_id" INTEGER NOT NULL,
-		"reaction" text NOT NULL,
-		PRIMARY KEY (user_id, post_id, comment_id)
-	  );`
-	reactionStatement, err := db.Prepare(createreactionTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	reactionStatement.Exec() // Execute SQL Statements
-
-	//post category table
-	createpostscategoryTable := `CREATE TABLE postscategory (
-		"category_id" INTEGER NOT NULL,
-		"post_id" INTEGER NOT NULL
-	  );`
-	postcategoryStatement, err := db.Prepare(createpostscategoryTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	postcategoryStatement.Exec() // Execute SQL Statements
-
-	createUserLevelTable := `CREATE TABLE user_level (
-		"user_level" TEXT NOT NULL UNIQUE,
-		"value" INTEGER NOT NULL,
-		PRIMARY KEY (user_level, value)
-	)`
-	userlevelStatement, err := db.Prepare(createUserLevelTable) // Prepare SQL Statement
-	if err != nil {
-		return err
-	}
-	userlevelStatement.Exec() // Execute SQL Statements
-
-	return nil
-}
-
-// returns the row affected and error
-// insertUsers function inserts a record in the users table
-func insertUsers(db *sql.DB, name string, email string, password string, user_level int) (int, error) {
-	hashedPwd, _ := HashPassword(password)
-	insertUsers := `INSERT INTO users(name, email, Password, user_level) VALUES (?, ?, ?, ?)`
-	statement, err := db.Prepare(insertUsers) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(name, email, hashedPwd, user_level) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
-// returns the row affected and error
-// function adds posts to the database
-func insertPost(db *sql.DB, user_id int, heading string, body string, insert_time string, image string) (int, error) {
-	insertPost := `INSERT INTO posts(user_id, heading, body, insert_time, image) VALUES (?, ?, ?, ?, ?)`
-	statement, err := db.Prepare(insertPost) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(user_id, heading, body, insert_time, image) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
-// returns the row affected and error
-// function inserts categories into the database
-func insertCategory(db *sql.DB, category_name string) (int, error) {
-	insertCategory := `INSERT INTO categories(category_name) VALUES (?)`
-	statement, err := db.Prepare(insertCategory) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(category_name) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
-// returns the row affected and error
-// function inserts comments into the database
-func insertComment(db *sql.DB, post_id int, user_id int, body string, insert_time string) (int, error) {
-	insertComment := `INSERT INTO comments(post_id, user_id, body, insert_time) VALUES (?, ?, ?, ?)`
-	statement, err := db.Prepare(insertComment) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(post_id, user_id, body, insert_time) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
-// function inserts reaction into the database
-// returns the row affected and error
-func insertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reaction string) (int, error) {
-	insertReaction := `INSERT INTO reaction(user_id, post_id, comment_id, reaction) VALUES (?, ?, ?, ?)`
-	statement, err := db.Prepare(insertReaction) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(user_id, post_id, comment_id, reaction) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
-// function inserts post category into the database
-func insertPostCategory(db *sql.DB, post_id int, category_id int) (int, error) {
-	insertPostCategory := `INSERT INTO postscategory(post_id, category_id) VALUES (?, ?)`
-	statement, err := db.Prepare(insertPostCategory) // Prepare statement.
-	// This is good to avoid SQL injections
-	if err != nil {
-		return 0, err
-	}
-	val, err := statement.Exec(post_id, category_id) // Execute statement with parameters
-	if err != nil {
-		return 0, err
-	}
-	insertId, _ := val.LastInsertId()
-	return int(insertId), nil
-}
-
 // hash password returned the password string as a hash to be stored in the database
 // this is doen for security reasons
 func HashPassword(password string) (string, error) {
@@ -374,4 +169,19 @@ func QueryResultDisplay(db *sql.DB) {
 		row.Scan(&name, &heading)                 // Fetch the record
 		fmt.Println("user: ", name, "|", heading) // Print the record
 	}
+}
+
+func RetrieveUsers(db *sql.DB, userData map[string]string) []Users {
+	var users []Users
+	rows, err := db.Query("SELECT * FROM users WHERE user_id = ?", userData["user_id"])
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var user Users
+		rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.User_level)
+		users = append(users, user)
+	}
+	return users
 }

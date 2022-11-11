@@ -12,7 +12,7 @@ func main() {
 	start := time.Now()
 	// checking if the database is exists or not
 	// then creating it
-	_, err := d.DatabaseExist()
+	db, err := d.DatabaseExist()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -26,6 +26,7 @@ func main() {
 	}
 	fmt.Println(u.GetEmail())
 	fmt.Println(u.GetName())
+	fmt.Println(d.RetrieveUsers(db, 1))
 
 	// DISPLAY INSERTED RECORDS
 	// d.QueryResultDisplay(forumdb)

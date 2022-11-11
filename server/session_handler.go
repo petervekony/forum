@@ -13,7 +13,7 @@ type SessionManager struct {
 }
 
 type SessionData struct {
-	uid int
+	uid string
 	ip  string
 }
 

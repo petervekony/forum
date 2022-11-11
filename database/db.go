@@ -17,7 +17,7 @@ type Users struct {
 	Email      string
 	Password   string
 	Deactive   int
-	User_level int
+	User_level string
 }
 
 func (u *Users) GetName() string {
@@ -36,7 +36,7 @@ func createTable(db *sql.DB) error {
 		"email" TEXT NOT NULL UNIQUE,
 		"password" TEXT NOT NULL,
 		"deactive" INTEGER DEFAULT 0,
-		"user_level" INTEGER
+		"user_level" TEXT
 	  );`
 
 	usersStatement, err := db.Prepare(createUsersTable) // Prepare SQL Statement
@@ -118,7 +118,7 @@ func createTable(db *sql.DB) error {
 
 	createUserLevelTable := `CREATE TABLE user_level (
 		"user_level" TEXT NOT NULL UNIQUE,
-		VALUE INTEGER NOT NULL,
+		"value" INTEGER NOT NULL,
 		PRIMARY KEY (user_level, value)
 	)`
 	userlevelStatement, err := db.Prepare(createUserLevelTable) // Prepare SQL Statement
@@ -133,14 +133,14 @@ func createTable(db *sql.DB) error {
 // returns the row affected and error
 // insertUsers function inserts a record in the users table
 func insertUsers(db *sql.DB, name string, email string, password string, user_level int) (int, error) {
-	Password, _ := HashPassword(password)
+	hashedPwd, _ := HashPassword(password)
 	insertUsers := `INSERT INTO users(name, email, Password, user_level) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertUsers) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
 		return 0, err
 	}
-	val, err := statement.Exec(name, email, Password, user_level) // Execute statement with parameters
+	val, err := statement.Exec(name, email, hashedPwd, user_level) // Execute statement with parameters
 	if err != nil {
 		return 0, err
 	}
@@ -250,7 +250,8 @@ func CheckPasswordHash(password, hash string) bool {
 func DatabaseExist() (*sql.DB, error) {
 	newDb := false
 	databaseFile := "forum-db.db"
-	if _, err := os.Stat(databaseFile); os.IsNotExist(err) {
+	_, err := os.Stat(databaseFile)
+	if os.IsNotExist(err) {
 		fmt.Println("Creating the forum database ...")
 		file, err := os.Create(databaseFile) // Create Sqlite file
 		if err != nil {
@@ -260,6 +261,8 @@ func DatabaseExist() (*sql.DB, error) {
 		fmt.Println("database created")
 
 		newDb = true
+	} else if err != nil {
+		return nil, err
 	}
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile) // Open the created Sqlite3 File
 	if err != nil {

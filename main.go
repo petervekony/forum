@@ -16,17 +16,12 @@ func main() {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	u := d.Users{
-		User_id:    1,
-		Name:       "femi",
-		Email:      "femi@gritlab.ax",
-		Password:   "letsgohomenow",
-		Deactive:   0,
-		User_level: "admin",
-	}
-	fmt.Println(u.GetEmail())
-	fmt.Println(u.GetName())
-	fmt.Println(d.RetrieveUsers(db, 1))
+	user := make(map[string]string)
+	user["name"] = "%te%"
+	user["email"] = "%@gritlab.ax%"
+	fmt.Println("user map is", user)
+	users, _ := d.GetUsers(db, user)
+	fmt.Println("user info is", users)
 
 	// DISPLAY INSERTED RECORDS
 	// d.QueryResultDisplay(forumdb)

@@ -80,7 +80,7 @@ func createTable(db *sql.DB) error {
 	reactionStatement.Exec() // Execute SQL Statements
 
 	//post category table
-	createpostscategoryTable := `CREATE TABLE postscategory (
+	createpostscategoryTable := `CREATE TABLE postsCategory (
 		"category_id" INTEGER NOT NULL,
 		"post_id" INTEGER NOT NULL
 	  );`
@@ -90,7 +90,7 @@ func createTable(db *sql.DB) error {
 	}
 	postcategoryStatement.Exec() // Execute SQL Statements
 
-	createUserLevelTable := `CREATE TABLE user_level (
+	createUserLevelTable := `CREATE TABLE userLevel (
 		"user_level" TEXT NOT NULL UNIQUE,
 		"value" INTEGER NOT NULL,
 		PRIMARY KEY (user_level, value)

@@ -3,7 +3,6 @@ package database
 import (
 	"bufio"
 	"database/sql"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -20,7 +19,48 @@ type Users struct {
 	Deactive   int
 	User_level string
 }
+type Posts struct {
+	Post_id      int
+	User_id      int
+	Heading      string
+	Body         string
+	Closed_user  int
+	Closed_admin int
+	Closed_date  string
+	Insert_time  string
+	Update_time  string
+	Image        string
+}
 
+type Comments struct {
+	Comment_id  int
+	Post_id     int
+	User_id     int
+	Body        string
+	Insert_time string
+}
+
+type Categories struct {
+	Category_id   int
+	Category_Name string
+	Closed        int
+}
+
+type Reaction struct {
+	User_id    int
+	Post_id    int
+	Comment_id int
+	Reaction   string
+}
+
+type PostCategory struct {
+	Category_id int
+	Post_id     int
+}
+type UserLevel struct {
+	User_level    string
+	value 	   int
+}
 func (u *Users) GetName() string {
 	return u.Name
 }
@@ -182,62 +222,4 @@ func QueryResultDisplay(db *sql.DB) {
 		row.Scan(&name, &heading)                 // Fetch the record
 		fmt.Println("user: ", name, "|", heading) // Print the record
 	}
-}
-
-// GET USERS FROM DB
-func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
-	query := "select * from users WHERE"
-	count := 0
-	for k, v := range userData {
-		if k == "password" {
-			return nil, errors.New("password is not a valid search parameter")
-		}
-		if count > 0 {
-			query += " AND "
-		}
-		if k == "free_query" {
-			query += " " + v
-		} else {
-			query += " " + k + "='" + v + "'"
-		}
-		count++
-	}
-	var users []Users
-	rows, err := db.Query(query)
-	if err != nil {
-		fmt.Println(err)
-		return nil, err
-	}
-	defer rows.Close()
-	for rows.Next() { // Iterate and fetch the records
-		var user Users
-		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Deactive, &user.User_level); // Fetch the record
-		err != nil {
-			fmt.Println(err)
-			return users, err
-		}
-		users = append(users, user)
-	}
-	return users, nil
-}
-
-func testGetUser() {
-	user := make(map[string]string)
-	//user["name"] = "%te%"
-	//user["email"] = "%@gritlab.ax%"
-	//user["user_id"] = "1"
-	user["free_query"] = "user_id=1 OR name LIKE '%t%'"
-	db, err := DbConnect()
-	if err != nil{
-		fmt.Println(err)
-	}
-	users, err := GetUsers(db, user)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("user info is", users)
-}
-
-func init() {
-	testGetUser()
 }

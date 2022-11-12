@@ -3,6 +3,7 @@ package database
 import (
 	"bufio"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -183,17 +184,39 @@ func QueryResultDisplay(db *sql.DB) {
 	}
 }
 
-func RetrieveUsers(db *sql.DB, userData map[string]string) []Users {
+// GET USERS FROM DB
+func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
+	query := "select * from users WHERE"
+	count := 0
+	for k, v := range userData {
+		if k == "password" {
+			return nil, errors.New("password is not a valid search parameter")
+		}
+		if count > 0 {
+			query += " AND "
+		}
+		if k == "free_query" {
+			query += " " + v
+		} else {
+			query += " " + k + "='" + v + "'"
+		}
+		count++
+	}
 	var users []Users
-	rows, err := db.Query("SELECT * FROM users WHERE user_id = ?", userData["user_id"])
+	rows, err := db.Query(query)
 	if err != nil {
 		fmt.Println(err)
+		return nil, err
 	}
 	defer rows.Close()
-	for rows.Next() {
+	for rows.Next() { // Iterate and fetch the records
 		var user Users
-		rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.User_level)
+		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Deactive, &user.User_level); // Fetch the record
+		err != nil {
+			fmt.Println(err)
+			return users, err
+		}
 		users = append(users, user)
 	}
-	return users
+	return users, nil
 }

@@ -38,7 +38,7 @@ func UpdatePostsData(db *sql.DB, data map[string]string, post_id string) error {
 		count++
 	}
 	query += ", update_time='" + time + "' WHERE post_id=" + post_id
-	statement, err := db.Prepare(query)
+	statement, err := db.Prepare(query) 
 	if err != nil {
 		return err
 	}

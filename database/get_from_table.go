@@ -248,6 +248,8 @@ func getUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, err
 	}
 	return userLevels, nil
 }
+
+// for test remove at the end
 func test() {
 	user := make(map[string]string)
 	post := make(map[string]string)

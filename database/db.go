@@ -220,3 +220,24 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	}
 	return users, nil
 }
+
+func testGetUser() {
+	user := make(map[string]string)
+	//user["name"] = "%te%"
+	//user["email"] = "%@gritlab.ax%"
+	//user["user_id"] = "1"
+	user["free_query"] = "user_id=1 OR name LIKE '%t%'"
+	db, err := DbConnect()
+	if err != nil{
+		fmt.Println(err)
+	}
+	users, err := GetUsers(db, user)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("user info is", users)
+}
+
+func init() {
+	testGetUser()
+}

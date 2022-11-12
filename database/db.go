@@ -3,6 +3,7 @@ package database
 import (
 	"bufio"
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -176,13 +177,19 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	query := "select * from users WHERE"
 	count := 0
 	for k, v := range userData {
+		if k == "password" {
+			return nil, errors.New("password is not a valid search parameter")
+		}
 		if count > 0 {
 			query += " AND "
 		}
-		query += " " + k + " LIKE '" + v + "'"
+		if k == "free_query" {
+			query += " " + v
+		} else {
+			query += " " + k + "='" + v + "'"
+		}
 		count++
 	}
-	fmt.Println(query)
 	var users []Users
 	rows, err := db.Query(query)
 	if err != nil {
@@ -197,7 +204,6 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 			fmt.Println(err)
 			return users, err
 		}
-		fmt.Println(user)
 		users = append(users, user)
 	}
 	return users, nil

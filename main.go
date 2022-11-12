@@ -17,10 +17,15 @@ func main() {
 		fmt.Println(err.Error())
 	}
 	user := make(map[string]string)
-	user["name"] = "%te%"
-	user["email"] = "%@gritlab.ax%"
-	fmt.Println("user map is", user)
-	users, _ := d.GetUsers(db, user)
+	//user["name"] = "%te%"
+	//user["email"] = "%@gritlab.ax%"
+	//user["user_id"] = "1"
+	user["free_query"] = "user_id=1 OR name LIKE '%t%'"
+
+	users, err := d.GetUsers(db, user)
+	if err != nil {
+		fmt.Println(err)
+	}
 	fmt.Println("user info is", users)
 
 	// DISPLAY INSERTED RECORDS

@@ -10,20 +10,19 @@
 <body>
     <h1>WELCOME TO GRITFACE</h1>
 </body>
-=========
 <html>
     <head>
         <title>Gritface</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-        <link rel="stylesheet" href="server/public_html/static/css/style.css">
-        <link rel="stylesheet" href="server/public_html/static/css/bootstrap-icons.css">    <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FORUM PROJECT</title>
     <script src="server/public_html/static/js/script.js"></script>
 </head>
-<body class="bg-dark" onload="initPage()">
+<body class="bg-dark">
         <nav class="navbar navbar-expand-md navbar-light bg-info">
             <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
                 <ul class="navbar-nav mr-auto">
@@ -44,13 +43,71 @@
                         </form>
                     </li>
                     <li class="nav-item active offset-2">
-                        <button class="btn bg-dark navbar-light text-end"><a class=nav-link href="#"></a>Sign up</button>
-                        <button class="btn bg-dark"><a class=nav-link href="#"></a>Login</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#signup_modal">Sign up</button>
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#login_modal">Login</button>
                         
                     </li>
                 </ul>
             </div>
         </nav>
+
+        <div id="login_modal" class="modal fade" role="dialog">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content bg-dark text-info">
+                <div class="modal-header text-center">
+                  <h4 class="modal-title font-weight-bold">Login</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="md-form mb-5">
+                    <input type="email" id="orangeForm-email" class="form-control validate bg-dark">
+                    <label data-error="wrong" data-success="right" for="orangeForm-email">email</label>
+                  </div>
+                  <div class="md-form mb-4">
+                    <i class="fas fa-lock prefix grey-text"></i>
+                    <input type="password" id="orangeForm-pass" class="form-control validate bg-dark">
+                    <label data-error="wrong" data-success="right" for="orangeForm-pass">password</label>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary">Login</button>
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="signup_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content bg-dark text-info">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <i class="fas fa-user prefix grey-text"></i>
+          <input type="text" id="orangeForm-name" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="orangeForm-name">Your name</label>
+        </div>
+        <div class="md-form mb-5">
+          <i class="fas fa-envelope prefix grey-text"></i>
+          <input type="email" id="orangeForm-email" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="orangeForm-email">Your email</label>
+        </div>
+
+        <div class="md-form mb-4">
+          <i class="fas fa-lock prefix grey-text"></i>
+          <input type="password" id="orangeForm-pass" class="form-control validate">
+          <label data-error="wrong" data-success="right" for="orangeForm-pass">Your password</label>
+        </div>
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="btn btn-deep-orange">Sign up</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
     <h1>WELCOME TO GRITFACE</h1>
@@ -79,6 +136,25 @@
                 
                     </div>
                 </div>
+                <div class="modal" tabindex="-1" role="dialog" id="login_modal">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Modal title</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Login</p>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-primary">Login</button>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
 
 
@@ -86,5 +162,4 @@
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         </div>
     </body>
->>>>>>>>> Temporary merge branch 2
 </html>

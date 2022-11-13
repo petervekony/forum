@@ -1,3 +1,4 @@
+window.onload=initPage();
 async function initPage() {
     await fetch("/posts")
       .then((response) => response.json())

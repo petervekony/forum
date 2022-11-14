@@ -9,6 +9,7 @@ import (
 // Get users from database
 func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	query := "select * from users WHERE"
+	fmt.Println(query)
 	count := 0
 	for k, v := range userData {
 		if k == "password" {

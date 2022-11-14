@@ -58,9 +58,10 @@ type PostCategory struct {
 	Post_id     int
 }
 type UserLevel struct {
-	User_level    string
-	value 	   int
+	User_level string
+	value      int
 }
+
 func (u *Users) GetName() string {
 	return u.Name
 }
@@ -123,7 +124,7 @@ func DatabaseExist() (*sql.DB, error) {
 			fmt.Println(err.Error())
 		} else {
 			// INSERT RECORDS
-			exampleDbData(forumdb)
+			//exampleDbData(forumdb)
 		}
 	}
 
@@ -178,32 +179,32 @@ func DatabaseExist() (*sql.DB, error) {
 	return forumdb, nil
 }
 
-func exampleDbData(forumdb *sql.DB) {
-	insertUsers(forumdb, "peter", "peter@gritlab.ax", "bachelor", 0)
-	insertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
-	insertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)
-	insertUsers(forumdb, "christian", "christain@gritlab.ax", "kingofhanko", 0)
-	insertUsers(forumdb, "taneli", "tvntvn@gritlab.ax", "kakka", 1)
-	insertUsers(forumdb, "jussi", "jussi@gritlab.ax", "kakka", 0)
-	insertUsers(forumdb, "andre", "andre@gritlab.ax", "kakka923rfg", 0)
-	insertPost(forumdb, 1, "football", "football is a great sport", "2017-01-01 00:00:00", "")
-	insertPost(forumdb, 3, "Improving Data Science", "I wished to rebuild the whole data science world", "2017-01-01 00:00:45", "")
-	insertPost(forumdb, 6, "Eating at a restaurants", "Me gusta is the best burger in Mariehamn", "2017-01-01 00:23:00", "")
-	insertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "")
-	insertCategory(forumdb, "sport")
-	insertCategory(forumdb, "food")
-	insertCategory(forumdb, "hiking")
-	insertCategory(forumdb, "data science")
-	insertCategory(forumdb, "programming")
-	insertCategory(forumdb, "music")
-	insertCategory(forumdb, "movies")
-	insertCategory(forumdb, "books")
-	insertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
-	insertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
-	insertReaction(forumdb, 1, 1, 1, "😀")
-	insertReaction(forumdb, 1, 1, 2, "💩")
-	insertPostCategory(forumdb, 1, 1)
-}
+// func exampleDbData(forumdb *sql.DB) {
+// 	insertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
+// 	insertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
+// 	insertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)
+// 	insertUsers(forumdb, "christian", "christain@gritlab.ax", "kingofhanko", 0)
+// 	insertUsers(forumdb, "taneli", "tvntvn@gritlab.ax", "kakka", 1)
+// 	insertUsers(forumdb, "jussi", "jussi@gritlab.ax", "kakka", 0)
+// 	insertUsers(forumdb, "andre", "andre@gritlab.ax", "kakka923rfg", 0)
+// 	insertPost(forumdb, 1, "football", "football is a great sport", "2017-01-01 00:00:00", "")
+// 	insertPost(forumdb, 3, "Improving Data Science", "I wished to rebuild the whole data science world", "2017-01-01 00:00:45", "")
+// 	insertPost(forumdb, 6, "Eating at a restaurants", "Me gusta is the best burger in Mariehamn", "2017-01-01 00:23:00", "")
+// 	insertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "")
+// 	insertCategory(forumdb, "sport")
+// 	insertCategory(forumdb, "food")
+// 	insertCategory(forumdb, "hiking")
+// 	insertCategory(forumdb, "data science")
+// 	insertCategory(forumdb, "programming")
+// 	insertCategory(forumdb, "music")
+// 	insertCategory(forumdb, "movies")
+// 	insertCategory(forumdb, "books")
+// 	insertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
+// 	insertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
+// 	insertReaction(forumdb, 1, 1, 1, "😀")
+// 	insertReaction(forumdb, 1, 1, 2, "💩")
+// 	insertPostCategory(forumdb, 1, 1)
+// }
 
 func QueryResultDisplay(db *sql.DB) {
 	row, err := db.Query(`

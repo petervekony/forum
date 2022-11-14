@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
 )
 
 // returns the row affected and error
@@ -10,7 +9,6 @@ import (
 func InsertUsers(db *sql.DB, name string, email string, password string, user_level int) (int, error) {
 	insertUsers := `INSERT INTO users(name, email, Password, user_level) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertUsers) // Prepare statement.
-	fmt.Println("statement: ", statement)
 	// This is good to avoid SQL injections
 	if err != nil {
 		return 0, err

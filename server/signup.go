@@ -60,7 +60,7 @@ func EscapeString(value string) string {
 
 // function to sign up a user
 func SignUp(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Printf("User signing up. Name:%v, email:%v, password:%v, confirm password:%v\n", r.FormValue("username"), r.FormValue("email"), r.FormValue("password"), r.FormValue("Confirm Password"))
 	// If logged in, redirect to front page
 	// If not logged in, show sign up page
 	// check if session is alive
@@ -78,7 +78,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// User is not logged in, show sign up page
-	fmt.Fprintf(w, "User is not logged in")
+	// fmt.Fprintf(w, "User is not logged in")
 	// user trying to sign up
 	if r.Method == "POST" {
 		// get form values
@@ -110,6 +110,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		}
 		// make sure that no fields are empty or non ascii
 		if !IsAscii(name) || !IsAscii(email) || !IsAscii(password) || !IsAscii(confirmPwd) {
+			// for testing
+			fmt.Printf("name: %v email: %v password: %v confrimPwd: %v\n", IsAscii(name), IsAscii(email), IsAscii(password), IsAscii(confirmPwd))
 			fmt.Fprintln(w, "Internal server error", http.StatusInternalServerError)
 			http.Redirect(w, r, "/signup", http.StatusSeeOther)
 			return
@@ -150,9 +152,12 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		} else {
-			fmt.Fprintf(w, "Signup successful")
+			// fmt.Fprintf(w, "Signup successful")
 			// needed to finalize endpoint
+			fmt.Printf("Sign up successful for %v\n", r.FormValue("username"))
+			// check session for pop up log in modal/give log in message in some way
 			http.Redirect(w, r, "/", http.StatusSeeOther)
+
 			return
 		}
 	}

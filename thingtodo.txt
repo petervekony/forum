@@ -15,6 +15,6 @@ https://stackoverflow.com/questions/31647406/mysql-real-escape-string-equivalent
 
 check how to go from http to htps
 
-check rate limiting for DoS attack
+check rate limiting for DoS attack.
 
 check how to use google authentication**

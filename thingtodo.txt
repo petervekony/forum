@@ -1,29 +1,22 @@
 for tosin
 
-write signup function
-check email format
-check non empty string for user name and email
-no need for password
+write signup function - done
+check email format - done
+check non empty string for user name and email -done
+no need for password - done
 
 write login function
 write logout function
-encrypt database
-how to store session in database
+
+encrypt database**
+how to store session in database**
 
 injecting sql command in the user input
 The prepare method of the query provides some form of security so that these wont happen
 also if you use the place holders ?
 
-// this is safe
-db.Query("SELECT name FROM users WHERE age=?", req.FormValue("age"))
-// this allows sql injection.
-db.Query("SELECT name FROM users WHERE age=" + req.FormValue("age"))
+check how to go from http to htps -done
 
+check rate limiting for DoS attack. - done
 
-https://stackoverflow.com/questions/31647406/mysql-real-escape-string-equivalent-for-golang
-
-check how to go from http to htps
-
-check rate limiting for DoS attack.
-
-check how to use google authentication**
+2 factor authentication check how to use google authentication**

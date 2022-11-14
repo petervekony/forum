@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,6 +15,23 @@ func passwordMatch(password string, hash string) bool {
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	// If logged in, redirect to front page
+	// If not logged in, show sign up page
+	// check if session is alive
+	uid, err := sessionManager.checkSession(w, r)
+	if err != nil {
+		// No session found, show sign up page
+		//handle error
+		fmt.Fprintln(w, err.Error())
+	}
+	// Check if user is logged in
+	if uid != "0" {
+		// User is logged in, redirect to front page
+		fmt.Fprintf(w, "User is logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
 	// parse the form
 	r.ParseForm()
 
@@ -27,15 +45,21 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// check if the username and password match
+	// check if the password match the one with database
 	if !passwordMatch(password, HashedPassword) {
 		fmt.Fprintf(w, "Invalid username or password")
 		return
 	}
 
-	// set the cookie
-	cookie := http.Cookie{Name: "session", Value: username, Path: "/"}
-	http.SetCookie(w, &cookie)
+	// set the session
+	uID, err := strconv.Atoi(uid)
+	if err != nil {
+		fmt.Fprintln(w, err.Error())
+	}
+	err = sessionManager.setSessionUID(uID, w, r)
+	if err != nil {
+		fmt.Fprintln(w, err.Error())
+	}
 
 	// redirect to the home page
 	http.Redirect(w, r, "/", http.StatusFound)

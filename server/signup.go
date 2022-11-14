@@ -127,7 +127,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		// // check if username is already taken
+		// check if username is already taken
 		var user map[string]string
 		users, err := d.GetUsers(db, user)
 		if err != nil {
@@ -146,10 +146,12 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(rowUpdated)
 		if err != nil {
 			fmt.Fprintln(w, err.Error())
-			http.Redirect(w, r, "/signup", http.StatusSeeOther)
+			// needed to finalize endpoint
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		} else {
 			fmt.Fprintf(w, "Signup successful")
+			// needed to finalize endpoint
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}

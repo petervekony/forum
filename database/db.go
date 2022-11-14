@@ -87,7 +87,7 @@ func CheckPasswordHash(password, hash string) bool {
 // Connect to database
 func DbConnect() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
-	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
+	forumdb, err := sql.Open("sqlite3", "./"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
 
 	if err != nil {
 		return nil, err
@@ -124,7 +124,6 @@ func DatabaseExist() (*sql.DB, error) {
 		return nil, err
 	}
 	defer conn.Close()
-	
 
 	if newDb {
 		err = createTable(forumdb) // Create Database Tables

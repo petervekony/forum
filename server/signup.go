@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // function to check if email is valid
@@ -27,6 +29,13 @@ func isAscii(s string) bool {
 	return true
 }
 
+// hash password returned the password string as a hash to be stored in the database
+// this is doen for security reasons
+func HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	return string(bytes), err
+}
+
 // prevents sql injection
 func escapeString(value string) string {
 	var sb strings.Builder
@@ -46,6 +55,7 @@ func escapeString(value string) string {
 	return sb.String()
 }
 
+// function to sign up a user
 func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	// If logged in, redirect to front page
@@ -77,7 +87,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		// create user
 		// redirect to front page
 		// first check if string is not sql injection
-		username := escapeString(r.FormValue("username"))
+		name := escapeString(r.FormValue("username"))
 		email := escapeString(r.FormValue("email"))
 		// no need to escape password because its hashed before being stored
 		password := r.FormValue("password")
@@ -96,27 +106,47 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		// make sure that no fields are empty or non ascii
-		if !isAscii(username) || !isAscii(email) || !isAscii(password) || !isAscii(confirmPwd) {
-			fmt.Fprintf(w, "Please fill in all fields")
+		if !isAscii(name) || !isAscii(email) || !isAscii(password) || !isAscii(confirmPwd) {
+			fmt.Fprintln(w, "Internal server error", http.StatusInternalServerError)
 			http.Redirect(w, r, "/signup", http.StatusSeeOther)
 			return
 		}
 		// user level will by 1 by default i.e registered user
 		userLevel := 1
+		// hash password
+		hashedPassword, err := HashPassword(password)
+		if err != nil {
+			// handle error
+			fmt.Fprintln(w, "Internal server error", http.StatusInternalServerError)
+		}
 		// connect to database
 		db, err := d.DbConnect()
 		if err != nil {
 			fmt.Println(err.Error())
 		}
+		// // check if username is already taken
+		// var user map[string]string
+		// users, err := d.GetUsers(db, user)
+		// if err != nil {
+		// 	fmt.Println(err.Error())
+		// }
+		// fmt.Println(users)
+		// for _, u := range users {
+		// 	if u.Name == name {
+		// 		fmt.Fprintf(w, "Username is already taken")
+		// 		http.Redirect(w, r, "/signup", http.StatusSeeOther)
+		// 		return
+		// 	}
+		// }
 		// create user
-		rowUpdated, err := d.InsertUsers(db, username, email, password, userLevel)
+		rowUpdated, err := d.InsertUsers(db, name, email, hashedPassword, userLevel)
 		fmt.Println(rowUpdated)
 		if err != nil {
-			fmt.Fprintf(w, err.Error())
+			fmt.Fprintln(w, err.Error())
 			http.Redirect(w, r, "/signup", http.StatusSeeOther)
 			return
 		} else {
-			fmt.Fprintf(w, "User created")
+			fmt.Fprintf(w, "Signup successful")
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}

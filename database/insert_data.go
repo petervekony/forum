@@ -8,7 +8,6 @@ import (
 // returns the row affected and error
 // insertUsers function inserts a record in the users table
 func InsertUsers(db *sql.DB, name string, email string, password string, user_level int) (int, error) {
-	hashedPwd, _ := HashPassword(password)
 	insertUsers := `INSERT INTO users(name, email, Password, user_level) VALUES (?, ?, ?, ?)`
 	statement, err := db.Prepare(insertUsers) // Prepare statement.
 	fmt.Println("statement: ", statement)
@@ -16,7 +15,7 @@ func InsertUsers(db *sql.DB, name string, email string, password string, user_le
 	if err != nil {
 		return 0, err
 	}
-	val, err := statement.Exec(name, email, hashedPwd, user_level) // Execute statement with parameters
+	val, err := statement.Exec(name, email, password, user_level) // Execute statement with parameters
 	if err != nil {
 		return 0, err
 	}

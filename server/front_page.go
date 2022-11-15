@@ -10,6 +10,7 @@ import (
 )
 
 func FrontPage(w http.ResponseWriter, r *http.Request) {
+	fmt.Printf("Handling %v\n", r.URL.Path)
 	if r.URL.Path == "/" { // TBC for session check
 		fmt.Println("cookies handling.")
 		uid, err := sessionManager.checkSession(w, r)
@@ -27,7 +28,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		dyn_content["name"] = uid
 
 		tmpl.Execute(w, dyn_content)
-	} else if strings.Contains(r.URL.Path, "/server/") {
+	} else if strings.Index(r.URL.Path, "/server/") == 0 {
 		script, err := os.ReadFile(r.URL.Path[1:])
 		if err != nil {
 			log.Fatal(err)
@@ -39,9 +40,13 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		w.Write([]byte(posts))
+	} else if r.URL.Path == "/signup" {
+		fmt.Printf("Signing up, path %v\n", r.URL.Path)
+		SignUp(w, r)
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
-		//error404(w)
+		// w.WriteHeader(404)
+		// w.Write([]byte("404 Page not found."))
 		return
 	}
 }

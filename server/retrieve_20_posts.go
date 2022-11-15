@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"gritface/database"
 	"strconv"
 )
@@ -80,7 +79,7 @@ func Retrieve20Posts() (string, error) {
 		return "", err
 	}
 
-	fmt.Println(structSlice)
-	fmt.Println(string(res))
+	// fmt.Println(structSlice)
+	// fmt.Println(string(res))
 	return string(res), nil
 }

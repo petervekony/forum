@@ -3,24 +3,27 @@ async function initPage() {
     await fetch("/posts")
       .then((response) => response.json())
       .then(function (json) {
-        console.log(json)
         for (const [key, postJSON] of Object.entries(json)) {
 
           const postSection = document.getElementById("post_section");
   
           const postDiv = document.createElement("div");
+          postDiv.id = postJSON.post_id;
+
           const postBody = document.createElement("div");
+          const postBodyText = document.createElement("div");
+          const postBodyTimeRow = document.createElement("div");
           const postHeading = document.createElement("div");
           const postInsertTime = document.createElement("div");
           const postModTime = document.createElement("div");
           const postImage = document.createElement("div");
-          const postComments = document.createElement("div");
+          const postReactionsRow = document.createElement("div");
           const postReactions = document.createElement("div");
-          const postRow = document.createElement("div");
           const postLike = document.createElement("button");
+          const postDislike = document.createElement("button");
           const postHeart = document.createElement("button");
-          const postComment = document.createElement("div");
-          const postCommentImg = document.createElement("div");
+
+          // const postLikeNum = document.createElement("p");
   
           postDiv.classList.add(
             "col-8",
@@ -33,36 +36,60 @@ async function initPage() {
           );
 
           postBody.classList.add("col-10", "offset-1");
+          postBodyText.classList.add("text-justify", "my-2")
+          postBodyTimeRow.classList.add("row", "text-secondary");
+          postReactionsRow.classList.add("row");
           postHeading.classList.add("col-10", "offset-1", "my-2");
           postInsertTime.classList.add("col-6", "order-0", "text-left");
           postModTime.classList.add("col-6", "order-1", "text-end");
-          postComments.classList.add("row", "my-2");
           postReactions.classList.add("col-5", "mx-1");
           postImage.classList.add("border", "bg-info", "text-center");
           postLike.classList.add("btn", "border", "rounded", "bg-dark");
           postHeart.classList.add("btn", "border", "rounded", "bg-dark");
-          postComment.classList.add("col-9", "border", "rounded", "bg-secondary");
-          postCommentImg.classList.add("col-2", "mx-1", "border", "rounded", "bg-info");
-  
-          postBody.textContent = postJSON.body;
+          postDislike.classList.add("btn", "border", "rounded", "bg-dark");
+
+          // postLikeNum.classList.add("mx-1");
+            
+          postBodyText.textContent = postJSON.body;
           postHeading.textContent = postJSON.heading;
           postInsertTime.textContent = postJSON.insert_time;
           postModTime.textContent = postJSON.update_time;
-          postComments.textContent = JSON.stringify(postJSON.comments);
           postReactions.textContent = postJSON.post_reactions;
           postImage.textContent = postJSON.image;
+          postLike.textContent = "👍";
+          postDislike.textContent = "👎";
+          postHeart.textContent = "❤️";
+          // postLikeNum.textContent = "0";
   
           postSection.appendChild(postDiv);
           postDiv.appendChild(postHeading);
           postDiv.appendChild(postBody);
-          postDiv.appendChild(postRow)
           postBody.appendChild(postImage);
-          postBody.appendChild(postInsertTime);
-          postBody.appendChild(postModTime);
-          postRow.appendChild(postReactions);
-          postRow.appendChild(postComments);
+          postBody.appendChild(postBodyText);
+          postBody.appendChild(postReactionsRow);
+          postBodyText.appendChild(postBodyTimeRow)
+          postBodyTimeRow.appendChild(postInsertTime);
+          postBodyTimeRow.appendChild(postModTime);
+          postReactionsRow.appendChild(postReactions);
           postReactions.appendChild(postLike);
+          // postReactions.appendChild(postLikeNum);
+          postReactions.appendChild(postDislike);
           postReactions.appendChild(postHeart);
+
+          // loop and create comments
+          for (const [key, comment] of Object.entries(postJSON.comments)) {
+            const postCommentRow = document.createElement("div");
+            const postComment = document.createElement("div");
+            const postCommenterImg = document.createElement("div");
+            postCommentRow.classList.add("row", "my-2");
+            postComment.classList.add("col-9", "border", "rounded", "bg-secondary");
+            postCommenterImg.classList.add("col-2", "mx-1", "border", "rounded", "bg-info");
+            postComment.textContent = comment.body;
+            postCommenterImg.textContent = `User id:${comment.user_id} profile pic`;
+            postCommentRow.appendChild(postCommenterImg);
+            postCommentRow.appendChild(postComment);
+            postBody.appendChild(postCommentRow);
+          }
           console.log(postJSON)
         };
       });

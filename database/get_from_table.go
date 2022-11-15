@@ -250,62 +250,62 @@ func getUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, err
 }
 
 // for test remove at the end
-func test() {
-	user := make(map[string]string)
-	post := make(map[string]string)
-	comment := make(map[string]string)
-	category := make(map[string]string)
-	reaction := make(map[string]string)
-	postCategory := make(map[string]string)
-	userLevel := make(map[string]string)
-	user["free_query"] = "user_id=2 AND name LIKE '%p%'"
-	post["free_query"] = "user_id=1 OR heading LIKE '%t%'"
-	comment["free_query"] = "user_id=1 OR body LIKE '%t%'"
-	category["free_query"] = "category_id=2 OR category_name LIKE '%t%'"
-	reaction["free_query"] = "user_id=1 OR post_id=1"
-	postCategory["free_query"] = "post_id=1 OR category_id=2"
-	userLevel["free_query"] = "user_level=1 OR value=1"
-	db, err := DbConnect()
-	if err != nil {
-		fmt.Println(err)
-	}
-	users, err := GetUsers(db, user)
-	if err != nil {
-		fmt.Println(err)
-	}
-	posts, err := GetPosts(db, post)
-	if err != nil {
-		fmt.Println(err)
-	}
-	comments, err := getComments(db, comment)
-	if err != nil {
-		fmt.Println(err)
-	}
-	categories, err := getCategories(db, category)
-	if err != nil {
-		fmt.Println(err)
-	}
-	reactions, err := getReaction(db, reaction)
-	if err != nil {
-		fmt.Println(err)
-	}
-	postCategories, err := getPostCategories(db, postCategory)
-	if err != nil {
-		fmt.Println(err)
-	}
-	userLevels, err := getUserLevel(db, userLevel)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("users are ", users)
-	fmt.Println("posts are", posts)
-	fmt.Println("comments are", comments)
-	fmt.Println("categories are", categories)
-	fmt.Println("reactions are", reactions)
-	fmt.Println("postCategories are", postCategories)
-	fmt.Println("userLevels are", userLevels)
-}
+// func test() {
+// 	user := make(map[string]string)
+// 	post := make(map[string]string)
+// 	comment := make(map[string]string)
+// 	category := make(map[string]string)
+// 	reaction := make(map[string]string)
+// 	postCategory := make(map[string]string)
+// 	userLevel := make(map[string]string)
+// 	user["free_query"] = "user_id=2 AND name LIKE '%p%'"
+// 	post["free_query"] = "user_id=1 OR heading LIKE '%t%'"
+// 	comment["free_query"] = "user_id=1 OR body LIKE '%t%'"
+// 	category["free_query"] = "category_id=2 OR category_name LIKE '%t%'"
+// 	reaction["free_query"] = "user_id=1 OR post_id=1"
+// 	postCategory["free_query"] = "post_id=1 OR category_id=2"
+// 	userLevel["free_query"] = "user_level=1 OR value=1"
+// 	db, err := DbConnect()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	users, err := GetUsers(db, user)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	posts, err := GetPosts(db, post)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	comments, err := getComments(db, comment)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	categories, err := getCategories(db, category)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	reactions, err := getReaction(db, reaction)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	postCategories, err := getPostCategories(db, postCategory)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	userLevels, err := getUserLevel(db, userLevel)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	fmt.Println("users are ", users)
+// 	fmt.Println("posts are", posts)
+// 	fmt.Println("comments are", comments)
+// 	fmt.Println("categories are", categories)
+// 	fmt.Println("reactions are", reactions)
+// 	fmt.Println("postCategories are", postCategories)
+// 	fmt.Println("userLevels are", userLevels)
+// }
 
-func init() {
-	test()
-}
+// func init() {
+// 	test()
+// }

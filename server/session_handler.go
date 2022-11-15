@@ -21,7 +21,6 @@ var sessionManager SessionManager
 
 // Check for valid session, if not create a new one. Return session user data
 func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (string, error) {
-
 	cookie, err := sm.isSessionSet(w, r)
 	if err != nil {
 		// Session is not set, create a new one

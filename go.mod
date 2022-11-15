@@ -8,3 +8,5 @@ require (
 	github.com/google/uuid v1.3.0
 	golang.org/x/crypto v0.2.0
 )
+
+require golang.org/x/time v0.2.0

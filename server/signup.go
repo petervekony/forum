@@ -144,8 +144,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 		// create user
-		rowUpdated, err := d.InsertUsers(db, name, email, HashedPassword, userLevel)
-		fmt.Println(rowUpdated)
+		uID, err := d.InsertUsers(db, name, email, HashedPassword, userLevel)
+		fmt.Println(uID)
 		if err != nil {
 			fmt.Fprintln(w, err.Error())
 			// needed to finalize endpoint

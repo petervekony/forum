@@ -90,9 +90,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		// create user
 		// redirect to front page
 		// first check if string is not sql injection
-		fmt.Println(r.FormValue("username"))
 		name := EscapeString(r.FormValue("username"))
-		fmt.Println(name)
 		email := EscapeString(r.FormValue("email"))
 		// no need to escape password because its hashed before being stored
 		password := r.FormValue("password")

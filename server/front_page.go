@@ -48,5 +48,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		// w.WriteHeader(404)
 		// w.Write([]byte("404 Page not found."))
 		return
+		//12334
 	}
 }

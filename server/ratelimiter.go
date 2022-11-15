@@ -66,9 +66,9 @@ func (i *IPRateLimiter) LimitMiddleware(next http.Handler) http.Handler {
 // CleanUpVisitorMap runs as a go routine and every 30 minutes reassigns i.ips to an empty map to avoid memory leak
 func (i *IPRateLimiter) CleanUpVisitorMap() {
 	for {
-		time.Sleep(5 * time.Second)
+		time.Sleep(5 * time.Minute)
 
-		if time.Since(i.lastCleaned) > 30*time.Second {
+		if time.Since(i.lastCleaned) > 30*time.Minute {
 			i.ips = make(map[string]*rate.Limiter)
 			i.lastCleaned = time.Now()
 		}

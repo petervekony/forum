@@ -37,7 +37,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	// get the username and password
 	username := EscapeString(r.Form.Get("username"))
-	password := EscapeString(r.Form.Get("password"))
+	password := r.Form.Get("password")
 
 	// check if the username and password are valid
 	if IsAscii(username) || IsAscii(password) {

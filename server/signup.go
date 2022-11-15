@@ -25,7 +25,7 @@ func IsAscii(s string) bool {
 		return false
 	}
 	for _, c := range s {
-		if c <= 33 || c >= 127 {
+		if c <= 33 || c > 127 {
 			return false
 		}
 	}

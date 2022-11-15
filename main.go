@@ -9,6 +9,10 @@ import (
 
 var limiter = s.NewIPRateLimiter(20, 10)
 
+func init() {
+	go limiter.CleanUpVisitorMap()
+}
+
 func main() {
 	// check if db exist
 	_, err := d.DatabaseExist()

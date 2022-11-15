@@ -3,25 +3,28 @@ package server
 import (
 	"net/http"
 	"sync"
+	"time"
 
 	"golang.org/x/time/rate"
 )
 
 // IPRateLimiter is a struct that holds the connected IP addresses, a RWMutex, a rate.Limit on requests/second and a limit on package bursts
 type IPRateLimiter struct {
-	ips map[string]*rate.Limiter
-	mu  *sync.RWMutex
-	r   rate.Limit
-	b   int
+	ips         map[string]*rate.Limiter
+	lastCleaned time.Time
+	mu          *sync.RWMutex
+	r           rate.Limit
+	b           int
 }
 
 // NewIPRateLimiter returns a pointer to a new IPRateLimiter object
 func NewIPRateLimiter(r rate.Limit, b int) *IPRateLimiter {
 	i := &IPRateLimiter{
-		ips: make(map[string]*rate.Limiter),
-		mu:  &sync.RWMutex{},
-		r:   r,
-		b:   b,
+		ips:         make(map[string]*rate.Limiter),
+		lastCleaned: time.Now(),
+		mu:          &sync.RWMutex{},
+		r:           r,
+		b:           b,
 	}
 	return i
 }
@@ -58,4 +61,15 @@ func (i *IPRateLimiter) LimitMiddleware(next http.Handler) http.Handler {
 		}
 		next.ServeHTTP(w, r)
 	})
+}
+
+func (i *IPRateLimiter) CleanUpVisitorMap() {
+	for {
+		time.Sleep(5 * time.Second)
+
+		if time.Since(i.lastCleaned) > 30*time.Second {
+			i.ips = make(map[string]*rate.Limiter)
+			i.lastCleaned = time.Now()
+		}
+	}
 }

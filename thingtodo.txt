@@ -27,5 +27,6 @@ check how to go from http to https
         once we want to have some kind of hosting, we can apply for a free certificate valid for 3-month from https://letsencrypt.org/, otherwise for testing purposes it works
 
 check rate limiting for DoS attack.
+    - https://www.alexedwards.net/blog/how-to-rate-limit-http-requests
 
 check how to use google authentication**

@@ -28,5 +28,6 @@ check how to go from http to https
 
 check rate limiting for DoS attack.
     - https://www.alexedwards.net/blog/how-to-rate-limit-http-requests
+    - done
 
 check how to use google authentication**

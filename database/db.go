@@ -2,6 +2,7 @@ package database
 
 import (
 	"bufio"
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
@@ -86,7 +87,7 @@ func CheckPasswordHash(password, hash string) bool {
 // Connect to database
 func DbConnect() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
-	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
+	forumdb, err := sql.Open("sqlite3", "./"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
 
 	if err != nil {
 		return nil, err
@@ -113,10 +114,16 @@ func DatabaseExist() (*sql.DB, error) {
 	} else if err != nil {
 		return nil, err
 	}
-	forumdb, err := sql.Open("sqlite3", "./"+databaseFile) // Open the created Sqlite3 File
+	forumdb, err := sql.Open("sqlite3", "./"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
+	// Open the created Sqlite3 File
 	if err != nil {
 		return nil, err
 	}
+	conn, err := forumdb.Conn(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
 
 	if newDb {
 		err = createTable(forumdb) // Create Database Tables
@@ -124,7 +131,7 @@ func DatabaseExist() (*sql.DB, error) {
 			fmt.Println(err.Error())
 		} else {
 			// INSERT RECORDS
-			//exampleDbData(forumdb)
+			exampleDbData(forumdb)
 		}
 	}
 
@@ -179,32 +186,32 @@ func DatabaseExist() (*sql.DB, error) {
 	return forumdb, nil
 }
 
-// func exampleDbData(forumdb *sql.DB) {
-// 	insertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
-// 	insertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
-// 	insertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)
-// 	insertUsers(forumdb, "christian", "christain@gritlab.ax", "kingofhanko", 0)
-// 	insertUsers(forumdb, "taneli", "tvntvn@gritlab.ax", "kakka", 1)
-// 	insertUsers(forumdb, "jussi", "jussi@gritlab.ax", "kakka", 0)
-// 	insertUsers(forumdb, "andre", "andre@gritlab.ax", "kakka923rfg", 0)
-// 	insertPost(forumdb, 1, "football", "football is a great sport", "2017-01-01 00:00:00", "")
-// 	insertPost(forumdb, 3, "Improving Data Science", "I wished to rebuild the whole data science world", "2017-01-01 00:00:45", "")
-// 	insertPost(forumdb, 6, "Eating at a restaurants", "Me gusta is the best burger in Mariehamn", "2017-01-01 00:23:00", "")
-// 	insertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "")
-// 	insertCategory(forumdb, "sport")
-// 	insertCategory(forumdb, "food")
-// 	insertCategory(forumdb, "hiking")
-// 	insertCategory(forumdb, "data science")
-// 	insertCategory(forumdb, "programming")
-// 	insertCategory(forumdb, "music")
-// 	insertCategory(forumdb, "movies")
-// 	insertCategory(forumdb, "books")
-// 	insertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
-// 	insertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
-// 	insertReaction(forumdb, 1, 1, 1, "😀")
-// 	insertReaction(forumdb, 1, 1, 2, "💩")
-// 	insertPostCategory(forumdb, 1, 1)
-// }
+func exampleDbData(forumdb *sql.DB) {
+	InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
+	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
+	InsertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)
+	InsertUsers(forumdb, "christian", "christain@gritlab.ax", "kingofhanko", 0)
+	InsertUsers(forumdb, "taneli", "tvntvn@gritlab.ax", "kakka", 1)
+	InsertUsers(forumdb, "jussi", "jussi@gritlab.ax", "kakka", 0)
+	InsertUsers(forumdb, "andre", "andre@gritlab.ax", "kakka923rfg", 0)
+	InsertPost(forumdb, 1, "football", "football is a great sport", "2017-01-01 00:00:00", "")
+	InsertPost(forumdb, 3, "Improving Data Science", "I wished to rebuild the whole data science world", "2017-01-01 00:00:45", "")
+	InsertPost(forumdb, 6, "Eating at a restaurants", "Me gusta is the best burger in Mariehamn", "2017-01-01 00:23:00", "")
+	InsertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "")
+	InsertCategory(forumdb, "sport")
+	InsertCategory(forumdb, "food")
+	InsertCategory(forumdb, "hiking")
+	InsertCategory(forumdb, "data science")
+	InsertCategory(forumdb, "programming")
+	InsertCategory(forumdb, "music")
+	InsertCategory(forumdb, "movies")
+	InsertCategory(forumdb, "books")
+	InsertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
+	InsertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
+	InsertReaction(forumdb, 1, 1, 1, "😀")
+	InsertReaction(forumdb, 1, 1, 2, "💩")
+	InsertPostCategory(forumdb, 1, 1)
+}
 
 func QueryResultDisplay(db *sql.DB) {
 	row, err := db.Query(`

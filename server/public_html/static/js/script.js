@@ -55,7 +55,7 @@ async function initPage() {
         postInsertTime.textContent = postJSON.insert_time;
         postModTime.textContent = postJSON.update_time;
         postReactions.textContent = postJSON.post_reactions;
-        postImage.innerHTML = `<img src="/server/public_html/statis/images/${postJSON.image}">`;
+        postImage.textContent = `<img src="/server/public_html/statis/images/${postJSON.image}">`;
         postLike.textContent = "👍";
         postDislike.textContent = "👎";
         postHeart.textContent = "❤️";

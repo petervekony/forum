@@ -54,6 +54,12 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(writeMsg))
 			// w.Write([]byte(signupMsg))
 		}
+	} else if r.URL.Path == "/login" {
+		fmt.Printf("Logging in, path %v\n", r.URL.Path)
+		loginMsg, loginSuccess := Login(w, r)
+		fmt.Println(loginMsg, loginSuccess)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
+		w.Write([]byte(writeMsg))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

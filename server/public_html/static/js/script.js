@@ -55,7 +55,7 @@ async function initPage() {
         postInsertTime.textContent = postJSON.insert_time;
         postModTime.textContent = postJSON.update_time;
         postReactions.textContent = postJSON.post_reactions;
-        postImage.textContent = postJSON.image;
+        postImage.innerHTML = `<img src="/server/public_html/statis/images/${postJSON.image}">`;
         postLike.textContent = "👍";
         postDislike.textContent = "👎";
         postHeart.textContent = "❤️";
@@ -126,15 +126,54 @@ async function signup() {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
+
       const modalHeading = document.getElementById("signup_result_heading");
       const modalBody = document.getElementById("signup_result_body");
+      const modalBtn = document.getElementById("login");
+
       if (!json.status) {
         modalHeading.innerHTML = "Sorry, sign-up unsuccessful!";
         modalBody.innerHTML = `An error has occurred during the sign-up process:<br />${json.message}`;
+        modalBtn.setAttribute("data-bs-target", "#signup_modal");
+        modalBtn.textContent = "Sign up again";
       } else {
         modalHeading.innerHTML = "Welcome!";
         modalBody.innerHTML = `You are now registered to Gritface!<br />
         You can now login.`;
+        modalBtn.setAttribute("data-bs-target", "#login_modal");
+        modalBtn.textContent = "Log in";
       }
     });
+}
+
+async function login() {
+  const email = document.getElementById("login_email");
+  const password = document.getElementById("login_pass");
+
+  let user = {
+    email: email.value,
+    password: password.value,
+  };
+
+  password.value = "";
+  resetLoginModal();
+  console.log(user);
+  await fetch("/login", {
+    method: "POST",
+    body: JSON.stringify(user),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      if (!json.status) {
+        const loginPassLabel = document.getElementById("login_pass_label");
+        loginPassLabel.innerHTML = `password<br />${json.message}`;
+      } else {
+        window.location.replace(json.message);
+      }
+    });
+}
+
+function resetLoginModal() {
+  const loginPassLabel = document.getElementById("login_pass_label");
+  loginPassLabel.innerHTML = "password";
 }

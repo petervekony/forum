@@ -122,6 +122,11 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 
 		fmt.Printf("User signing up. Name:%v, email:%v, password:%v, confirm password:%v\n", name, email, password, confirmPwd)
 
+		if name == "" || email == "" || password == "" || confirmPwd == "" {
+			errMsg := "Error: please fill in all the required fields"
+			return errMsg, false
+		}
+
 		// check if email is valid
 		if !isEmailValid(email) {
 			// fmt.Fprintf(w, "Email is not valid")

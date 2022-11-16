@@ -58,6 +58,7 @@
           class="btn bg-dark border-secondary text-info"
           data-bs-toggle="modal"
           data-bs-target="#login_modal"
+          onclick="resetLoginModal()"
         >
           Login
         </button>
@@ -81,6 +82,7 @@
                 data-error="wrong"
                 data-success="right"
                 for="orangeForm-email"
+                id="login_email_label"
                 >email</label
               >
             </div>
@@ -94,15 +96,17 @@
                 data-error="wrong"
                 data-success="right"
                 for="orangeForm-pass"
+                id="login_pass_label"
                 >password</label
               >
             </div>
           </div>
           <div class="modal-footer text-center border-0 justify-content-center">
-            <a class="login" href="user.html"
+            <a class="login"
               ><button
                 class="btn bg-dark text-info border-info"
                 id="login_button"
+                onclick="login()"
               >
                 Login
               </button></a

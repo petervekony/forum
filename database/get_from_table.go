@@ -10,6 +10,7 @@ import (
 func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	query := "select * from users WHERE"
 	count := 0
+	fmt.Println(userData)
 	for k, v := range userData {
 		if k == "password" {
 			return nil, errors.New("password is not a valid search parameter")
@@ -20,10 +21,11 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 		if k == "free_query" {
 			query += " " + v
 		} else {
-			query += " " + k + "='" + v + "'"
+			query += " " + k + "='" + v + "'" + " COLLATE NOCASE"
 		}
 		count++
 	}
+	fmt.Println(query)
 	var users []Users
 	rows, err := db.Query(query)
 	if err != nil {
@@ -78,7 +80,7 @@ func GetPosts(db *sql.DB, postData map[string]string) ([]Posts, error) {
 }
 
 // Get comments from db
-func getComments(db *sql.DB, commentData map[string]string) ([]Comments, error) {
+func GetComments(db *sql.DB, commentData map[string]string) ([]Comments, error) {
 	query := "select * from comments WHERE"
 	count := 0
 	for k, v := range commentData {
@@ -112,7 +114,7 @@ func getComments(db *sql.DB, commentData map[string]string) ([]Comments, error) 
 }
 
 // get categories from db
-func getCategories(db *sql.DB, categoryData map[string]string) ([]Categories, error) {
+func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, error) {
 	query := "select * from categories WHERE"
 	count := 0
 	for k, v := range categoryData {
@@ -146,7 +148,7 @@ func getCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 }
 
 // get reaction from db
-func getReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error) {
+func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error) {
 	query := "select * from reaction WHERE"
 	count := 0
 	for k, v := range reactionData {
@@ -180,7 +182,7 @@ func getReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error)
 }
 
 // get post categories from db
-func getPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]PostCategory, error) {
+func GetPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]PostCategory, error) {
 	query := "select * from postsCategory WHERE"
 	count := 0
 	for k, v := range postCategoriesData {
@@ -215,7 +217,7 @@ func getPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]Post
 
 // get user_level from db
 
-func getUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, error) {
+func GetUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, error) {
 	query := "select * from userLevel WHERE"
 	count := 0
 	for k, v := range userLevelData {

@@ -115,7 +115,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		// redirect to front page
 		// first check if string is not sql injection
 		name := EscapeString(user.Name)
-		email := EscapeString(user.Email)
+		email := strings.ToLower(EscapeString(user.Email))
 		// no need to escape password because its hashed before being stored
 		password := user.Password
 		confirmPwd := user.ConfirmPwd
@@ -162,7 +162,9 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			return err.Error(), false
 		}
 		// check if username is already taken
-		var user map[string]string
+		user := make(map[string]string)
+		user["name"] = name
+		fmt.Println(user)
 		users, err := d.GetUsers(db, user)
 		if err != nil {
 			fmt.Println("???", err)

@@ -58,6 +58,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)
 		// w.Write([]byte("404 Page not found."))
+		// testing
 		return
 	}
 }

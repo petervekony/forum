@@ -71,36 +71,40 @@
           <div class="modal-header justify-content-center border-0 text-info">
             <h4 class="modal-title font-weight-bold">Login</h4>
           </div>
-          <div class="modal-body mx-5 border-info">
-            <div class="md-form mb-3">
-              <input
-                type="email"
-                id="login_email"
-                class="form-control validate border-info bg-dark text-info"
-              />
-              <label
-                data-error="wrong"
-                data-success="right"
-                for="orangeForm-email"
-                id="login_email_label"
-                >email</label
-              >
+          <form action="/loginSuccess" id="login_success" method="POST">
+            <div class="modal-body mx-5 border-info">
+              <div class="md-form mb-3">
+                <input
+                  type="email"
+                  id="login_email"
+                  class="form-control validate border-info bg-dark text-info"
+                  name="login_email"
+                />
+                <label
+                  data-error="wrong"
+                  data-success="right"
+                  for="orangeForm-email"
+                  id="login_email_label"
+                  >email</label
+                >
+              </div>
+              <div class="md-form mb-3">
+                <input
+                  type="password"
+                  id="login_pass"
+                  class="form-control validate bg-dark border-info text-info"
+                  name="login_pass"
+                />
+                <label
+                  data-error="wrong"
+                  data-success="right"
+                  for="orangeForm-pass"
+                  id="login_pass_label"
+                  >password</label
+                >
+              </div>
             </div>
-            <div class="md-form mb-3">
-              <input
-                type="password"
-                id="login_pass"
-                class="form-control validate bg-dark border-info text-info"
-              />
-              <label
-                data-error="wrong"
-                data-success="right"
-                for="orangeForm-pass"
-                id="login_pass_label"
-                >password</label
-              >
-            </div>
-          </div>
+          </form>
           <div class="modal-footer text-center border-0 justify-content-center">
             <a class="login"
               ><button

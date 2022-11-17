@@ -102,7 +102,8 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
-	return "/server/public_html/user.html", true
+	fmt.Println("uid is " + uid)
+	return uid, true
 	// redirect to the home page
 	// http.Redirect(w, r, "/", http.StatusFound)
 }

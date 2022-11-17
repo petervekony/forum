@@ -168,7 +168,11 @@ async function login() {
         const loginPassLabel = document.getElementById("login_pass_label");
         loginPassLabel.innerHTML = `password<br />${json.message}`;
       } else {
-        window.location.replace(json.message);
+        console.log(`logged in successfully with uid ${json.message}`);
+        const loginForm = document.getElementById("login_success");
+        const uid = document.getElementById("login_email");
+        uid.value = json.message;
+        loginForm.submit();
       }
     });
 }

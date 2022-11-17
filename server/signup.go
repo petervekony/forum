@@ -123,7 +123,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		fmt.Printf("User signing up. Name:%v, email:%v, password:%v, confirm password:%v\n", name, email, password, confirmPwd)
 
 		if name == "" || email == "" || password == "" || confirmPwd == "" {
-			errMsg := "Error: please fill in all the required fields"
+			errMsg := "Fill in all the required fields"
 			return errMsg, false
 		}
 
@@ -131,14 +131,14 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		if !isEmailValid(email) {
 			// fmt.Fprintf(w, "Email is not valid")
 			// http.Redirect(w, r, "/signup", http.StatusSeeOther)
-			errMsg := "Error: email is not valid"
+			errMsg := "Email is not valid"
 			return errMsg, false
 		}
 		// check if pass and confirm pass match
 		if password != confirmPwd {
 			// fmt.Fprintf(w, "Passwords do not match")
 			// http.Redirect(w, r, "/signup", http.StatusSeeOther)
-			errMsg := "Error: passwords do not match"
+			errMsg := "Passwords do not match"
 			return errMsg, false
 		}
 		// make sure that no fields are empty or non ascii
@@ -148,7 +148,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			// fmt.Fprintln(w, "Internal server error", http.StatusInternalServerError)
 			// http.Redirect(w, r, "/signup", http.StatusSeeOther)
 			// return
-			errMsg := "Error: non-ascii characters found"
+			errMsg := "Non-ascii characters found"
 			return errMsg, false
 		}
 		// user level will by 1 by default i.e registered user
@@ -158,7 +158,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		if err != nil {
 			// handle error
 			// fmt.Fprintln(w, "Internal server error", http.StatusInternalServerError)
-			errMsg := "Error: Internal server error in hashing password"
+			errMsg := "Internal server error in hashing password"
 			return errMsg, false
 		}
 		// connect to database
@@ -181,7 +181,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 				// fmt.Fprintf(w, "Username is already taken")
 				// http.Redirect(w, r, "/signup", http.StatusSeeOther)
 				// return
-				errMsg := "Error: username is already taken"
+				errMsg := "Username is already taken"
 				return errMsg, false
 			}
 		}
@@ -211,5 +211,5 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			return successMsg, true
 		}
 	}
-	return "Error: wrong method", false
+	return "Wrong method", false
 }

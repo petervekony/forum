@@ -132,10 +132,10 @@ async function signup() {
       const modalBtn = document.getElementById("login");
 
       if (!json.status) {
-        modalHeading.innerHTML = "Sorry, sign-up unsuccessful!";
-        modalBody.innerHTML = `An error has occurred during the sign-up process:<br />${json.message}`;
+        modalHeading.innerHTML = "Oh Snap!";
+        modalBody.innerHTML = `${json.message}`;
         modalBtn.setAttribute("data-bs-target", "#signup_modal");
-        modalBtn.textContent = "Sign up again";
+        modalBtn.textContent = "Sign up";
       } else {
         modalHeading.innerHTML = "Welcome!";
         modalBody.innerHTML = `You are now registered to Gritface!<br />

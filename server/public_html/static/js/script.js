@@ -60,6 +60,7 @@ async function initPage() {
         postDislike.textContent = "👎";
         postHeart.textContent = "❤️";
         // postLikeNum.textContent = "0";
+        // test
 
         postSection.appendChild(postDiv);
         postDiv.appendChild(postHeading);

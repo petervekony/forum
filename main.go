@@ -14,6 +14,7 @@ func init() {
 }
 
 func main() {
+	s.ProcessImage("image.jpg")
 	// check if db exist
 	_, err := d.DatabaseExist()
 	if err != nil {

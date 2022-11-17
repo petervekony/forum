@@ -29,6 +29,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 		tmpl.Execute(w, dyn_content)
 	} else if strings.Index(r.URL.Path, "/server/") == 0 {
+		fmt.Printf("Handling %v\n", r.URL.Path[1:])
 		script, err := os.ReadFile(r.URL.Path[1:])
 		if err != nil {
 			log.Fatal(err)

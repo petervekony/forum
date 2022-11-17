@@ -63,6 +63,7 @@ func (sm *SessionManager) isSessionSet(w http.ResponseWriter, r *http.Request) (
 	}
 }
 
+// function set session UID
 func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.Request) error {
 
 	thisSession, err := sm.isSessionSet(w, r)
@@ -75,6 +76,26 @@ func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.
 	sm.sessions[thisSession.Value] = strconv.Itoa(uid)
 
 	return nil
+}
+
+// functio delete session
+func (sm *SessionManager) deleteSession(w http.ResponseWriter, r *http.Request) (*http.Cookie, error) {
+	// check if user is logged in
+	cookie, err := sm.isSessionSet(w, r)
+	if err != nil {
+		return nil, err
+	}
+
+	// delete the session
+	delete(sessionManager.sessions, cookie.Value)
+
+	// remove the cookie
+	cookie = &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		MaxAge: -1,
+	}
+	return cookie, nil
 }
 
 func init() {

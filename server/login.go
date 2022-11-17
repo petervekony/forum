@@ -1,7 +1,10 @@
 package server
 
 import (
+	"encoding/json"
 	"fmt"
+	d "gritface/database"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -14,7 +17,25 @@ func passwordMatch(password string, hash string) bool {
 	return err == nil
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+type User struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
+}
+
+func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
+	req, err := io.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		fmt.Println(err)
+		return "Error: reading json log in request from user", false
+	}
+	
+	// Unmarshal
+	var user User
+	err = json.Unmarshal(req, &user)
+	if err != nil {
+		return "Error: unsuccessful in unmarshaling log in data from user", false
+	}
 	// If logged in, redirect to front page
 	// If not logged in, show sign up page
 	// check if session is alive
@@ -22,45 +43,66 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// No session found, show sign up page
 		//handle error
-		fmt.Fprintln(w, err.Error())
+		// fmt.Fprintln(w, err.Error())
+		return err.Error(), false
 	}
 	// Check if user is logged in
 	if uid != "0" {
 		// User is logged in, redirect to front page
-		fmt.Fprintf(w, "User is logged in")
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
+		// fmt.Fprintf(w, "User is logged in")
+		// http.Redirect(w, r, "/", http.StatusSeeOther)
+		return "User is logged in", false
 	}
 
 	// parse the form
-	r.ParseForm()
+	// r.ParseForm()
 
-	// get the username and password
-	username := EscapeString(r.Form.Get("username"))
-	password := r.Form.Get("password")
+	// get the email and password
+	email := EscapeString(user.Email)
+	password := user.Password
 
-	// check if the username and password are valid
-	if IsAscii(username) || IsAscii(password) {
-		fmt.Fprintf(w, "Invalid username or password")
-		return
+	// check if the email and password are ascii
+	if !IsAscii(email) || !IsAscii(password) {
+		// fmt.Fprintf(w, "Invalid email or password")
+		return "Error: invalid email or password", false
+	}
+
+	// retrieve user password from database
+	db, err := d.DbConnect()
+	if err != nil {
+		return err.Error(), false
+	}
+
+	loginUser := make(map[string]string)
+	loginUser["email"] = email
+	users, err := d.GetUsers(db, loginUser)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	// if no or more than 1 record found, return error
+	if len(users) != 1 {
+		return "Error: email or password is not found!", false
 	}
 
 	// check if the password match the one with database
-	if !passwordMatch(password, HashedPassword) {
-		fmt.Fprintf(w, "Invalid username or password")
-		return
+	if !passwordMatch(password, users[0].Password) {
+		// fmt.Fprintf(w, "Invalid email or password")
+		return "Error: email or password is not found", false
 	}
 
 	// set the session
 	uID, err := strconv.Atoi(uid)
 	if err != nil {
-		fmt.Fprintln(w, err.Error())
+		// fmt.Fprintln(w, err.Error())
+		return err.Error(), false
 	}
 	err = sessionManager.setSessionUID(uID, w, r)
 	if err != nil {
-		fmt.Fprintln(w, err.Error())
+		// fmt.Fprintln(w, err.Error())
+		return err.Error(), false
 	}
 
+	return "/server/public_html/user.html", true
 	// redirect to the home page
-	http.Redirect(w, r, "/", http.StatusFound)
+	// http.Redirect(w, r, "/", http.StatusFound)
 }

@@ -4,24 +4,19 @@ async function setUser() {
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
 
-  // let user = {
-  //   sessionID: sessionID,
-  // };
-
-  // await fetch("/getUser", {
-  //   method: "POST",
-  //   body: JSON.stringify(user),
-  // })
-  //   .then((response) => response.json())
-  //   .then((json) => {
-  //     console.log(json);
-  //     userPic.innerHTML = `<img src="${json.image}">`;
-  //     userName.textContent = json.username;
-  //   });
+  await fetch("/getUser", {
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      userPic.innerHTML = `<img src="${json.Image}">`;
+      userName.textContent = json.Username;
+    });
 
   // for testing
-  userPic.textContent = "cookie monster's pic";
-  userName.textContent = "cookie monster";
+  // userPic.textContent = "cookie monster's pic";
+  // userName.textContent = "cookie monster";
 
   const addPostBtn = document.getElementById("add_post_button");
   addPostBtn.addEventListener("click", newPost);
@@ -121,4 +116,5 @@ async function newPost() {
   // }).then((response) => response.json()).then((json) => {
   //   console.log(json)
   // });
+  userPost.value = "";
 }

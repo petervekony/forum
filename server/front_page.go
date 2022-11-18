@@ -92,6 +92,16 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.URL.Path == "/logout" {
 		Logout(w, r);
+	} else if r.URL.Path == "/getUser" {
+		userInfo, status := GetUserInfo(w, r)
+		if status {
+			w.Write([]byte(userInfo))
+		} else {
+			fmt.Println(userInfo)
+			w.Write([]byte("{\"Username\": \"Cannot retrieve username\"}"))
+		}
+	} else if r.URL.Path == "/addPost" {
+		
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

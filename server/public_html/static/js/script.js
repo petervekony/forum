@@ -136,7 +136,7 @@ async function signup() {
 
       const modalHeading = document.getElementById("signup_result_heading");
       const modalBody = document.getElementById("signup_result_body");
-      const modalBtn = document.getElementById("login");
+      let modalBtn = document.getElementById("login");
 
       if (!json.status) {
         modalHeading.innerHTML = "Oh Snap!";

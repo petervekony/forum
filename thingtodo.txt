@@ -14,6 +14,8 @@ https://stackoverflow.com/questions/31647406/mysql-real-escape-string-equivalent
 check how to go from http to https
     - works in branch peter, but with a self-generated certificate, which needs to be accepted by the user (you get a warning message in the browser saying the site is not secure),
         once we want to have some kind of hosting, we can apply for a free certificate valid for 3-month from https://letsencrypt.org/, otherwise for testing purposes it works
+        - https://www.cloudflare.com/ssl/
+        - https://www.sslforfree.com/
 
 check how to use google authentication**
 

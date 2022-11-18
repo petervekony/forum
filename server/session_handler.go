@@ -35,7 +35,7 @@ func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (
 			Path:  "/",
 			// Secure:   true,
 			// HttpOnly: true,
-			MaxAge: 60,
+			MaxAge: 3600,
 		}
 
 		// Send cookie to client

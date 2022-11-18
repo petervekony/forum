@@ -2,6 +2,7 @@ package server
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -34,7 +35,7 @@ func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (
 			Path:  "/",
 			// Secure:   true,
 			// HttpOnly: true,
-			MaxAge: 3600,
+			MaxAge: 60,
 		}
 
 		// Send cookie to client
@@ -43,7 +44,8 @@ func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (
 		// Store cookie in session as uid=0 (unregistered user)
 		sm.sessions[ID] = "0"
 	}
-
+	// here session value is 0 because user is not logged in
+	fmt.Println("session value is", sm.sessions[cookie.Value])
 	return sm.sessions[cookie.Value], nil
 }
 
@@ -59,22 +61,22 @@ func (sm *SessionManager) isSessionSet(w http.ResponseWriter, r *http.Request) (
 	if ok {
 		return c, nil
 	} else {
-		return nil, errors.New("Cookie value not alive")
+		return nil, errors.New("cookie value not alive")
 	}
 }
 
 // function set session UID
 func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.Request) error {
-
+	// user have logged in, set session UID
 	thisSession, err := sm.isSessionSet(w, r)
-
 	if err != nil {
 		// Something wrong with cookie, return error
-		return errors.New("Could not retrieve cookie data")
+		return errors.New("could not retrieve cookie data")
 	}
-
+	// this is working right
+	// here session value is 0
 	sm.sessions[thisSession.Value] = strconv.Itoa(uid)
-
+	fmt.Println("session value is now set to", sm.sessions[thisSession.Value])
 	return nil
 }
 

@@ -10,6 +10,9 @@ async function initPage() {
         const postDiv = document.createElement("div");
         postDiv.id = postJSON.post_id;
 
+        const postBodyWrapper = document.createElement("div");
+        const collapseComments = document.createElement("div");
+
         const postBody = document.createElement("div");
         const postBodyText = document.createElement("div");
         const postBodyTimeRow = document.createElement("div");
@@ -34,6 +37,9 @@ async function initPage() {
           "my-2",
           "py-2"
         );
+        
+        postBodyWrapper.add("border", "rounded", "mx-auto", "col-8");
+        collapseComments.add()
 
         postBody.classList.add("col-10", "offset-1");
         postBodyText.classList.add("text-justify", "my-2");

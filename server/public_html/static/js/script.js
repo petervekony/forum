@@ -178,7 +178,18 @@ async function login() {
     });
 }
 
-function resetLoginModal() {
+async function resetLoginModal() {
   const loginPassLabel = document.getElementById("login_pass_label");
+  const loginPass = document.getElementById("login_pass");
   loginPassLabel.innerHTML = "password";
+  loginPass.value = "";
+  await fetch("/checkSession")
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.status) {
+        window.location.replace("/loginSuccess");
+      } else {
+        console.log("please sign up");
+      }
+    });
 }

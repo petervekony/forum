@@ -47,14 +47,16 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		// fmt.Fprintln(w, err.Error())
 		return err.Error(), false
 	}
-	// Check if user is logged in
-	if uid != "0" {
-		// User is logged in, redirect to front page
-		// fmt.Fprintf(w, "User is logged in")
-		// http.Redirect(w, r, "/", http.StatusSeeOther)
-		return "User is logged in", false
-	}
 
+	// // Check if user is logged in
+	// if uid != "0" {
+	// 	// User is logged in, redirect to front page
+	// 	// fmt.Fprintf(w, "User is logged in")
+	// 	// http.Redirect(w, r, "/", http.StatusSeeOther)
+	// 	return "User is logged in", true
+	// }
+	
+	
 	// parse the form
 	// r.ParseForm()
 

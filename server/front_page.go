@@ -98,10 +98,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(userInfo))
 		} else {
 			fmt.Println(userInfo)
-			w.Write([]byte("{\"Username\": \"Cannot retrieve username\"}"))
+			w.Write([]byte("{\"Username\": 0}"))
+			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 	} else if r.URL.Path == "/addPost" {
-		
+
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

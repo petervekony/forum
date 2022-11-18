@@ -9,6 +9,9 @@ async function setUser() {
   })
     .then((response) => response.json())
     .then((json) => {
+      if (!json.Username) {
+        window.location.replace("/");
+      }
       console.log(json);
       userPic.innerHTML = `<img src="${json.Image}">`;
       userName.textContent = json.Username;

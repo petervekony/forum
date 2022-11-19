@@ -11,14 +11,15 @@ async function initPage() {
           "rounded",
           "content",
           "mx-auto",
-          "col-8"
+          "col-8",
+          "mb-3"
         );
         let comments = "";
         console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
           comments += `<div class="collapse" id="collapse_post_comments">
-            <div class="row my-3" id="post_comments">
-                <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
+            <div class="row my-3 ms-auto" id="post_comments">
+                <div class="col-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
                 <div class="col-8 border rounded-end bg-secondary" id="post_comments">
                 ${comment.body}
                 </div>
@@ -58,9 +59,22 @@ async function initPage() {
                         <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
                         <button class="bg-dark border rounded-end">💛<span
                                 class="badge text-info">8</span></button>
+                        <p class="text-info"># Comments</p>
                     </div>
                 </div>
             </div>
+            <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+            <div class="row">
+                <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
+                <div class="col-10 text-start">
+                <form action="/addComment" id="add_post_comment">
+                    <textarea class="form-control text-light bg-dark
+                                mb-2 border-info" name="user_comment" id="user_post_comment" rows="1"
+                    placeholder="Write a comment"></textarea>
+                </form>
+                </div>
+            </div>
+        </div>
             ${comments}
         </div>
     </section>`;

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"io"
 	"mime/multipart"
 
 	"image/gif"
@@ -17,11 +18,6 @@ import (
 
 	"golang.org/x/image/draw"
 )
-
-const size = 1000
-
-// const maxSize = 20000 * 1024
-const maxFileSize = size << 10
 
 // function to process image from the request
 func processImage(file multipart.File) (image.Image, error) {
@@ -37,8 +33,18 @@ func processImage(file multipart.File) (image.Image, error) {
 	}
 	// this will return a image/...
 	filetype := http.DetectContentType(buffer)
+
+	// reset the file pointer to the beginning
+	_, err = file.Seek(0, io.SeekStart)
+	if err != nil {
+		return nil, err
+	}
 	// we just slice the string to get the extension
 	ext := filetype[6:]
+	if ext != "jpeg" && ext != "png" && ext != "gif" && ext != "jpg" {
+		return nil, errors.New("Invalid file type")
+	}
+	// check the file type for decoding
 	switch ext {
 	case "png":
 		img, err = png.Decode(file)
@@ -87,12 +93,20 @@ func SaveImg(filePath string, img image.Image) (string, error) {
 // function to upload image
 // we do not need any response writer just  request
 // this is the one that will be called from the handler
-func ImageUpload(r *http.Request) (string, error) {
+func uploadImageHandler(w http.ResponseWriter, r *http.Request) (string, error) {
+	if r.Method != "POST" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return "", errors.New("Method not allowed")
+	}
 	// max upload size is 20mb
 	// this we can adjust depending on the size of the image we want
-	r.ParseMultipartForm(20000 << 10)
+	err := r.ParseMultipartForm(20000 << 10)
+	if err != nil {
+		http.Error(w, "File size bigger than 20MB", http.StatusBadRequest)
+		return "", errors.New("The uploaded image is too big. Please use an image less than 20MB in size")
+	}
 	// get the file from the request
-	file, _, err := r.FormFile("profileImage")
+	file, fileHeader, err := r.FormFile("profileImage")
 	if err != nil {
 		fmt.Println("invalid size", err)
 		return "", err
@@ -100,17 +114,21 @@ func ImageUpload(r *http.Request) (string, error) {
 	defer file.Close()
 	img, err := processImage(file)
 	if err != nil {
+		http.Error(w, "Invalid file type", http.StatusBadRequest)
 		return "", err
 	}
 	err = resizeImage(img)
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return "", err
 	}
+
 	// destination path to store the image
-	dstPath := "server/public_html/static/images/posts_imgs/"
+	dstPath := "server/public_html/static/images/posts_imgs/" + fileHeader.Filename // need a better way to do store files
 	// save the image to the path
 	filePath, err := SaveImg(dstPath, img)
 	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return "", err
 	}
 	return filePath, nil
@@ -145,7 +163,7 @@ func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
 	// this is the image that the user wants to use as profile image
 	// we will save this image to the server and update the user profile image
 	// in the database
-	imgName, err := ImageUpload(r)
+	imgName, err := uploadImageHandler(w, r)
 	if err != nil {
 		// do something
 	}
@@ -177,51 +195,4 @@ func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
 	defer f.Close()
 	io.Copy(f, file)
 	return header.Filename, nil
-} */
-
-/*
-func Post(w http.ResponseWriter, r *http.Request) {
-	if r.ContentLength > maxFileSize {
-		if flusher, ok := w.(http.Flusher); ok {
-			response := []byte("Request too large")
-			w.Header().Set("Connection", "close")
-			w.Header().Set("Content-Length", fmt.Sprintf("%d", len(response)))
-			w.WriteHeader(http.StatusExpectationFailed)
-			w.Write(response)
-			flusher.Flush()
-		}
-		conn, _, _ := w.(http.Hijacker).Hijack()
-		conn.Close()
-		return
-	}
-
-	r.Body = http.MaxBytesReader(w, r.Body, maxFileSize)
-
-	err := r.ParseMultipartForm(1024)
-	if err != nil {
-		w.Write([]byte("File too large"))
-		return
-	}
-
-	file, header, err := r.FormFile("file")
-	if err != nil {
-		panic(err)
-	}
-
-	dst, err := os.Create("./public_html/static/images/" + header.Filename)
-	if err != nil {
-		panic(err)
-	}
-	defer dst.Close()
-
-	written, err := io.Copy(dst, io.LimitReader(file, maxFileSize))
-	if err != nil {
-		panic(err)
-	}
-
-	if written == maxFileSize {
-		w.Write([]byte("File too large"))
-		return
-	}
-	w.Write([]byte("Success..."))
 } */

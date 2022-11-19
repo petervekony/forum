@@ -33,21 +33,19 @@ async function newPost() {
   }
   console.log(`New post button clicked and value is ${userPost.value}`);
 
-  // let newPost = {
-  //   sessionID: sessionID,
-  //   uID: uID,
-  //   postContent: userPost.value,
-  //   postImage: userImage.value,
-  // };
+  let newPost = {
+    postHeading: "post heading",
+    postBody: userPost.value,
+  };
 
-  // await fetch("/addPost", {
-  //   method: "POST",
-  //   body: JSON.stringify(newPost),
-  // })
-  //   .then((response) => response.json())
-  //   .then((json) => {
-  //     console.log(json);
-  //   });
+  await fetch("/addPost", {
+    method: "POST",
+    body: JSON.stringify(newPost),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+    });
 
   // create new post in DOM (old)
   const postDiv = document.createElement("div");

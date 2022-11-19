@@ -14,7 +14,7 @@ async function initPage() {
           "col-8"
         );
         let comments = "";
-
+        console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
           comments += `<div class="collapse" id="collapse_post_comments">
             <div class="row my-3" id="post_comments">
@@ -24,7 +24,9 @@ async function initPage() {
                 </div>
             </div>
         </div>`;
-          postDiv.innerHTML = `<section class="row" id="post_section">
+        }
+
+        postDiv.innerHTML = `<section class="row" id="post_section">
         <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
@@ -62,7 +64,6 @@ async function initPage() {
             ${comments}
         </div>
     </section>`;
-        }
 
         // loop and create comments
         const container = document.getElementById("container");

@@ -102,7 +102,9 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 	} else if r.URL.Path == "/addPost" {
-
+		message, status := addPostText(w, r)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(writeMsg))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

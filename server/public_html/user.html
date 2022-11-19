@@ -1,240 +1,252 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Gritface</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-        <link rel="stylesheet" href="/static/css/style.css">
+
+<head>
+    <title>Gritface</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/style.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body class="bg-dark">
     <nav class="navbar navbar-expand-md navbar-light bg-info">
-        <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+        <div class="navbar-collapse collapse w-100 order-1 order-md-0
+                dual-collapse2">
             <ul class="navbar-nav mx-3">
                 <li class="nav-item active">
                     <a class="nav-link" href="user.html">GRITFACE</a>
                 </li>
             </ul>
-            <button class="btn btn-dark text-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <button class="btn btn-dark text-info" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
                 Categories
-              </button>
+            </button>
             <ul class="nav navbar-nav offset-2">
-                    <form action="" class="navbar-form">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <input type="search" name="search" id="" placeholder="Search..." class="form-control">
-                                <button id="search-button" class="btn bg-dark text-info">search</button>
-                            </div>
-                        </form>
-                </ul>
+                <form action="" class="navbar-form">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="search" name="search" id="" placeholder="Search..." class="form-control">
+                            <button id="search-button" class="btn bg-dark
+                                    text-info">search</button>
+                        </div>
+                </form>
+            </ul>
+        </div>
+        <div class="nav-item active col-2 text-end mx-2">
+            <button class="btn bg-dark border-secondary text-info" data-bs-toggle="modal"
+                data-bs-target="#settings">Settings</button>
+            <form class="logout" action="/logout"><button class="btn
+                            bg-dark border-secondary text-info" data-bs-toggle="modal"
+                    data-bs-target="#login_modal">Log out</button></form>
+        </div>
+    </nav>
+
+
+    <br>
+
+    <div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample"
+        aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">What
+                you want to see?</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="categories_check" id="categories_check">
+                <input class="form-check-input" type="checkbox" value="" id="check1" />
+                <label class="form-check-label" for="check1">Top posts</label>
             </div>
-            <div class="nav-item active col-2 text-end mx-2">
-                <button class="btn bg-dark border-secondary text-info" data-bs-toggle="modal" data-bs-target="#settings">Settings</button>
-                <form class="logout" action="/logout"><button class="btn bg-dark border-secondary text-info" data-bs-toggle="modal" data-bs-target="#login_modal">Log out</button></form>
+            <div class="categories_check">
+                <input class="form-check-input" type="checkbox" value="" id="check2" />
+                <label class="form-check-label" for="check2">Recent
+                    posts</label>
             </div>
-        </nav>
-
-   
-<br>
-
-<div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title" id="offcanvasExampleLabel">What you want to see?</h5>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div class="categories_check">
+                <input class="form-check-input" type="checkbox" value="" id="check3" />
+                <label class="form-check-label" for="check3">ALL THE
+                    OTHER CATEGORIES</label>
+            </div>
+            <div class="my-5">
+                <button class="btn btn-dark border-info text-info" type="button" id="categories_sort"
+                    data-bs-toggle="############">
+                    Select
+                </button>
+            </div>
+        </div>
     </div>
-    <div class="offcanvas-body">
-      <div class="categories_check" id="categories_check">
-        <input class="form-check-input" type="checkbox" value="" id="check1" />
-        <label class="form-check-label" for="check1">Top posts</label>
-    </div>
-    <div class="categories_check">
-      <input class="form-check-input" type="checkbox" value="" id="check2" />
-      <label class="form-check-label" for="check2">Recent posts</label>
-  </div>
-  <div class="categories_check">
-    <input class="form-check-input" type="checkbox" value="" id="check3" />
-    <label class="form-check-label" for="check3">ALL THE OTHER CATEGORIES</label>
-</div>
-    <div class="my-5">
-    <button class="btn btn-dark border-info text-info" type="button" id="categories_sort" data-bs-toggle="############">
-          Select
-        </button>
-    </div>    
-    </div>
-</div>
 
-<div class="container">
-    <div class="user_post">
-    <div class="row offset-2 mb-2">
-        <div class="col-1 bg-info rounded text-center" id="user_pic">$pic</div>
-        <h5 class="col-6 text-info text-justify" id="user_name">$Username</div>
-    </div>
-    <style>
-        textarea {
-            resize: none;
-        }
-    </style>
-
+    <div class="container">
+        <div class="user_post">
+            <div class="row offset-2 mb-2">
+                <div class="col-1 bg-info rounded text-center" id="user_pic">$pic</div>
+                <h5 class="col-6 text-info text-justify" id="user_name">$Username
+            </div>
+        </div>
+        <style>
+            textarea {
+                resize: none;
+            }
+        </style>
         <div class="col-8 offset-2 text-secondary border-info">
             <form action="/addPost" id="add_post_form">
-                <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_content" id="user_post" rows="3" placeholder="What's on your mind?"></textarea>
+                <textarea class="form-control text-light bg-dark
+                                mb-2 border-info" name="post_content" id="user_post" rows="3"
+                    placeholder="What's on your mind?"></textarea>
             </form>
-         <div class="user_post_footer text-end mb-4">
+            <div class="user_post_footer text-end mb-4">
 
-            <div class="dropdown">
-                <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
-                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check1" />
-                                <label class="form-check-label" for="check1">IRL</label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check2" />
-                                <label class="form-check-label" for="check2">Food</label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check3" />
-                                <label class="form-check-label" for="check3">Sport</label>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check4" />
-                                <label class="form-check-label" for="check4">Hacking</label>
-                            </div>
-                        </a>
-                    </li>
+                <div class="dropdown">
+                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check1" />
+                                    <label class="form-check-label" for="check1">IRL</label>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check2" />
+                                    <label class="form-check-label" for="check2">Food</label>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check3" />
+                                    <label class="form-check-label" for="check3">Sport</label>
+                                </div>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check4" />
+                                    <label class="form-check-label" for="check4">Hacking</label>
+                                </div>
+                            </a>
+                        </li>
                         <a class="dropdown-item" href="#">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" value="" id="check5" checked />
                                 <label class="form-check-label" for="check5">Shitpost</label>
                             </div>
                         </a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="#">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check6" />
-                                <label class="form-check-label" for="check6">Mental health</label>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="check6" />
+                                    <label class="form-check-label" for="check6">Mental health</label>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <button type="button" class="btn btn-info" id="add_img_button">+IMG</button>
+                    <button type="button" class="btn btn-info" id="add_post_button">POST</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container features" id="container">
+        <div class="border rounded content mx-auto col-8">
+            <section class="row" id="post_section">
+                <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
+                    <div class="text-white rounded my-2 py-2" id="post_div">
+                        <div class="col-11 offset-1 my-1" id="post_heading">
+                            This is the first post!
+                        </div>
+                        <div class="col-10 offset-1" id="post_body">
+                            <div class="border bg-info text-center" id="post_image">image</div>
+                            <div class="text-justify my-2">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit.
+                                Suspendisse scelerisque vehicula arcu,
+                                sed molestie dui facilisis
+                                a. Nam vestibulum eu sapien eu suscipit.
+                                Maecenas at nulla orci.
+                                In auctor nisl quis congue commodo.
+                                Maecenas sodales nisi augue,
+                                at bibendum ipsum euismod non. Praesent
+                                rhoncus dui justo, sed
+                                vulputate dui laoreet ac. Fusce
+                                ultricies eros ut pulvinar
+                                egestas. Suspendisse tristique risus eu
+                                luctus congue. Suspendisse
+                                velit est, ullamcorper et lorem in,
+                                egestas ullamcorper ipsum.
+                                Etiam venenatis mauris justo, maximus
+                                fermentum lacus mattis sed.
+                                Mauris ac suscipit massa. Vestibulum
+                                quis ligula ac erat ornare
+                                convallis. Quisque sed tellus vitae erat
+                                molestie facilisis.
+                                Vestibulum ante ipsum primis in faucibus
+                                orci luctus et ultrices
+                                posuere cubilia curae; Maecenas id urna
+                                justo.
                             </div>
-                        </a>
-                    </li>
-                </ul>
-            
-              <button type="button" class="btn btn-info" id="add_img_button">+IMG</button>
-            <button type="button" class="btn btn-info" id="add_post_button">POST</button>
-        </div>
-    </div>
-    </div>
-</div>
+                            <div class="row text-secondary">
+                                <div class="col-6 order-0 text-left" id="post_insert_time">
+                                    12.11
+                                </div>
+                                <div class="col-6 order-1 text-end" id="post_mod_time">
+                                    01.19
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<div class="container features">
-    <div class="border rounded content mx-auto col-8">
-    <section class="row" id="post_section">
-      <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
-        <div
-        class="text-white rounded my-2 py-2"
-        id="post_div" 
-      >
-        <div class="col-11 offset-1 my-1" id="post_heading">
-          This is the first post!
+                <div class="offset-1 py-1">
+                    <div class="col-12 mb-2">
+                        <div class="row">
+                            <div class="mx-1" id="post_reactions">
+                                <button class="bg-dark border
+                                            rounded-start">👍<span class="badge text-info">10</span></button>
+                                <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
+                                <button class="bg-dark border
+                                            rounded-end">💛<span class="badge text-info">8</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="collapse" id="collapse_post_comments">
+                        <div class="row my-3" id="post_comments">
+                            <div class="col-1 row-1 mx-1 border
+                                        rounded-start bg-info">img</div>
+                            <div class="col-8 border rounded-end
+                                        bg-secondary" id="post_comments">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit.
+                                Suspendisse scelerisque vehicula arcu,
+                                sed molestie dui
+                                facilisis a.kjklasjdaklsdj
+                                askldjlasjdas
+                                askdjaskljdlkasjdklas
+                                asdkljaskldjaslkdjaslkj.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        <div class="col-10 offset-1" id="post_body">
-          <div class="border bg-info text-center" id="post_image">image</div>
-          <div class="text-justify my-2">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            Suspendisse scelerisque vehicula arcu, sed molestie dui facilisis
-            a. Nam vestibulum eu sapien eu suscipit. Maecenas at nulla orci.
-            In auctor nisl quis congue commodo. Maecenas sodales nisi augue,
-            at bibendum ipsum euismod non. Praesent rhoncus dui justo, sed
-            vulputate dui laoreet ac. Fusce ultricies eros ut pulvinar
-            egestas. Suspendisse tristique risus eu luctus congue. Suspendisse
-            velit est, ullamcorper et lorem in, egestas ullamcorper ipsum.
-            Etiam venenatis mauris justo, maximus fermentum lacus mattis sed.
-            Mauris ac suscipit massa. Vestibulum quis ligula ac erat ornare
-            convallis. Quisque sed tellus vitae erat molestie facilisis.
-            Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-            posuere cubilia curae; Maecenas id urna justo.
-          </div>
-            <div class="row text-secondary">
-              <div class="col-6 order-0 text-left" id="post_insert_time">
-                12.11
-              </div>
-              <div class="col-6 order-1 text-end" id="post_mod_time">
-                01.19
-              </div>
-            </div>
-        </div>
-      </div>
-      </div>
-        
-        <div class="offset-1 py-1">
-            <div class="col-12 mb-2">
-                <div class="row">
-                <div class="mx-1" id="post_reactions">
-              <button class="bg-dark border rounded-start">👍<span class="badge text-info">10</span></button>
-              <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
-              <button class="bg-dark border rounded-end">💛<span class="badge text-info">8</span></button>
-            </div>
-          </div>
-            </div>
-          <div class="collapse" id="collapse_post_comments">
-          <div class="row my-3" id="post_comments">
-            <div class="col-1 row-1 mx-1 border rounded-start bg-info">img</div>
-            <div class="col-8 border rounded-end bg-secondary" id="post_comments">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Suspendisse scelerisque vehicula arcu, sed molestie dui
-              facilisis a.kjklasjdaklsdj 
-              askldjlasjdas
-              askdjaskljdlkasjdklas
-              asdkljaskldjaslkdjaslkj.
-            </div>
-          </div>
-          </div>
-          </div>
-    </section>
     </div>
-</div>
-    <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"
-  ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
 </body>
-    <script src="/static/js/loggedin.js"></script>
-    <script src="/static/js/script.js"></script>
+<script src="/static/js/loggedin.js"></script>
+<script src="/static/js/script.js"></script>
+
 </html>
-
-

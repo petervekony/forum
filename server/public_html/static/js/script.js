@@ -5,108 +5,69 @@ async function initPage() {
     .then((response) => response.json())
     .then(function (json) {
       for (const [key, postJSON] of Object.entries(json)) {
-        const postSection = document.getElementById("post_section");
-
         const postDiv = document.createElement("div");
-        postDiv.id = postJSON.post_id;
-
-        const postBodyWrapper = document.createElement("div");
-        const collapseComments = document.createElement("div");
-
-        const postBody = document.createElement("div");
-        const postBodyText = document.createElement("div");
-        const postBodyTimeRow = document.createElement("div");
-        const postHeading = document.createElement("div");
-        const postInsertTime = document.createElement("div");
-        const postModTime = document.createElement("div");
-        const postImage = document.createElement("div");
-        const postReactionsRow = document.createElement("div");
-        const postReactions = document.createElement("div");
-        const postLike = document.createElement("button");
-        const postDislike = document.createElement("button");
-        const postHeart = document.createElement("button");
-
-        // const postLikeNum = document.createElement("p");
-
         postDiv.classList.add(
-          "col-8",
-          "offset-2",
-          "text-white",
           "border",
           "rounded",
-          "my-2",
-          "py-2"
+          "content",
+          "mx-auto",
+          "col-8"
         );
-        
-        postBodyWrapper.add("border", "rounded", "mx-auto", "col-8");
-        collapseComments.add()
+        let comments = "";
+        console.log(postJSON);
+        for (const [key, comment] of Object.entries(postJSON.comments)) {
+          comments += `<div class="collapse" id="collapse_post_comments">
+            <div class="row my-3" id="post_comments">
+                <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
+                <div class="col-8 border rounded-end bg-secondary" id="post_comments">
+                ${comment.body}
+                </div>
+            </div>
+        </div>`;
+        }
 
-        postBody.classList.add("col-10", "offset-1");
-        postBodyText.classList.add("text-justify", "my-2");
-        postBodyTimeRow.classList.add("row", "text-secondary");
-        postReactionsRow.classList.add("row");
-        postHeading.classList.add("col-10", "offset-1", "my-2");
-        postInsertTime.classList.add("col-6", "order-0", "text-left");
-        postModTime.classList.add("col-6", "order-1", "text-end");
-        postReactions.classList.add("col-5", "mx-1");
-        postImage.classList.add("border", "bg-info", "text-center");
-        postLike.classList.add("btn", "border", "rounded", "bg-dark");
-        postHeart.classList.add("btn", "border", "rounded", "bg-dark");
-        postDislike.classList.add("btn", "border", "rounded", "bg-dark");
+        postDiv.innerHTML = `<section class="row" id="post_section">
+        <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
+            <div class="text-white rounded my-2 py-2" id="post_div">
+                <div class="col-11 offset-1 my-1" id="post_heading">
+                    ${postJSON.heading}
+                </div>
+                <div class="col-10 offset-1" id="post_body">
+                    <div class="border bg-info text-center" id="post_image">${postJSON.image}"</div>
+                    <div class="text-justify my-2">
+                        ${postJSON.body}
+                    </div>
+                    <div class="row text-secondary">
+                        <div class="col-6 order-0 text-left" id="post_insert_time">
+                            ${postJSON.insert_time}
+                        </div>
+                        <div class="col-6 order-1 text-end" id="post_mod_time">
+                            ${postJSON.update_time}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        // postLikeNum.classList.add("mx-1");
-
-        postBodyText.textContent = postJSON.body;
-        postHeading.textContent = postJSON.heading;
-        postInsertTime.textContent = postJSON.insert_time;
-        postModTime.textContent = postJSON.update_time;
-        postReactions.textContent = postJSON.post_reactions;
-        postImage.textContent = `<img src="/server/public_html/statis/images/${postJSON.image}">`;
-        postLike.textContent = "👍";
-        postDislike.textContent = "👎";
-        postHeart.textContent = "❤️";
-        // postLikeNum.textContent = "0";
-
-        postSection.appendChild(postDiv);
-        postDiv.appendChild(postHeading);
-        postDiv.appendChild(postBody);
-        postBody.appendChild(postImage);
-        postBody.appendChild(postBodyText);
-        postBody.appendChild(postReactionsRow);
-        postBodyText.appendChild(postBodyTimeRow);
-        postBodyTimeRow.appendChild(postInsertTime);
-        postBodyTimeRow.appendChild(postModTime);
-        postReactionsRow.appendChild(postReactions);
-        postReactions.appendChild(postLike);
-        // postReactions.appendChild(postLikeNum);
-        postReactions.appendChild(postDislike);
-        postReactions.appendChild(postHeart);
+        <div class="offset-1 py-1">
+            <div class="col-12 mb-2">
+                <div class="row">
+                    <div class="mx-1" id="post_reactions">
+                        <button class="bg-dark border rounded-start">👍<span
+                                class="badge text-info">10</span></button>
+                        <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
+                        <button class="bg-dark border rounded-end">💛<span
+                                class="badge text-info">8</span></button>
+                    </div>
+                </div>
+            </div>
+            ${comments}
+        </div>
+    </section>`;
 
         // loop and create comments
-        for (const [key, comment] of Object.entries(postJSON.comments)) {
-          const postCommentRow = document.createElement("div");
-          const postComment = document.createElement("div");
-          const postCommenterImg = document.createElement("div");
-          postCommentRow.classList.add("row", "my-2");
-          postComment.classList.add(
-            "col-9",
-            "border",
-            "rounded",
-            "bg-secondary"
-          );
-          postCommenterImg.classList.add(
-            "col-2",
-            "mx-1",
-            "border",
-            "rounded",
-            "bg-info"
-          );
-          postComment.textContent = comment.body;
-          postCommenterImg.textContent = `User id:${comment.user_id} profile pic`;
-          postCommentRow.appendChild(postCommenterImg);
-          postCommentRow.appendChild(postComment);
-          postBody.appendChild(postCommentRow);
-        }
+        const container = document.getElementById("container");
+        container.append(postDiv);
       }
     });
 }
@@ -135,7 +96,7 @@ async function signup() {
 
       const modalHeading = document.getElementById("signup_result_heading");
       const modalBody = document.getElementById("signup_result_body");
-      const modalBtn = document.getElementById("login");
+      let modalBtn = document.getElementById("login");
 
       if (!json.status) {
         modalHeading.innerHTML = "Oh Snap!";
@@ -174,12 +135,27 @@ async function login() {
         const loginPassLabel = document.getElementById("login_pass_label");
         loginPassLabel.innerHTML = `password<br />${json.message}`;
       } else {
-        window.location.replace(json.message);
+        console.log(`logged in successfully with uid ${json.message}`);
+        const loginForm = document.getElementById("login_success");
+        // const uid = document.getElementById("login_email");
+        // uid.value = json.message;
+        loginForm.submit();
       }
     });
 }
 
-function resetLoginModal() {
+async function resetLoginModal() {
   const loginPassLabel = document.getElementById("login_pass_label");
+  const loginPass = document.getElementById("login_pass");
   loginPassLabel.innerHTML = "password";
+  loginPass.value = "";
+  await fetch("/checkSession")
+    .then((response) => response.json())
+    .then((json) => {
+      if (json.status) {
+        window.location.replace("/loginSuccess");
+      } else {
+        console.log("please sign up");
+      }
+    });
 }

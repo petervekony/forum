@@ -29,6 +29,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 		tmpl.Execute(w, dyn_content)
 	} else if strings.Index(r.URL.Path, "/server/") == 0 {
+		fmt.Printf("Handling %v\n", r.URL.Path[1:])
 		script, err := os.ReadFile(r.URL.Path[1:])
 		if err != nil {
 			log.Fatal(err)
@@ -59,6 +60,50 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		loginMsg, loginSuccess := Login(w, r)
 		fmt.Println(loginMsg, loginSuccess)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
+		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/loginSuccess" {
+		fmt.Printf("User %v just logged in successfully.\n", r.FormValue("login_email"))
+		// loginEmail := r.FormValue("login_email")
+		script, err := os.ReadFile("server/public_html/user.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write(script)
+	} else if r.URL.Path == "/checkSession" {
+		uid, err := sessionManager.checkSession(w, r)
+		fmt.Println("at check session uid is", uid)
+		if err != nil {
+			// No session found, show login page
+			//handle error
+			// fmt.Fprintln(w, err.Error())
+			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
+			w.Write([]byte(writeMsg))
+		}
+		// Check if user is logged in
+		if uid != "0" {
+			// User is logged in, redirect to front page
+			// fmt.Fprintf(w, "User is logged in")
+			// http.Redirect(w, r, "/", http.StatusSeeOther)
+			writeMsg := fmt.Sprintf("{\"status\": %v}", true)
+			w.Write([]byte(writeMsg))
+		} else {
+			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
+			w.Write([]byte(writeMsg))
+		}
+	} else if r.URL.Path == "/logout" {
+		Logout(w, r);
+	} else if r.URL.Path == "/getUser" {
+		userInfo, status := GetUserInfo(w, r)
+		if status {
+			w.Write([]byte(userInfo))
+		} else {
+			fmt.Println(userInfo)
+			w.Write([]byte("{\"Username\": 0}"))
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
+	} else if r.URL.Path == "/addPost" {
+		message, status := addPostText(w, r)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)

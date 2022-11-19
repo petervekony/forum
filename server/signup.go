@@ -61,11 +61,12 @@ func EscapeString(value string) string {
 }
 
 type NewUser struct {
-	Name string	`json:"name"`
-	Email string `json:"email"`
-	Password string `json:"password"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
 	ConfirmPwd string `json:"confirmPassword"`
 }
+
 
 // function to sign up a user
 func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
@@ -75,14 +76,14 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		fmt.Println(err)
 		return "Error: reading json sign up request from user", false
 	}
-	
+
 	// Unmarshal
 	var user NewUser
 	err = json.Unmarshal(req, &user)
 	if err != nil {
 		return "Error: unsuccessful in unmarshaling data from user", false
 	}
-	
+
 	// If logged in, redirect to front page
 	// If not logged in, show sign up page
 	// check if session is alive
@@ -175,7 +176,6 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			fmt.Println("???", err)
 			// return err.Error(), false
 		}
-		fmt.Println(users)
 		for _, u := range users {
 			if u.Name == name {
 				// fmt.Fprintf(w, "Username is already taken")
@@ -186,8 +186,8 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			}
 		}
 		// create user
-		uID, err := d.InsertUsers(db, name, email, HashedPassword, userLevel)
-		fmt.Println(uID)
+		UID, err := d.InsertUsers(db, name, email, HashedPassword, userLevel)
+		fmt.Println(UID)
 
 		if err != nil {
 			// fmt.Fprintln(w, err.Error())

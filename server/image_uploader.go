@@ -124,7 +124,7 @@ func uploadImageHandler(w http.ResponseWriter, r *http.Request) (string, error) 
 	}
 
 	// destination path to store the image
-	dstPath := "server/public_html/static/images/posts_imgs/" + fileHeader.Filename // need a better way to do store files
+	dstPath := "server/public_html/static/images/profile_imgs/" + fileHeader.Filename // need a better way to do store files
 	// save the image to the path
 	filePath, err := SaveImg(dstPath, img)
 	if err != nil {

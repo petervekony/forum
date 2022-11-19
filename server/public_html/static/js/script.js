@@ -139,6 +139,7 @@ async function login() {
         const loginForm = document.getElementById("login_success");
         // const uid = document.getElementById("login_email");
         // uid.value = json.message;
+        // test
         loginForm.submit();
       }
     });

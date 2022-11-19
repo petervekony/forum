@@ -17,10 +17,10 @@ func passwordMatch(password string, hash string) bool {
 	return err == nil
 }
 
-// type User struct {
-// 	Email    string `json:"email"`
-// 	Password string `json:"password"`
-// }
+type User struct {
+	Email string `json:"email"`
+	Password string `json:"password"`
+}
 
 func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
@@ -29,9 +29,9 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		fmt.Println(err)
 		return "Error: reading json log in request from user", false
 	}
-
+	
 	// Unmarshal
-	var user d.Users
+	var user User
 	err = json.Unmarshal(req, &user)
 	if err != nil {
 		return "Error: unsuccessful in unmarshaling log in data from user", false
@@ -40,23 +40,20 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	// If not logged in, show sign up page
 	// check if session is alive
 	uid, err := sessionManager.checkSession(w, r)
-	fmt.Println("at check session uid is", uid)
 	if err != nil {
-		// No session found, show login page
+		// No session found, show sign up page
 		//handle error
 		// fmt.Fprintln(w, err.Error())
 		return err.Error(), false
 	}
+	// Check if user is logged in
+	if uid != "0" {
+		// User is logged in, redirect to front page
+		// fmt.Fprintf(w, "User is logged in")
+		// http.Redirect(w, r, "/", http.StatusSeeOther)
+		return "User is logged in", false
+	}
 
-	// // Check if user is logged in
-	// if uid != "0" {
-	// 	// User is logged in, redirect to front page
-	// 	// fmt.Fprintf(w, "User is logged in")
-	// 	// http.Redirect(w, r, "/", http.StatusSeeOther)
-	// 	return "User is logged in", true
-	// }
-	
-	
 	// parse the form
 	// r.ParseForm()
 
@@ -82,8 +79,6 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	
-	fmt.Println(loginUser)
 	// if no or more than 1 record found, return error
 	if len(users) != 1 {
 		return "Error: email or password is not found!", false
@@ -96,20 +91,19 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 
 	// set the session
-	// uID, err := strconv.Atoi(uid)
-	// if err != nil {
-	// 	// fmt.Fprintln(w, err.Error())
-	// 	return err.Error(), false
-	// }
-
-	num := users[0].User_id
-
-	err = sessionManager.setSessionUID(num, w, r)
+	uID, err := strconv.Atoi(uid)
 	if err != nil {
 		// fmt.Fprintln(w, err.Error())
 		return err.Error(), false
 	}
-	return strconv.Itoa(num), true
+	err = sessionManager.setSessionUID(uID, w, r)
+	if err != nil {
+		// fmt.Fprintln(w, err.Error())
+		return err.Error(), false
+	}
+
+	fmt.Println("uid is " + uid)
+	return uid, true
 	// redirect to the home page
 	// http.Redirect(w, r, "/", http.StatusFound)
 }

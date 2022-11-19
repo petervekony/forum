@@ -69,42 +69,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		w.Write(script)
-	} else if r.URL.Path == "/checkSession" {
-		uid, err := sessionManager.checkSession(w, r)
-		fmt.Println("at check session uid is", uid)
-		if err != nil {
-			// No session found, show login page
-			//handle error
-			// fmt.Fprintln(w, err.Error())
-			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
-			w.Write([]byte(writeMsg))
-		}
-		// Check if user is logged in
-		if uid != "0" {
-			// User is logged in, redirect to front page
-			// fmt.Fprintf(w, "User is logged in")
-			// http.Redirect(w, r, "/", http.StatusSeeOther)
-			writeMsg := fmt.Sprintf("{\"status\": %v}", true)
-			w.Write([]byte(writeMsg))
-		} else {
-			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
-			w.Write([]byte(writeMsg))
-		}
-	} else if r.URL.Path == "/logout" {
-		Logout(w, r);
-	} else if r.URL.Path == "/getUser" {
-		userInfo, status := GetUserInfo(w, r)
-		if status {
-			w.Write([]byte(userInfo))
-		} else {
-			fmt.Println(userInfo)
-			w.Write([]byte("{\"Username\": 0}"))
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-		}
-	} else if r.URL.Path == "/addPost" {
-		message, status := addPostText(w, r)
-		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
-		w.Write([]byte(writeMsg))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

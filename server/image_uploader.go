@@ -13,8 +13,9 @@ import (
 	"net/http"
 	"os"
 
-	"golang.org/x/image/draw"
 	d "gritface/database"
+
+	"golang.org/x/image/draw"
 )
 
 const size = 1000
@@ -68,23 +69,19 @@ func resizeImage(img image.Image) error {
 	resized := image.NewRGBA(image.Rect(0, 0, width, imageHeight))
 	// apporxbilinear gives a close quality to the original image, other methds trades between quality and speed
 	draw.ApproxBiLinear.Scale(resized, resized.Rect, img, img.Bounds(), draw.Over, nil)
-
-	// destination path to store the image
-	dstPath := "server/public_html/static/images/posts_imgs/"
-	// save the image to the path
-	SaveImg(dstPath, resized)
 	return nil
 }
 
 // Given image is 5120x2880
 // Want to have it 2560x1440
-func SaveImg(filePath string, img image.Image) {
+func SaveImg(filePath string, img image.Image) (string, error) {
 	imgFile, err := os.Create(filePath)
 	if err != nil {
 		log.Println("Cannot create file:", err)
 	}
 	defer imgFile.Close()
 	jpeg.Encode(imgFile, img, nil)
+	return filePath, nil
 }
 
 // function to upload image
@@ -109,12 +106,18 @@ func ImageUpload(r *http.Request) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return "Image successfully uploaded", nil
+	// destination path to store the image
+	dstPath := "server/public_html/static/images/posts_imgs/"
+	// save the image to the path
+	filePath, err := SaveImg(dstPath, img)
+	if err != nil {
+		return "", err
+	}
+	return filePath, nil
 }
 
 // function to change profile image
 func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
-
 	// get user id from the request
 	// this is the id of the user that is logged in
 	// we will use this to get the user from the database
@@ -132,25 +135,26 @@ func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// do something
 	}
-	fmt.Println(users.I)
+	// if user is not found, nothing to change
+	if len(user) == 0 {
+		http.Error(w, "User not found", http.StatusNotFound)
+	}
+	// path of the original image
+	fmt.Println(user[0].Profile_image)
 	// get the image from the request
 	// this is the image that the user wants to use as profile image
 	// we will save this image to the server and update the user profile image
 	// in the database
-	_, err = ImageUpload(r)
+	imgName, err := ImageUpload(r)
 	if err != nil {
 		// do something
 	}
-	
-
-
-
-
-	// call the image upload function
-	_, err := ImageUpload(r)
+	// update the user profile image
+	user[0].Profile_image = imgName
+	// update the user in the database
+	err = d.UpdateUserData(db, loginUser, user_id)
 	if err != nil {
-		fmt.Println("error", err)
-		return
+		// do something
 	}
 }
 

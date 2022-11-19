@@ -35,7 +35,7 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	defer rows.Close()
 	for rows.Next() { // Iterate and fetch the records
 		var user Users
-		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Deactive, &user.User_level); // Fetch the record
+		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Profile_image, &user.Deactive, &user.User_level); // Fetch the record
 		err != nil {
 			fmt.Println(err)
 			return users, err

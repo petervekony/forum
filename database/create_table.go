@@ -9,6 +9,7 @@ func createTable(db *sql.DB) error {
 		"name" TEXT NOT NULL UNIQUE,
 		"email" TEXT NOT NULL UNIQUE,
 		"password" TEXT NOT NULL,
+		"profile_image" TEXT DEFAULT '',
 		"deactive" INTEGER DEFAULT 0,
 		"user_level" TEXT
 	  );`

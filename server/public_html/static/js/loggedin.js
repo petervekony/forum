@@ -34,6 +34,10 @@ async function newPost() {
   console.log(`New post button clicked and value is ${userPost.value}`);
   
   const userPostHeading = document.getElementById("user_post_title");
+  if (!userPostHeading.value) {
+    console.log("Post title is empty");
+    return;
+  }
   
 
   let newPost = {
@@ -85,12 +89,12 @@ async function newPost() {
                   <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
                   <button class="bg-dark border rounded-end">💛<span
                           class="badge text-info">8</span></button>
+                  <p class="text-info"># Comments</p>
               </div>
           </div>
       </div>
-  </div>
-  <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
-  <div class="row">
+    <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+    <div class="row">
       <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
       <div class="col-10 text-start">
       <form action="/addComment" id="add_post_comment">
@@ -100,9 +104,11 @@ async function newPost() {
       </form>
       </div>
   </div>
+  </div>
 </div>
 </section>`;
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";
+  userPostHeading.value = "";
 }

@@ -6,13 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-        <link rel="icon" type="image/x-icon" href="/static/images/favicon1.ico">
+        <link rel="icon" type="image/x-icon" href="/static/images/favicon2.ico">
         <link rel="stylesheet" href="/static/css/style.css">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-
 <body class="bg-dark">
     <nav class="navbar navbar-expand-md navbar-light bg-info">
         <div class="navbar-collapse collapse w-100 order-1 order-md-0
@@ -22,46 +21,54 @@
                     <a class="nav-link" href="user.html">GRITFACE</a>
                 </li>
             </ul>
-            <button class="btn btn-dark text-info" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            <button
+                class="btn btn-dark text-info"
+                type="button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasExample"
+                aria-controls="offcanvasExample">
                 Categories
             </button>
             <ul class="nav navbar-nav offset-2">
                 <li>
                 <form action="search" method="GET" class="navbar-form">
                     <div class="form-group">
-                        <div class="input-group offset-2">
-                            <input type="search" name="search" id="" placeholder="Search..." class="form-control">
-                            <button id="search-button" class="btn bg-dark
-                                    text-info">search</button>
+                        <div class="input-group">
+                            <input
+                                type="search"
+                                name="search"
+                                id=""
+                                placeholder="Search..."
+                                class="form-control">
+                            <button
+                                id="search-button"
+                                class="btn bg-dark text-info">
+                                search
+                            </button>
                         </div>
                     </div>
                 </form>
                 </li>
             </ul>
         </div>
-        <div class="nav-item active col-5 text-end mx-3">
-            <button
-              class="btn bg-dark border-secondary text-info"
-              data-bs-toggle="modal"
-              data-bs-target="#signup_modal"
-            >
-              Sign up
+       <div class="nav-item active col-5 text-end mx-3">
+        <form>  
+            <button 
+                class="btn bg-dark border-secondary text-info"
+                formaction=""
+                data-bs-toggle="modal"
+                data-bs-target="#settings">
+                Profile
             </button>
             <button
-              class="btn bg-dark border-secondary text-info"
-              data-bs-toggle="modal"
-              data-bs-target="#login_modal"
-              onclick="resetLoginModal()"
-            >
-              Login
+                class="btn bg-dark border-secondary text-info"
+                formaction="/logout">
+                Log out
             </button>
-          </div>
-        </nav>
-
-
+        </form>
+        </div>
+    </nav>
     <br>
-
     <div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample"
         aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
@@ -96,17 +103,19 @@
     <div class="container">
         <div class="user_post">
             <div class="row offset-2 mb-2">
-                <div class="col-1 bg-info rounded text-center" id="user_pic">$pic</div>
-                <h3 class="col-6 text-info text-justify" id="user_name">$Username</h3>
+                <!-- <div class="col-1 bg-info rounded text-center" id="user_pic">$pic</div> -->
+                <div class="col-1 mx-2"><img class="center-block rounded-circle" src="static/images/raccoon.jpeg" id="user_pic"></div>
+                <h1 class="col-6 text-info text-start mx-4 px-4 my-2" id="user_name">$Username</h1>
             </div>
         </div>
         <style>
             textarea {
                 resize: none;
+                outline: none;
             }
         </style>
         <div class="col-8 offset-2 mb-2" id="post_title">
-            <h5 class="text-info text-justify text-end">Post title</h5>
+            <h5 class="text-info text-end">Post title</h5>
             <form action="/addPost" id="add_post_form">
                 <textarea class="form-control text-light bg-dark
                                 mb-2 border-info" name="post_title" id="user_post_title" rows="1"
@@ -231,7 +240,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="offset-1 py-1">
                     <div class="col-12">
                         <div class="row">
@@ -241,19 +249,29 @@
                                 <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
                                 <button class="bg-dark border
                                             rounded-end">💛<span class="badge text-info">8</span></button>
-                                <p class="text-info">5 Comments</p>
+                                <p class="mx-1 text-info">5 Comments</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
                         <div class="row">
                             <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
-                            <div class="col-10 text-start">
-                            <form action="/addComment" id="add_post_comment">
-                                <textarea class="form-control text-light bg-dark
-                                            mb-2 border-info" name="user_comment" id="user_post_comment" rows="1"
-                                placeholder="Write a comment"></textarea>
-                            </form>
+                            <div class="col-11 text-start">
+                                <div class="input-group">
+                                    <textarea
+                                        class="bg-dark border-info rounded text-light px-2 w-75"
+                                        class="form-control"
+                                        placeholder="Write a comment"></textarea>
+                                    <div class="input-group-append mx-2">
+                                      <button
+                                        class="btn bg-info text-dark mt-2"
+                                        type="button"
+                                        formaction="/addComment"
+                                        id="add_post_comment">
+                                        Comment
+                                      </button>
+                                    </div>
+                                  </div>
                             </div>
                         </div>
                     </div>

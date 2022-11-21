@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"image"
@@ -132,6 +133,16 @@ func uploadImageHandler(w http.ResponseWriter, r *http.Request) (string, error) 
 		return "", err
 	}
 	return filePath, nil
+}
+
+// store image path to db
+func storeImageToDB(db *sql.DB, filePath string, userID int) error {
+	// store the image path to the database
+	_, err := db.Exec("UPDATE users SET profile_img = $1 WHERE id = $2", filePath, userID)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // function to change profile image

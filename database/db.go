@@ -13,12 +13,13 @@ import (
 )
 
 type Users struct {
-	User_id    int
-	Name       string
-	Email      string
-	Password   string
-	Deactive   int
-	User_level string
+	User_id     int
+	Name        string
+	Email       string
+	Password    string
+	Profile_image string
+	Deactive    int
+	User_level  string
 }
 type Posts struct {
 	Post_id      int

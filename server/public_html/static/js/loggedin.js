@@ -32,9 +32,16 @@ async function newPost() {
     return;
   }
   console.log(`New post button clicked and value is ${userPost.value}`);
+  
+  const userPostHeading = document.getElementById("user_post_title");
+  if (!userPostHeading.value) {
+    console.log("Post title is empty");
+    return;
+  }
+  
 
   let newPost = {
-    postHeading: "post heading",
+    postHeading: userPostHeading.value,
     postBody: userPost.value,
   };
 
@@ -49,12 +56,12 @@ async function newPost() {
 
   // create new post in DOM (old)
   const postDiv = document.createElement("div");
-  postDiv.classList.add("border", "rounded", "content", "mx-auto", "col-8");
+  postDiv.classList.add("border", "rounded", "content", "mx-auto", "col-8", "mb-2");
   postDiv.innerHTML = `<section class="row" id="post_section">
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
-              Testing
+              ${userPostHeading.value}
           </div>
           <div class="col-10 offset-1" id="post_body">
               <div class="border bg-info text-center" id="post_image">Testing image"</div>
@@ -82,7 +89,29 @@ async function newPost() {
                   <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
                   <button class="bg-dark border rounded-end">💛<span
                           class="badge text-info">8</span></button>
+                  <p class="text-info"># Comments</p>
               </div>
+          </div>
+      </div>
+      <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+      <div class="row">
+          <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
+          <div class="col-11 text-start">
+              <div class="input-group">
+                  <textarea
+                      class="bg-dark border-info rounded text-light px-2 w-75"
+                      class="form-control"
+                      placeholder="Write a comment"></textarea>
+                  <div class="input-group-append mx-2">
+                    <button
+                      class="btn bg-info text-dark mt-2"
+                      type="button"
+                      formaction="/addComment"
+                      id="add_post_comment">
+                      Comment
+                    </button>
+                  </div>
+                </div>
           </div>
       </div>
   </div>
@@ -90,4 +119,5 @@ async function newPost() {
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";
+  userPostHeading.value = "";
 }

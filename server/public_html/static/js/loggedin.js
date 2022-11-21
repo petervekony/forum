@@ -97,7 +97,7 @@ async function newPost() {
       <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
         <div class="row">
           <div class="col-1>
-            <img class="rounded-circle" style="max-width: 120%" src="static/images/raccoon.jpeg" id="pic"></img>
+            <img class="rounded-circle center-block" style="max-width: 55px" src="static/images/raccoon.jpeg" id="fuck"></img>
           </div>
           <div class="col-11 text-start">
             <div class="input-group">
@@ -119,6 +119,7 @@ async function newPost() {
       </div>
   </div>
 </section>`;
+
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";

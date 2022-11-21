@@ -17,8 +17,8 @@ async function initPage() {
         console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
           comments += `<div class="collapse" id="collapse_post_comments">
-            <div class="row my-3 ms-auto" id="post_comments">
-              <div class="col-1 mx-1">
+            <div class="row mb-2 offset-1" id="post_comments">
+              <div class="col-1 mx-1 mb-2">
                 <img class="rounded-circle"
                      style="max-width: 120%; border: 2px solid #54B4D3;"
                      src="static/images/raccoon.jpeg"
@@ -66,7 +66,7 @@ async function initPage() {
         </div>
 
         <div class="offset-1 py-1">
-            <div class="col-12 mb-2">
+            <div class="col-12">
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
                         <button class="bg-dark border rounded-start">👍<span

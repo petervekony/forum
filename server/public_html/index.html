@@ -225,14 +225,18 @@
   </div>
 
     <!-- another modal for succesful sign up -->
-
+  <style>
+    textarea {
+      resize: none;
+    }
+    </style>
     <div id="signup_result_modal" class="modal fade" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content bg-dark text-secondary">
           <div class="modal-header justify-content-center border-0 text-info">
             <h4 class="modal-title font-weight-bold" id="signup_result_heading">Welcome!</h4>
           </div>
-          <div class="modal-body mx-5 border-info" ">
+          <div class="modal-body mx-5 border-info">
             <p id="signup_result_body">
               You are now registered to Gritface!<br />
               You can now login.
@@ -316,30 +320,33 @@
                           <div class="mx-1" id="post_reactions">
                               <button class="bg-dark border
                                           rounded-start">👍<span class="badge text-info">10</span></button>
-                              <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
-                              <button class="bg-dark border
-                                          rounded-end">💛<span class="badge text-info">8</span></button>
+                              <button class="bg-dark border rounded-end">👎<span class="badge text-info">5</span></button>
                           </div>
                       </div>
                   </div>
                   <div class="collapse" id="collapse_post_comments">
-                      <div class="row my-3" id="post_comments">
-                          <div class="col-1 row-1 mx-1 border
-                                      rounded-start bg-info">img</div>
-                          <div class="col-8 border rounded-end
-                                      bg-secondary" id="post_comments">
-                              Lorem ipsum dolor sit amet, consectetur
-                              adipiscing elit.
-                              Suspendisse scelerisque vehicula arcu,
-                              sed molestie dui
-                              facilisis a.kjklasjdaklsdj
-                              askldjlasjdas
-                              askdjaskljdlkasjdklas
-                              asdkljaskldjaslkdjaslkj.
+                      <div class="row my-3 ms-auto" id="post_comments">
+                          <div class="col-1 mx-1">
+                            <img class="rounded-circle border-info"
+                            style="max-width: 120%; border: 2px solid #54B4D3;"
+                            src="static/images/raccoon.jpeg"
+                            id="user_pic">
+                            </img>
+                          </div>
+                          <div class="col-8 border rounded bg-secondary"
+                               id="post_comments">
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit.
+                                Suspendisse scelerisque vehicula arcu,
+                                sed molestie dui
+                                facilisis a.kjklasjdaklsdj
+                                askldjlasjdas
+                                askdjaskljdlkasjdklas
+                                asdkljaskldjaslkdjaslkj.
                           </div>
                       </div>
                   </div>
-              </div>
+              <!-- </div> -->
           </section>
       </div>
   </div>

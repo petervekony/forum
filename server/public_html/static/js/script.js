@@ -9,7 +9,6 @@ async function initPage() {
         postDiv.classList.add(
           "border",
           "rounded",
-          "content",
           "mx-auto",
           "col-8",
           "mt-2"
@@ -18,14 +17,30 @@ async function initPage() {
         console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
           comments += `<div class="collapse" id="collapse_post_comments">
-            <div class="row my-3" id="post_comments">
-                <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
-                <div class="col-8 border rounded-end bg-secondary" id="post_comments">
+            <div class="row my-3 ms-auto" id="post_comments">
+              <div class="col-1 mx-1">
+                <img class="rounded-circle"
+                     style="max-width: 120%; border: 2px solid #54B4D3;"
+                     src="static/images/raccoon.jpeg"
+                     id="user_pic">
+                     </img>
+              </div>
+              <div class="col-8 border rounded bg-secondary" id="post_comments">
                 ${comment.body}
-                </div>
+              </div>
             </div>
-        </div>`;
+          </div>`;
         }
+            
+            
+            
+        //     <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
+        //         <div class="col-8 border rounded-end bg-secondary" id="post_comments">
+        //         ${comment.body}
+        //         </div>
+        //     </div>
+        // </div>`;
+        // }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
         <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
@@ -56,32 +71,9 @@ async function initPage() {
                     <div class="mx-1" id="post_reactions">
                         <button class="bg-dark border rounded-start">👍<span
                                 class="badge text-info">10</span></button>
-                        <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
-                        <button class="bg-dark border rounded-end">💛<span
-                                class="badge text-info">8</span></button>
+                        <button class="bg-dark border rounded-end">👎<span class="badge text-info">5</span></button>
                          <p class="mx-1 text-info" id="number_of_comments">16 Comments</p>
                     </div>
-                </div>
-            </div>
-            <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
-            <div class="row">
-                <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
-                <div class="col-11 text-start">
-                    <div class="input-group">
-                        <textarea
-                            class="bg-dark border-info rounded text-light px-2 w-75"
-                            class="form-control"
-                            placeholder="Write a comment"></textarea>
-                        <div class="input-group-append mx-2">
-                          <button
-                            class="btn bg-info text-dark mt-2"
-                            type="button"
-                            formaction="/addComment"
-                            id="add_post_comment">
-                            Comment
-                          </button>
-                        </div>
-                      </div>
                 </div>
             </div>
         </div>

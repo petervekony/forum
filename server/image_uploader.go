@@ -95,15 +95,15 @@ func SaveImg(filePath string, img image.Image) (string, error) {
 // this is the one that will be called from the handler
 func uploadImageHandler(w http.ResponseWriter, r *http.Request) (string, error) {
 	if r.Method != "POST" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return "", errors.New("Method not allowed")
+		http.Error(w, "bad Request Error", http.StatusBadRequest)
+		return "", errors.New("method not allowed")
 	}
 	// max upload size is 20mb
 	// this we can adjust depending on the size of the image we want
 	err := r.ParseMultipartForm(20000 << 10)
 	if err != nil {
 		http.Error(w, "File size bigger than 20MB", http.StatusBadRequest)
-		return "", errors.New("The uploaded image is too big. Please use an image less than 20MB in size")
+		return "", errors.New("image size too bigs. Please use an image less than 20MB in size")
 	}
 	// get the file from the request
 	file, fileHeader, err := r.FormFile("profileImage")

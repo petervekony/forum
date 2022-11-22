@@ -105,6 +105,10 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		message, status := addPostText(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/addComment" {
+		message, status := addComment(w, r)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(writeMsg))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

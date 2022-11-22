@@ -116,29 +116,28 @@
         </style>
         <div class="col-8 offset-2 mb-2" id="post_title">
             <h5 class="text-info text-end">Post title</h5>
-            <form action="/addPost" id="add_post_form">
+            <!-- <form action="/addPost" id="add_post_form"> -->
                 <textarea class="form-control text-light bg-dark
                                 mb-2 border-info" name="post_title" id="user_post_title" rows="1"
                     placeholder="Add a title"></textarea>
-            </form>
-
+            <!-- </form> -->
         </div>
         <div class="col-8 offset-2 text-secondary border-info">
-            <form action="/addPost" id="add_post_form">
+            <!-- <form action="/addPost" id="add_post_form"> -->
                 <textarea class="form-control text-light bg-dark
                                 mb-2 border-info" name="post_content" id="user_post" rows="3"
                     placeholder="What's on your mind?"></textarea>
-            </form>
+            <!-- </form> -->
             <div class="user_post_footer text-end mb-4">
 
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton" id="postCats">
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check1" />
+                                    <input class="form-check-input" type="checkbox" value="IRL" id="check1" />
                                     <label class="form-check-label" for="check1">IRL</label>
                                 </div>
                             </a>
@@ -146,7 +145,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check2" />
+                                    <input class="form-check-input" type="checkbox" value="Food" id="check2" />
                                     <label class="form-check-label" for="check2">Food</label>
                                 </div>
                             </a>
@@ -154,7 +153,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check3" />
+                                    <input class="form-check-input" type="checkbox" value="Sport" id="check3" />
                                     <label class="form-check-label" for="check3">Sport</label>
                                 </div>
                             </a>
@@ -162,14 +161,14 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check4" />
+                                    <input class="form-check-input" type="checkbox" value="Hacking" id="check4" />
                                     <label class="form-check-label" for="check4">Hacking</label>
                                 </div>
                             </a>
                         </li>
                         <a class="dropdown-item" href="#">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check5" checked />
+                                <input class="form-check-input" type="checkbox" value="Shitpost" id="check5" checked />
                                 <label class="form-check-label" for="check5">Shitpost</label>
                             </div>
                         </a>
@@ -177,7 +176,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check6" />
+                                    <input class="form-check-input" type="checkbox" value="Mental health" id="check6" />
                                     <label class="form-check-label" for="check6">Mental health</label>
                                 </div>
                             </a>
@@ -259,6 +258,7 @@
                             <div class="col-11 text-start">
                                 <div class="input-group">
                                     <textarea
+                                        id="newComment"
                                         class="bg-dark border-info rounded text-light px-2 w-75"
                                         class="form-control"
                                         placeholder="Write a comment"></textarea>

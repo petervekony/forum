@@ -14,11 +14,11 @@ async function initPage() {
           "col-8",
           "mt-2"
         );
+        postDiv.id = postJSON.post_id;
         let comments = "";
-        console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
-          comments += `<div class="collapse" id="collapse_post_comments">
-            <div class="row my-3" id="post_comments">
+          comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
+            <div class="row my-3 ms-auto" id="post_comments">
                 <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
                 <div class="col-8 border rounded-end bg-secondary" id="post_comments">
                 ${comment.body}
@@ -28,7 +28,7 @@ async function initPage() {
         }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
+        <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
                     ${postJSON.heading}
@@ -69,6 +69,7 @@ async function initPage() {
                 <div class="col-11 text-start">
                     <div class="input-group">
                         <textarea
+                            id="newComment"
                             class="bg-dark border-info rounded text-light px-2 w-75"
                             class="form-control"
                             placeholder="Write a comment"></textarea>
@@ -76,8 +77,7 @@ async function initPage() {
                           <button
                             class="btn bg-info text-dark mt-2"
                             type="button"
-                            formaction="/addComment"
-                            id="add_post_comment">
+                            onclick="addComment(${postDiv.id})">
                             Comment
                           </button>
                         </div>

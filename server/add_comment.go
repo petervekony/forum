@@ -10,13 +10,12 @@ import (
 	"time"
 )
 
-type Posts struct {
-	Body    string `json:"postBody"`
-	Heading string `json:"postHeading"`
-	Categories []string `json:"postCats"`
+type Comments struct {
+	Body       string   `json:"postComment"`
+	Post_id	int `json:"postID"`
 }
 
-func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
+func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
@@ -25,17 +24,17 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 
 	// Unmarshal
-	var post Posts
-	err = json.Unmarshal(req, &post)
+	var comment Comments
+	err = json.Unmarshal(req, &comment)
 	if err != nil {
 		return "Error: unsuccessful in unmarshaling log in data from user", false
 	}
-	fmt.Println(post)
+	fmt.Println(comment)
 	// If logged in, redirect to front page
 	// If not logged in, show sign up page
 	// check if session is alive
 	uid, err := sessionManager.checkSession(w, r)
-	fmt.Println("Adding post, check session uid is", uid)
+	fmt.Println("Adding comment, check session uid is", uid)
 	if err != nil {
 		// No session found, show login page
 		//handle error
@@ -51,10 +50,13 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return err.Error(), false
 	}
-	postID, err := d.InsertPost(db, uID, post.Heading, post.Body, time.Now().String(), "new post image")
 	if err != nil {
 		return err.Error(), false
 	}
-	postID_str := strconv.Itoa(postID)
-	return postID_str, true
+	commentID, err := d.InsertComment(db, comment.Post_id, uID, comment.Body, time.Now().String())
+	if err != nil {
+		return err.Error(), false
+	}
+	commentID_str := strconv.Itoa(commentID)
+	return commentID_str, true
 }

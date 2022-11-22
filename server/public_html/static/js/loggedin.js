@@ -32,19 +32,26 @@ async function newPost() {
     return;
   }
   console.log(`New post button clicked and value is ${userPost.value}`);
-  
+
   const userPostHeading = document.getElementById("user_post_title");
   if (!userPostHeading.value) {
     console.log("Post title is empty");
     return;
   }
-  
+
+  let postCats = [];
+  const postCatsList = document.getElementById("postCats");
+  postCatsList
+    .querySelectorAll('input[type="checkbox"]:checked')
+    .forEach((checked) => postCats.push(checked.value));
 
   let newPost = {
     postHeading: userPostHeading.value,
     postBody: userPost.value,
+    postCats: postCats,
   };
 
+  let postID;
   await fetch("/addPost", {
     method: "POST",
     body: JSON.stringify(newPost),
@@ -52,11 +59,20 @@ async function newPost() {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
+      postID = json.message;
     });
 
   // create new post in DOM (old)
   const postDiv = document.createElement("div");
-  postDiv.classList.add("border", "rounded", "content", "mx-auto", "col-8", "mb-2");
+  postDiv.classList.add(
+    "border",
+    "rounded",
+    "content",
+    "mx-auto",
+    "col-8",
+    "mb-2"
+  );
+  postDiv.id = postID;
   postDiv.innerHTML = `<section class="row" id="post_section">
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
@@ -105,9 +121,7 @@ async function newPost() {
                   <div class="input-group-append mx-2">
                     <button
                       class="btn bg-info text-dark mt-2"
-                      type="button"
-                      formaction="/addComment"
-                      id="add_post_comment">
+                      type="button">
                       Comment
                     </button>
                   </div>
@@ -120,4 +134,41 @@ async function newPost() {
   container.prepend(postDiv);
   userPost.value = "";
   userPostHeading.value = "";
+}
+
+async function addComment(id) {
+  const postDiv = document.getElementById(id);
+  const newComment = postDiv.querySelector("#newComment");
+  if (!newComment.value) {
+    console.log("Comment is empty");
+    return;
+  }
+  console.log(`New comment button clicked and value is ${newComment.value}`);
+  let comment = {
+    postComment: newComment.value,
+    postID: id,
+  };
+  console.log(id);
+  let commentID = 1;
+  await fetch("/addComment", {
+    method: "POST",
+    body: JSON.stringify(comment),
+  })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      commentID = json.message;
+    });
+  // create new post in DOM (old)
+  const commentDiv = document.createElement("div");
+  commentDiv.classList.add("row", "my-3", "ms-auto");
+  commentDiv.id = commentID;
+  commentDiv.innerHTML = `<div class="col-1 mx-1 border
+    rounded-start bg-info">img</div>
+  <div class="col-8 border rounded-end
+    bg-secondary" id="post_comments">
+  ${newComment.value}
+  </div>`;
+  const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
+  commentsDiv.prepend(commentDiv);
 }

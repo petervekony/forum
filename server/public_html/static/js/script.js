@@ -26,11 +26,11 @@ async function initPage() {
                 <p class="text-info pt-2">{$username}</p>
                 <p>${comment.body}</p>
                 <div class="row">
-                <div class="text-end" id="comment_reactions">
-                  <button class="btn btn-dark rounded-start">⬆️
+                <div class="text-end mb-1" id="comment_reactions">
+                  <button class="btn btn-dark">⬆️
                       <span class="badge text-info">6</span>
                   </button>
-                  <button class="btn btn-dark rounded-end">⬇️
+                  <button class="btn btn-dark">⬇️
                       <span class="badge text-info">9</span>
                   </button>
                 </div>
@@ -68,10 +68,10 @@ async function initPage() {
             <div class="col-12 mb-2">
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
-                        <button class="bg-dark border rounded-start">⬆️<span
-                                class="badge text-info">10</span></button>
-                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
+                        <button class="btn btn-dark border">⬆️<span
+                                class="badge text-secondary">10</span></button>
+                        <button class="btn btn-dark border">⬇️<span class="badge text-secondary">5</span></button>
+                         <p class="mx-1 text-dark" id="number_of_comments">13 Comments</p>
                     </div>
                 </div>
             </div>

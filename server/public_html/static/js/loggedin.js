@@ -100,9 +100,9 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="bg-dark border rounded-start">⬆️<span
-                          class="badge text-info">10</span></button>
-                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
+                  <button class="btn btn-dark border">⬆️<span
+                          class="badge text-secondary">10</span></button>
+                  <button class="btn btn-dark border">⬇️<span class="badge text-secondary">5</span></button>
                   <p class="text-info"># Comments</p>
               </div>
           </div>
@@ -173,11 +173,11 @@ async function addComment(id) {
     <p class="text-info pt-2">{$userName}</p>
       <p>${newComment.value}</p>
       <div class="row">
-      <div class="text-end" id="comment_reactions">
-        <button class="btn btn-dark rounded-start">⬆️
+      <div class="text-end mb-1" id="comment_reactions">
+        <button class="btn btn-dark">⬆️
             <span class="badge text-info">6</span>
         </button>
-        <button class="btn btn-dark rounded-end">⬇️
+        <button class="btn btn-dark">⬇️
             <span class="badge text-info">9</span>
         </button>
       </div>

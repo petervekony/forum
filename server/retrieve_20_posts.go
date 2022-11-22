@@ -71,7 +71,7 @@ func Retrieve20Posts() (string, error) {
 			return "", err
 		}
 		thisPostId := &row.Post_id
-		structSlice[*thisPostId].Comments[*&row.CommentID] = *row
+		structSlice[*thisPostId].Comments[row.CommentID] = *row
 
 	}
 	res, err := json.Marshal(structSlice)

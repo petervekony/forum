@@ -7,6 +7,10 @@ textarea:focus {
   outline: none !important;
 }
 
+textarea {
+  resize: none !important;
+}
+
 form:focus {
   outline: none !important;
 }

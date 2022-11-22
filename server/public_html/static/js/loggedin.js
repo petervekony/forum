@@ -39,12 +39,6 @@ async function newPost() {
     return;
   }
 
-  let postCats = [];
-  const postCatsList = document.getElementById("postCats");
-  postCatsList
-    .querySelectorAll('input[type="checkbox"]:checked')
-    .forEach((checked) => postCats.push(checked.value));
-
   let newPost = {
     postHeading: userPostHeading.value,
     postBody: userPost.value,
@@ -72,8 +66,8 @@ async function newPost() {
     "col-8",
     "mb-2"
   );
-  postDiv.id = postID;
   postDiv.innerHTML = `<section class="row" id="post_section">
+  <p class="text-start mx-2 text-info">{$username}</p>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -100,28 +94,31 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="bg-dark border rounded-start">👍<span
+                  <button class="bg-dark border rounded-start">⬆️<span
                           class="badge text-info">10</span></button>
-                  <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
-                  <button class="bg-dark border rounded-end">💛<span
-                          class="badge text-info">8</span></button>
+                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
                   <p class="text-info"># Comments</p>
               </div>
           </div>
       </div>
       <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
       <div class="row">
-          <div class="col-1 bg-info rounded justify-content-center py-2" id="comment_user_pic">$pic</div>
-          <div class="col-11 text-start">
+          <div class="col-1">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
+          </div>
+          <div class="col-10 text-start">
               <div class="input-group">
                   <textarea
                       class="bg-dark border-info rounded text-light px-2 w-75"
                       class="form-control"
+                      style="resize:none;"
+                      id="newComment"
                       placeholder="Write a comment"></textarea>
                   <div class="input-group-append mx-2">
                     <button
                       class="btn bg-info text-dark mt-2"
-                      type="button">
+                      type="button"
+                      onclick="addComment(${postDiv.id})">
                       Comment
                     </button>
                   </div>
@@ -159,16 +156,33 @@ async function addComment(id) {
       console.log(json);
       commentID = json.message;
     });
-  // create new post in DOM (old)
+  // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "my-3", "ms-auto");
   commentDiv.id = commentID;
-  commentDiv.innerHTML = `<div class="col-1 mx-1 border
-    rounded-start bg-info">img</div>
-  <div class="col-8 border rounded-end
-    bg-secondary" id="post_comments">
-  ${newComment.value}
-  </div>`;
+  commentDiv.innerHTML = `<div class="col-1 mx-1 mb-2>
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg">
+    </div>
+    <div class="col-8 border rounded bg-secondary" id="post_comments">
+    <p class="text-info pt-2">{$userName}</p>
+      ${newComment.value}
+      <div class="row">
+      <div class="text-end" id="comment_reactions">
+        <button class="btn btn-dark rounded-start">⬆️
+            <span class="badge text-info">6</span>
+        </button>
+        <button class="btn btn-dark rounded-end">⬇️
+            <span class="badge text-info">9</span>
+        </button>
+      </div>
+    </div>
+      </div>
+    </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
-  commentsDiv.prepend(commentDiv);
+  if (!commentsDiv) {
+    console.log("broke down");
+  } else {
+    commentsDiv.prepend(commentDiv);
+  }
+  newComment.value = "";
 }

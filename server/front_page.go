@@ -16,6 +16,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		uid, err := sessionManager.checkSession(w, r)
 		if err != nil {
 			// Handle error for session check fail
+			fmt.Println("error, session fucked up")
 		}
 
 		tmpl, err := template.ParseFiles("server/public_html/index.html")

@@ -51,9 +51,21 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return err.Error(), false
 	}
-	postID, err := d.InsertPost(db, uID, post.Heading, post.Body, time.Now().String(), "new post image")
+	postID, err := d.InsertPost(db, uID, post.Heading, post.Body, time.Now().String()[0:19], "new post image")
 	if err != nil {
 		return err.Error(), false
+	}
+	for _, category := range post.Categories {
+		catMap := make(map[string]string)
+		catMap["category_name"] = category
+		categoryArr, err := d.GetCategories(db, catMap)
+		if err != nil {
+			return err.Error(), false
+		}
+		_, err = d.InsertPostCategory(db, postID, categoryArr[0].Category_id)
+		if err != nil {
+			return err.Error(), false
+		}
 	}
 	postID_str := strconv.Itoa(postID)
 	return postID_str, true

@@ -63,10 +63,12 @@ async function initPage() {
  </div>
  </div>`;
         }
-        let likeNumComment = 0,
-          dislikeNumComment = 0;
+        let likeNumComment, dislikeNumComment;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
+          likeNumComment = 0;
+          dislikeNumComment = 0;
           if (comment.reactions) {
+            console.log(comment.reactions);
             comment.reactions.map(function (reactions) {
               for (const [key, reaction] of Object.entries(reactions)) {
                 if (reaction == "⬆️") likeNumComment++;
@@ -80,7 +82,7 @@ async function initPage() {
  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
  </div>
  <div class="col-8 border rounded bg-secondary" id="post_comments">
- <p class="text-info pt-2">Username of uid: ${comment.user_id}</p>
+ <p class="text-info pt-2">${comment.username}</p>
  ${comment.body}
  <div class="row">
  <div class="text-end" id="comment_reactions">
@@ -98,9 +100,7 @@ async function initPage() {
         comments += "</div>";
         postDiv.innerHTML = `
  <section class="row" id="post_section">
- <p class="text-start mx-2 text-info">Username of uid: ${
-   postJSON.user_id
- } ${categories}</p>
+ <p class="text-start mx-2 text-info">${postJSON.username} ${categories}</p>
  <div data-bs-target="#collapse_post_comments${
    postJSON.post_id
  }" data-bs-toggle="collapse">

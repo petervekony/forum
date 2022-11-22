@@ -1,4 +1,5 @@
 window.onload = setUser();
+window.onload = setCategories();
 
 async function setUser() {
   const userPic = document.getElementById("user_pic");
@@ -25,6 +26,26 @@ async function setUser() {
   addPostBtn.addEventListener("click", newPost);
 }
 
+async function setCategories() {
+  await fetch("/getCategories", {
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then(function (json) {
+      const catsList = document.getElementById("postCats");
+      json.map(function (category) {
+        const catsItem = document.createElement("li");
+        catsItem.innerHTML = `<a class="dropdown-item" href="#">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${category}" id="check1" />
+            <label class="form-check-label" for="check1">${category}</label>
+        </div>
+    </a>`;
+        catsList.append(catsItem);
+      });
+    });
+}
+
 async function newPost() {
   const userPost = document.getElementById("user_post");
   if (!userPost.value) {
@@ -39,10 +60,20 @@ async function newPost() {
     return;
   }
 
+  let categoriesSelected = [];
+  let catInnerHTML = "";
+  const postCats = document
+    .getElementById("postCats")
+    .querySelectorAll("input:checked");
+  postCats.forEach((x) => {
+    categoriesSelected.push(x.value);
+    catInnerHTML += `#${x.value} `;
+  });
+
   let newPost = {
     postHeading: userPostHeading.value,
     postBody: userPost.value,
-    postCats: postCats,
+    postCats: categoriesSelected,
   };
 
   let postID;
@@ -66,8 +97,10 @@ async function newPost() {
     "col-8",
     "mb-2"
   );
+  postDiv.id = postID;
+  const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <p class="text-start mx-2 text-info">{$username}</p>
+  <p class="text-start mx-2 text-info">${username} ${catInnerHTML}</p>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -80,10 +113,9 @@ async function newPost() {
               </div>
               <div class="row text-secondary">
                   <div class="col-6 order-0 text-left" id="post_insert_time">
-                      Create time ex (12:37)
+                      Created just now..
                   </div>
                   <div class="col-6 order-1 text-end" id="post_mod_time">
-                      Update time ex (12:53)
                   </div>
               </div>
           </div>
@@ -95,9 +127,9 @@ async function newPost() {
           <div class="row">
               <div class="mx-1" id="post_reactions">
                   <button class="bg-dark border rounded-start">⬆️<span
-                          class="badge text-info">10</span></button>
-                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
-                  <p class="text-info"># Comments</p>
+                          class="badge text-info">0</span></button>
+                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">0</span></button>
+                  <p class="text-info">0 Comments</p>
               </div>
           </div>
       </div>

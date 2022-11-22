@@ -20,6 +20,7 @@ type JSONData struct {
 	Comments     map[int]JSONComments `json:"comments"`
 	Categories	 []string							`json:"categories"`
 	Reactions		 []map[int]string			`json:"reactions"`
+	Username		 string								`json:"username"`
 }
 
 type JSONComments struct {
@@ -28,6 +29,7 @@ type JSONComments struct {
 	User_id   int    							`json:"user_id"`
 	Body      string 							`json:"body"`
 	Reactions	[]map[int]string		`json:"reactions"`
+	Username	string							`json:"username"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -55,6 +57,15 @@ func Retrieve20Posts() (string, error) {
 		}
 
 		postId := &rD.Post_id
+
+		// getting user's name
+		currentUser := make(map[string]string)
+		currentUser["user_id"] = strconv.Itoa(rD.User_id)
+		users, err := database.GetUsers(db, currentUser)
+		if err != nil {
+			return "", err
+		}
+		rD.Username = users[0].Name;
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -107,6 +118,15 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
+		currentUser := make(map[string]string)
+		currentUser["user_id"] = strconv.Itoa(row.User_id)
+		users, err := database.GetUsers(db, currentUser)
+		if err != nil {
+			return "", err
+		}
+		row.Username = users[0].Name;
+
+
 		thisPostId := &row.Post_id
 		thisCommentId := &row.CommentID
 		// getting reactions

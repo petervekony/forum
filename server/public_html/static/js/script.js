@@ -41,6 +41,7 @@ async function initPage() {
         }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
+        <p class="text-start mx-2 text-info">{$username}</p>
         <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">

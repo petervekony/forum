@@ -186,7 +186,7 @@ async function addComment(id) {
     </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   if (!commentsDiv) {
-    commentsDiv.append(commentDiv.value)
+   console.log("broke down")
   } else {
     commentsDiv.prepend(commentDiv);
   }

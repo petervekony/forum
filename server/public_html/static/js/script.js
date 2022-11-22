@@ -13,10 +13,11 @@ async function initPage() {
           "col-8",
           "mt-2"
         );
+        postDiv.id = postJSON.post_id;
         let comments = "";
         console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
-          comments += `<div class="collapse" id="collapse_post_comments">
+          comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
             <div class="row mb-2 offset-1" id="post_comments">
               <div class="col-1 mx-1 mb-2">
                 <img class="rounded-circle"
@@ -29,7 +30,7 @@ async function initPage() {
                 ${comment.body}
               </div>
             </div>
-          </div>`;
+        </div>`;
         }
             
             
@@ -43,7 +44,7 @@ async function initPage() {
         // }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
+        <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
                     ${postJSON.heading}
@@ -73,6 +74,29 @@ async function initPage() {
                                 class="badge text-info">10</span></button>
                         <button class="bg-dark border rounded-end">👎<span class="badge text-info">5</span></button>
                          <p class="mx-1 text-info" id="number_of_comments">16 Comments</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
+            <div class="row">
+                <div class="col-1 mx-2">
+                    <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+                </div>
+                <div class="col-10 text-start">
+                    <div class="input-group">
+                        <textarea
+                            class="bg-dark border-info rounded text-light px-2 w-75"
+                            class="form-control"
+                            style="resize:none;"
+                            placeholder="Write a comment"></textarea>
+                        <div class="input-group-append mx-2">
+                          <button
+                            class="btn bg-info text-dark mt-2"
+                            type="button"
+                            onclick="addComment(${postDiv.id})>
+                            Comment
+                          </button>
+                        </div>
                     </div>
                 </div>
             </div>

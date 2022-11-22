@@ -158,17 +158,17 @@ func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "User not found", http.StatusNotFound)
 	}
 	// path of the original image
-	fmt.Println(user[0].Profile_image)
+	//fmt.Println(user[0].Profile_image)
 	// get the image from the request
 	// this is the image that the user wants to use as profile image
 	// we will save this image to the server and update the user profile image
 	// in the database
-	imgName, err := uploadImageHandler(w, r)
+	//imgName, err := uploadImageHandler(w, r)
 	if err != nil {
 		// do something
 	}
 	// update the user profile image
-	user[0].Profile_image = imgName
+	//user[0].Profile_image = imgName
 	// update the user in the database
 	err = d.UpdateUserData(db, loginUser, user_id)
 	if err != nil {

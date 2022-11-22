@@ -210,10 +210,15 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
 	InsertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
 	InsertReaction(forumdb, 1, 1, 1, "⬆️")
-	InsertReaction(forumdb, 1, 1, 2, "⬆️")
-	InsertReaction(forumdb, 1, 2, 1, "⬇️")
+	InsertReaction(forumdb, 1, 2, 2, "⬆️")
+	InsertReaction(forumdb, 8, 2, 2, "⬇️")
+	InsertReaction(forumdb, 1, 1, 3, "⬇️")
+	InsertReaction(forumdb, 1, 1, 4, "⬇️")
+	InsertReaction(forumdb, 1, 1, 5, "⬇️")
 	InsertReaction(forumdb, 1, 1, 0, "⬇️")
 	InsertReaction(forumdb, 1, 2, 0, "⬇️")
+
+
 
 	InsertPostCategory(forumdb, 1, 1)
 }

@@ -160,11 +160,15 @@ async function addComment(id) {
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "my-3", "ms-auto");
   commentDiv.id = commentID;
-  commentDiv.innerHTML = `<div class="col-1 mx-1 mb-2>
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg">
+  const userPic = document.getElementById("user_pic");
+  const userName = document.getElementById("user_name");
+  commentDiv.innerHTML = `<div class="col-1 mx-2">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+        "src"
+      )}">
     </div>
     <div class="col-8 border rounded bg-secondary" id="post_comments">
-    <p class="text-info pt-2">{$userName}</p>
+    <p class="text-info pt-2">${userName.textContent}</p>
       ${newComment.value}
       <div class="row">
       <div class="text-end" id="comment_reactions">
@@ -185,4 +189,8 @@ async function addComment(id) {
     commentsDiv.prepend(commentDiv);
   }
   newComment.value = "";
+  const number_of_comments = postDiv.querySelector("#number_of_comments");
+  console.log(number_of_comments);
+  number_of_comments.textContent =
+    parseInt(number_of_comments.textContent) + 1 + " Comments";
 }

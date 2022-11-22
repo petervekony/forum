@@ -4,6 +4,7 @@ async function initPage() {
   await fetch("/posts")
     .then((response) => response.json())
     .then(function (json) {
+      console.log(json);
       for (const [key, postJSON] of Object.entries(json)) {
         const postDiv = document.createElement("div");
         postDiv.classList.add(
@@ -15,15 +16,16 @@ async function initPage() {
           "mt-2"
         );
         postDiv.id = postJSON.post_id;
-        let comments = "";
+        let comments = `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">`;
+        console.log();
         for (const [key, comment] of Object.entries(postJSON.comments)) {
-          comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
-            <div class="row my-3 ms-auto" id="post_comments">
+          comments += `
+          <div class="row my-3 ms-auto" id="post_comments">
               <div class="col-1 mx-2">
                 <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
               </div>
                 <div class="col-8 border rounded bg-secondary" id="post_comments">
-                <p class="text-info pt-2">{$username}</p>
+                <p class="text-info pt-2">Username of uid: ${comment.user_id}</p>
                 ${comment.body}
                 <div class="row">
                 <div class="text-end" id="comment_reactions">
@@ -36,19 +38,25 @@ async function initPage() {
                 </div>
               </div>
                 </div>
-            </div>
-        </div>`;
+            </div>`;
         }
-
-        postDiv.innerHTML = `<section class="row" id="post_section">
-        <p class="text-start mx-2 text-info">{$username}</p>
-        <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
+        comments += "</div>";
+        postDiv.innerHTML = `
+      <section class="row" id="post_section">
+        <p class="text-start mx-2 text-info">Username of uid: ${
+          postJSON.user_id
+        }</p>
+        <div data-bs-target="#collapse_post_comments${
+          postJSON.post_id
+        }" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
                     ${postJSON.heading}
                 </div>
                 <div class="col-10 offset-1" id="post_body">
-                    <div class="border bg-info text-center" id="post_image">${postJSON.image}"</div>
+                    <div class="border bg-info text-center" id="post_image">${
+                      postJSON.image
+                    }"</div>
                     <div class="text-justify my-2">
                         ${postJSON.body}
                     </div>
@@ -71,7 +79,9 @@ async function initPage() {
                         <button class="bg-dark border rounded-start">⬆️<span
                                 class="badge text-info">10</span></button>
                         <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
+                         <p class="mx-1 text-info" id="number_of_comments">${
+                           Object.keys(postJSON.comments).length
+                         } Comments</p>
                     </div>
                 </div>
             </div>
@@ -102,8 +112,6 @@ async function initPage() {
                 </div>
             </div>
         </div>
-
-
             ${comments}
         </div>
     </section>`;

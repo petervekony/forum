@@ -94,12 +94,12 @@ async function newPost() {
               </div>
           </div>
       </div>
-      <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+      <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
         <div class="row">
           <div class="col-1>
-            <img class="rounded-circle center-block" style="max-width: 55px" src="static/images/raccoon.jpeg" id="fuck"></img>
+            <img class="rounded-circle center-block" style="max-width: 55px" src="static/images/raccoon.jpeg" id="user_pic"></img>
           </div>
-          <div class="col-11 text-start">
+          <div class="col-10 text-start">
             <div class="input-group">
                 <textarea
                     class="bg-dark border-info rounded text-light px-2 w-75"

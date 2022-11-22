@@ -205,10 +205,10 @@ async function addComment(id) {
       <div class="row">
       <div class="text-end" id="comment_reactions">
         <button class="btn btn-dark rounded-start">⬆️
-            <span class="badge text-info">6</span>
+            <span class="badge text-info">0</span>
         </button>
         <button class="btn btn-dark rounded-end">⬇️
-            <span class="badge text-info">9</span>
+            <span class="badge text-info">0</span>
         </button>
       </div>
     </div>

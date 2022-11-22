@@ -18,6 +18,43 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			// Handle error for session check fail
 		}
 
+		if uid != "0" {
+			// user is logged in redirect to front page with posts
+			http.Redirect(w, r, "/front_page", http.StatusSeeOther)
+			return
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			
+
+		}
+
 		tmpl, err := template.ParseFiles("server/public_html/index.html")
 		if err != nil {
 			//error404(w)

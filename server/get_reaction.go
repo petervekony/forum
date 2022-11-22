@@ -67,6 +67,11 @@ func GetReactionInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 }
 
 func GetPostReactions(w http.ResponseWriter, r *http.Request) (int, string, bool) {
+	// session checking
+	uid, err := sessionManager.checkSession(w, r)
+	if err != nil {
+		return http.StatusInternalServerError, err.Error(), false
+	}
 	var post Posts
 	// connect to the db
 	db, err := d.DbConnect()
@@ -90,7 +95,13 @@ func GetPostReactions(w http.ResponseWriter, r *http.Request) (int, string, bool
 	if err != nil {
 		return 0, err.Error(), false
 	}
+	// use this to prevent like and dislike from being added to the same post
+	for _, reaction := range reaction_info {
+		if strconv.Itoa(reaction.User_id) == uid {
+			return 0, "already reacted", false
+		}
+	}
 	// print the reaction info since pid is unqiue
 	// len(reaction_info) should be the number of reaction for that post
-	return len(reaction_info[0].Reaction), reaction_info[0].Reaction, true
+	return len(reaction_info), reaction_info[0].Reaction, true
 }

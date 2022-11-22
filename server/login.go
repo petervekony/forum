@@ -49,14 +49,13 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 
 	// // Check if user is logged in
-	// if uid != "0" {
-	// 	// User is logged in, redirect to front page
-	// 	// fmt.Fprintf(w, "User is logged in")
-	// 	// http.Redirect(w, r, "/", http.StatusSeeOther)
-	// 	return "User is logged in", true
-	// }
-	
-	
+/* 	if uid != "0" {
+		// 	// User is logged in, redirect to front page
+		fmt.Fprintf(w, "User is logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return "User is logged in", true
+	} */
+
 	// parse the form
 	// r.ParseForm()
 
@@ -82,7 +81,7 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	
+
 	fmt.Println(loginUser)
 	// if no or more than 1 record found, return error
 	if len(users) != 1 {

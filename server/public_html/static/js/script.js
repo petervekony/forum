@@ -9,30 +9,36 @@ async function initPage() {
         postDiv.classList.add(
           "border",
           "rounded",
+          "content",
           "mx-auto",
           "col-8",
           "mt-2"
         );
         postDiv.id = postJSON.post_id;
         let comments = "";
-        console.log(postJSON);
         for (const [key, comment] of Object.entries(postJSON.comments)) {
           comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
-            <div class="row mb-2 offset-1" id="post_comments">
-              <div class="col-1 mx-1 mb-2">
-                <img class="rounded-circle"
-                     style="max-width: 120%; border: 2px solid #54B4D3;"
-                     src="static/images/raccoon.jpeg"
-                     id="user_pic">
-                     </img>
+            <div class="row my-3 ms-auto" id="post_comments">
+              <div class="col-1 mx-2">
+                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
               </div>
-              <div class="col-8 border rounded bg-secondary" id="post_comments">
+                <div class="col-8 border rounded bg-secondary" id="post_comments">
+                <p class="text-info pt-2">{$username}</p>
                 ${comment.body}
+                <div class="row">
+                <div class="text-end" id="comment_reactions">
+                  <button class="btn btn-dark rounded-start">⬆️
+                      <span class="badge text-info">6</span>
+                  </button>
+                  <button class="btn btn-dark rounded-end">⬇️
+                      <span class="badge text-info">9</span>
+                  </button>
+                </div>
               </div>
+                </div>
             </div>
         </div>`;
         }
-            
 
         postDiv.innerHTML = `<section class="row" id="post_section">
         <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
@@ -58,20 +64,21 @@ async function initPage() {
         </div>
 
         <div class="offset-1 py-1">
-            <div class="col-12">
+            <div class="col-12 mb-2">
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
-                        <button class="bg-dark border rounded-start">👍<span
+                        <button class="bg-dark border rounded-start">⬆️<span
                                 class="badge text-info">10</span></button>
-                        <button class="bg-dark border rounded-end">👎<span class="badge text-info">5</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">16 Comments</p>
+                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
+                         <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
                     </div>
                 </div>
             </div>
+
             <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
             <div class="row">
                 <div class="col-1 mx-2">
-                    <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
                 </div>
                 <div class="col-10 text-start">
                     <div class="input-group">
@@ -85,15 +92,16 @@ async function initPage() {
                           <button
                             class="btn bg-info text-dark mt-2"
                             type="button"
-                            onclick="addComment(${postDiv.id})>
+                            onclick="addComment(${postDiv.id})">
                             Comment
                           </button>
                         </div>
-                    </div>
+                      </div>
                 </div>
             </div>
         </div>
-      </div>
+
+
             ${comments}
         </div>
     </section>`;
@@ -172,6 +180,7 @@ async function login() {
         const loginForm = document.getElementById("login_success");
         // const uid = document.getElementById("login_email");
         // uid.value = json.message;
+        // test
         loginForm.submit();
       }
     });

@@ -71,7 +71,7 @@ async function initPage() {
                         <button class="btn btn-dark border">⬆️<span
                                 class="badge text-secondary">10</span></button>
                         <button class="btn btn-dark border">⬇️<span class="badge text-secondary">5</span></button>
-                         <p class="mx-1 text-dark" id="number_of_comments">13 Comments</p>
+                         <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
                     </div>
                 </div>
                 <div class="text-secondary">

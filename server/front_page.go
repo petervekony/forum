@@ -20,7 +20,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 
 		if uid != "0" && r.Method == "GET" {
 			// user is logged in redirect to front page with posts
-			fmt.Fprintf(w, "User is logged in")
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 

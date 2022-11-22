@@ -32,13 +32,13 @@ async function newPost() {
     return;
   }
   console.log(`New post button clicked and value is ${userPost.value}`);
-  
+
   const userPostHeading = document.getElementById("user_post_title");
   if (!userPostHeading.value) {
     console.log("Post title is empty");
     return;
   }
-  
+
   let postCats = [];
   const postCatsList = document.getElementById("postCats");
   postCatsList
@@ -99,31 +99,31 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="bg-dark border rounded-start">👍
-                      <span class="badge text-info">10</span>
-                  </button>
-                  <button class="bg-dark border rounded-end">👎
-                      <span class="badge text-info">5</span>
-                  </button>
+                  <button class="bg-dark border rounded-start">⬆️<span
+                          class="badge text-info">10</span></button>
+                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
                   <p class="text-info"># Comments</p>
               </div>
           </div>
       </div>
-      <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
-        <div class="row">
-          <div class="col-1>
-            <img class="rounded-circle center-block" style="max-width: 55px" src="static/images/raccoon.jpeg" id="user_pic"></img>
+      <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+      <div class="row">
+          <div class="col-1">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
           </div>
           <div class="col-10 text-start">
-            <div class="input-group">
-                <textarea
-                    class="bg-dark border-info rounded text-light px-2 w-75"
-                    style="resize:none;"
-                    placeholder="Write a comment"></textarea>
+              <div class="input-group">
+                  <textarea
+                      class="bg-dark border-info rounded text-light px-2 w-75"
+                      class="form-control"
+                      style="resize:none;"
+                      id="newComment"
+                      placeholder="Write a comment"></textarea>
                   <div class="input-group-append mx-2">
                     <button
                       class="btn bg-info text-dark mt-2"
                       type="button"
+                      onclick="addComment(${postDiv.id}">
                       Comment
                     </button>
                   </div>
@@ -132,7 +132,6 @@ async function newPost() {
       </div>
   </div>
 </section>`;
-
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";
@@ -162,23 +161,21 @@ async function addComment(id) {
       console.log(json);
       commentID = json.message;
     });
-  // create new post in DOM (old)
+  // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "my-3", "ms-auto");
   commentDiv.id = commentID;
-  commentDiv.innerHTML = `<div class="row my-3 ms-auto" id="post_comments">
-    <div class="col-1 mx-1">
+  commentDiv.innerHTML = `<div class="col-1 mx-1 mb-2>
       <img class="rounded-circle"
-          style="max-width: 120%; border: 2px solid #54B4D3;"
-          src="static/images/raccoon.jpeg"
-          id="user_pic">
+            style="max-width: 120%; border: 2px solid #54B4D3;"
+            src="static/images/raccoon.jpeg"
+            id="user_pic">
       </div>
-    <div class="col-8 border rounded bg-secondary"
-      id="post_comments">
-      ${newComment.value}
+      <div class="col-8 border rounded bg-secondary" id="post_comments">
+    ${newComment.value}
+    </div>
   </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   commentsDiv.prepend(commentDiv);
- 
+  newComment.value = "";
 }
-

@@ -16,6 +16,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		uid, err := sessionManager.checkSession(w, r)
 		if err != nil {
 			// Handle error for session check fail
+			fmt.Println("error, session fucked up")
 		}
 
 		tmpl, err := template.ParseFiles("server/public_html/index.html")
@@ -103,6 +104,10 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.URL.Path == "/addPost" {
 		message, status := addPostText(w, r)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/addComment" {
+		message, status := addComment(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else {

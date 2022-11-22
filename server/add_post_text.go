@@ -13,6 +13,7 @@ import (
 type Posts struct {
 	Body    string `json:"postBody"`
 	Heading string `json:"postHeading"`
+	Categories []string `json:"postCats"`
 }
 
 func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
@@ -29,6 +30,7 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return "Error: unsuccessful in unmarshaling log in data from user", false
 	}
+	fmt.Println(post)
 	// If logged in, redirect to front page
 	// If not logged in, show sign up page
 	// check if session is alive

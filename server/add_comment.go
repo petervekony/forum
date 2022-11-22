@@ -12,7 +12,7 @@ import (
 
 type Comments struct {
 	Body       string   `json:"postComment"`
-	Post_id	int `json:"postID"`
+	Post_id	   int      `json:"postID"`
 }
 
 func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {

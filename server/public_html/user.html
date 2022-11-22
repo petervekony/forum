@@ -114,29 +114,29 @@
             }
         </style>
         <div class="col-8 offset-2 mb-2" id="post_title">
-            <form action="/addPost" id="add_post_form">
+            <!-- <form action="/addPost" id="add_post_form"> -->
                 <textarea class="form-control text-light bg-dark
                                 mb-2 border-info" name="post_title" id="user_post_title" rows="1"
                     placeholder="Add a title"></textarea>
-            </form>
+            <!-- </form> -->
 
         </div>
         <div class="col-8 offset-2 text-secondary border-info">
-            <form action="/addPost" id="add_post_form">
+            <!-- <form action="/addPost" id="add_post_form"> -->
                 <textarea class="form-control text-light bg-dark
                                 mb-2 border-info" name="post_content" id="user_post" rows="3"
                     placeholder="What's on your mind?"></textarea>
-            </form>
+            <!-- </form> -->
             <div class="user_post_footer text-end mb-4">
 
                 <div class="dropdown">
                     <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-bs-toggle="dropdown" aria-expanded="false">Categories</button>
-                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton" id="postCats">
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check1" />
+                                    <input class="form-check-input" type="checkbox" value="IRL" id="check1" />
                                     <label class="form-check-label" for="check1">IRL</label>
                                 </div>
                             </a>
@@ -144,7 +144,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check2" />
+                                    <input class="form-check-input" type="checkbox" value="Food" id="check2" />
                                     <label class="form-check-label" for="check2">Food</label>
                                 </div>
                             </a>
@@ -152,7 +152,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check3" />
+                                    <input class="form-check-input" type="checkbox" value="Sport" id="check3" />
                                     <label class="form-check-label" for="check3">Sport</label>
                                 </div>
                             </a>
@@ -160,14 +160,14 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check4" />
+                                    <input class="form-check-input" type="checkbox" value="Hacking" id="check4" />
                                     <label class="form-check-label" for="check4">Hacking</label>
                                 </div>
                             </a>
                         </li>
                         <a class="dropdown-item" href="#">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="check5" checked />
+                                <input class="form-check-input" type="checkbox" value="Shitpost" id="check5" checked />
                                 <label class="form-check-label" for="check5">Shitpost</label>
                             </div>
                         </a>
@@ -175,7 +175,7 @@
                         <li>
                             <a class="dropdown-item" href="#">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="check6" />
+                                    <input class="form-check-input" type="checkbox" value="Mental health" id="check6" />
                                     <label class="form-check-label" for="check6">Mental health</label>
                                 </div>
                             </a>
@@ -242,10 +242,10 @@
                     <div class="col-12 mb-2">
                         <div class="row">
                             <div class="mx-1" id="post_reactions">
-                                <button class="bg-dark border rounded-start">👍
+                                <button class="bg-dark border rounded-start">⬆️
                                     <span class="badge text-info">10</span>
                                 </button>
-                                <button class="bg-dark border rounded-end">👎
+                                <button class="bg-dark border rounded-end">⬇️
                                     <span class="badge text-info">51</span>
                                 </button>
                                 <p class="mx-1 text-info">5 Comments</p>
@@ -255,7 +255,7 @@
                     <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
                         <div class="row">
                             <div class="col-1 mx-2">
-                                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+                                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
                             </div>
                             <div class="col-10 text-start">
                                 <div class="input-group">
@@ -263,13 +263,12 @@
                                         class="bg-dark border-info rounded text-light px-2 w-75"
                                         class="form-control"
                                         style="resize:none;"
+                                        id="newComment"
                                         placeholder="Write a comment"></textarea>
                                     <div class="input-group-append mx-2">
                                       <button
                                         class="btn bg-info text-dark mt-2"
-                                        type="button"
-                                        formaction="/addComment"
-                                        id="add_post_comment">
+                                        type="button">
                                         Comment
                                       </button>
                                     </div>
@@ -279,9 +278,9 @@
                     </div>
                     <div class="collapse" id="collapse_post_comments">
                         <div class="row my-3 ms-auto" id="post_comments">
-                            <div class="col-1 mx-1">
+                            <div class="col-1">
                                 <img class="rounded-circle"
-                                    style="max-width: 120%; border: 2px solid #54B4D3;"
+                                    style="max-width: 55px; border: 2px solid #54B4D3;"
                                     src="static/images/raccoon.jpeg"
                                     id="user_pic">
                             </div>
@@ -306,7 +305,7 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
 </body>
-<script src="/static/js/loggedin.js"></script>
-<script src="/static/js/script.js"></script>
+<script src="/static/js/loggedin_temp.js"></script>
+<script src="/static/js/script_temp.js"></script>
 
 </html>

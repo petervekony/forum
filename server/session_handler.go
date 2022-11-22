@@ -13,10 +13,10 @@ type SessionManager struct {
 	sessions map[string]string
 }
 
-type SessionData struct {
-	uid string
-	ip  string
-}
+// type SessionData struct {
+// 	uid string
+// 	ip  string
+// }
 
 var sessionManager SessionManager
 

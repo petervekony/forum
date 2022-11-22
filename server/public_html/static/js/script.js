@@ -33,15 +33,6 @@ async function initPage() {
         </div>`;
         }
             
-            
-            
-        //     <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
-        //         <div class="col-8 border rounded-end bg-secondary" id="post_comments">
-        //         ${comment.body}
-        //         </div>
-        //     </div>
-        // </div>`;
-        // }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
         <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
@@ -88,6 +79,7 @@ async function initPage() {
                             class="bg-dark border-info rounded text-light px-2 w-75"
                             class="form-control"
                             style="resize:none;"
+                            id="newComment"
                             placeholder="Write a comment"></textarea>
                         <div class="input-group-append mx-2">
                           <button
@@ -101,6 +93,7 @@ async function initPage() {
                 </div>
             </div>
         </div>
+      </div>
             ${comments}
         </div>
     </section>`;

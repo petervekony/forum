@@ -1,10 +1,8 @@
 package server
 
-import "net/http"
-
 // limit session to 1 active session per user
 
-func limitSession(w http.ResponseWriter, r *http.Request) (string, bool) {
+/* func limitSession(w http.ResponseWriter, r *http.Request) (string, bool) {
 	// get the session cookie
 	cookie, err := r.Cookie("session")
 	if err != nil {
@@ -18,7 +16,7 @@ func limitSession(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 	// get the user id from the session
-	uid := session.Values["user_id"]
+	uid := session._["user_id"]
 	// get the user from the database
 	user := make(map[string]string)
 	user["user_id"] = uid.(string)
@@ -46,3 +44,4 @@ func limitSession(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 	return "", true
 }
+*/

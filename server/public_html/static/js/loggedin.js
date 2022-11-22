@@ -109,7 +109,7 @@ async function newPost() {
       </div>
       <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
       <div class="row">
-          <div class="col-1">
+          <div class="col-1 mx-2">
                 <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
           </div>
           <div class="col-10 text-start">
@@ -166,12 +166,12 @@ async function addComment(id) {
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "my-3", "ms-auto");
   commentDiv.id = commentID;
-  commentDiv.innerHTML = `<div class="col-1 mx-1 mb-2>
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg">
+  commentDiv.innerHTML = `<div class="col-1 mx-2 mb-2">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg">
     </div>
     <div class="col-8 border rounded bg-secondary" id="post_comments">
     <p class="text-info pt-2">{$userName}</p>
-      ${newComment.value}
+      <p>${newComment.value}</p>
       <div class="row">
       <div class="text-end" id="comment_reactions">
         <button class="btn btn-dark rounded-start">⬆️

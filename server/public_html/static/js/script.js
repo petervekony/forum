@@ -20,11 +20,11 @@ async function initPage() {
           comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
             <div class="row my-3 ms-auto" id="post_comments">
               <div class="col-1 mx-2">
-                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
               </div>
                 <div class="col-8 border rounded bg-secondary" id="post_comments">
                 <p class="text-info pt-2">{$username}</p>
-                ${comment.body}
+                <p>${comment.body}</p>
                 <div class="row">
                 <div class="text-end" id="comment_reactions">
                   <button class="btn btn-dark rounded-start">⬆️
@@ -79,7 +79,7 @@ async function initPage() {
             <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
             <div class="row">
                 <div class="col-1 mx-2">
-                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
                 </div>
                 <div class="col-10 text-start">
                     <div class="input-group">

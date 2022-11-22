@@ -6,6 +6,24 @@ async function initPage() {
       console.log(json);
       let commentTextArea = "";
       for (const [key, postJSON] of Object.entries(json)) {
+        let categories = "";
+        if (postJSON.categories) {
+          postJSON.categories.map(
+            (category) => (categories += `#${category} `)
+          );
+        }
+        let likeNum = 0,
+          dislikeNum = 0;
+        if (postJSON.reactions) {
+          postJSON.reactions.map(function (reactions) {
+            for (const [reaction_user_id, reaction] of Object.entries(
+              reactions
+            )) {
+              if (reaction == "⬆️") likeNum++;
+              if (reaction == "⬇️") dislikeNum++;
+            }
+          });
+        }
         const postDiv = document.createElement("div");
         postDiv.classList.add(
           "border",
@@ -45,7 +63,17 @@ async function initPage() {
  </div>
  </div>`;
         }
+        let likeNumComment = 0,
+          dislikeNumComment = 0;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
+          if (comment.reactions) {
+            comment.reactions.map(function (reactions) {
+              for (const [key, reaction] of Object.entries(reactions)) {
+                if (reaction == "⬆️") likeNumComment++;
+                if (reaction == "⬇️") dislikeNumComment++;
+              }
+            });
+          }
           comments += `
  <div class="row my-3 ms-auto" id="post_comments">
  <div class="col-1 mx-2">
@@ -57,10 +85,10 @@ async function initPage() {
  <div class="row">
  <div class="text-end" id="comment_reactions">
  <button class="btn btn-dark rounded-start">⬆️
- <span class="badge text-info">6</span>
+ <span class="badge text-info">${likeNumComment}</span>
  </button>
  <button class="btn btn-dark rounded-end">⬇️
- <span class="badge text-info">9</span>
+ <span class="badge text-info">${dislikeNumComment}</span>
  </button>
  </div>
  </div>
@@ -70,7 +98,9 @@ async function initPage() {
         comments += "</div>";
         postDiv.innerHTML = `
  <section class="row" id="post_section">
- <p class="text-start mx-2 text-info">Username of uid: ${postJSON.user_id}</p>
+ <p class="text-start mx-2 text-info">Username of uid: ${
+   postJSON.user_id
+ } ${categories}</p>
  <div data-bs-target="#collapse_post_comments${
    postJSON.post_id
  }" data-bs-toggle="collapse">
@@ -101,8 +131,8 @@ async function initPage() {
  <div class="row">
  <div class="mx-1" id="post_reactions">
  <button class="bg-dark border rounded-start">⬆️<span
- class="badge text-info">10</span></button>
- <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
+ class="badge text-info">${likeNum}</span></button>
+ <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">${dislikeNum}</span></button>
  <p class="mx-1 text-info" id="number_of_comments">${
    Object.keys(postJSON.comments).length
  } Comments</p>

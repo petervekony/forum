@@ -18,7 +18,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			// Handle error for session check fail
 		}
 
-		if uid != "0" && r.Method == "GET" {
+		if uid != "0" && r.Method == "POST" {
 			// user is logged in redirect to front page with posts
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
@@ -96,7 +96,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(writeMsg))
 		}
 	} else if r.URL.Path == "/logout" {
-		Logout(w, r);
+		Logout(w, r)
 	} else if r.URL.Path == "/getUser" {
 		userInfo, status := GetUserInfo(w, r)
 		if status {

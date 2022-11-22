@@ -106,6 +106,9 @@ async function newPost() {
                   <p class="text-info"># Comments</p>
               </div>
           </div>
+          <div class="text-secondary">
+          <p>{$categories} #IRL #Shitpost #depression</p>
+        </div>
       </div>
       <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
       <div class="row">

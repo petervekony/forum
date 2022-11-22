@@ -74,6 +74,9 @@ async function initPage() {
                          <p class="mx-1 text-dark" id="number_of_comments">13 Comments</p>
                     </div>
                 </div>
+                <div class="text-secondary">
+                <p>{$categories} #IRL #Shitpost #depression</p>
+              </div>
             </div>
 
             <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">

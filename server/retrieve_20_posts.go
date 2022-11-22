@@ -19,7 +19,7 @@ type JSONData struct {
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
 	Categories	 []string							`json:"categories"`
-	Reactions		 map[string]string		`json:"reactions"`
+	Reactions		 []map[int]string			`json:"reactions"`
 }
 
 type JSONComments struct {
@@ -27,7 +27,7 @@ type JSONComments struct {
 	Post_id   int    							`json:"post_id"`
 	User_id   int    							`json:"user_id"`
 	Body      string 							`json:"body"`
-	Reactions	map[string]string		`json:"reactions"`
+	Reactions	[]map[int]string		`json:"reactions"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -56,14 +56,13 @@ func Retrieve20Posts() (string, error) {
 
 		postId := &rD.Post_id
 
+		// getting post's categories
 		currentPost := make(map[string]string)
 		currentPost["post_id"] = strconv.Itoa(*postId)
 		categories, err := database.GetPostCategories(db, currentPost)
 		if err != nil {
 			return "", err
 		}
-
-		// getting post's categories
 		var categoryNames []string
 		for _, category := range categories {
 			currentCategory := make(map[string]string)
@@ -75,6 +74,19 @@ func Retrieve20Posts() (string, error) {
 			categoryNames = append(categoryNames, categoriesName[0].Category_Name)
 		}
 		rD.Categories = categoryNames
+
+		// getting post's reactions
+		reactions, err := database.GetReaction(db, currentPost)
+		if err != nil {
+			return "", err
+		}
+		for _, reaction := range reactions {
+			if reaction.Comment_id == 0 {
+				userReaction := make(map[int]string)
+				userReaction[reaction.User_id] = reaction.Reaction
+				rD.Reactions = append(rD.Reactions, userReaction)
+			}
+		}
 
 		structSlice[*postId] = *rD
 
@@ -96,6 +108,20 @@ func Retrieve20Posts() (string, error) {
 			return "", err
 		}
 		thisPostId := &row.Post_id
+		thisCommentId := &row.CommentID
+		// getting reactions
+		currentComment := make(map[string]string)
+		currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
+		reactions, err := database.GetReaction(db, currentComment)
+		if err != nil {
+			return "", err
+		}
+		for _, reaction := range reactions {
+			userReaction := make(map[int]string)
+			userReaction[reaction.User_id] = reaction.Reaction
+			row.Reactions = append(row.Reactions, userReaction)
+		}
+
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
 	res, err := json.Marshal(structSlice)

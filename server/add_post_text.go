@@ -10,9 +10,18 @@ import (
 	"time"
 )
 
+// edited by Tosin
 type Posts struct {
+	Post_id    int    `json:"Post_id"`
+	User_id    int    `json:"User_id"`
 	Body    string `json:"postBody"`
 	Heading string `json:"postHeading"`
+	Closed_user int `json:"Closed_user"`
+	Closed_admin int `json:"Closed_admin"`
+	Closed_date string `json:"Closed_date"`
+	Insert_time string `json:"Insert_time"`
+	Update_time string `json:"Update_time"`
+	Image string `json:"Image"`
 }
 
 func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {

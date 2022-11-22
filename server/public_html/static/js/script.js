@@ -4,9 +4,6 @@ async function initPage() {
   await fetch("/posts")
     .then((response) => response.json())
     .then(function (json) {
-      console.log(json);
-      let commentTextArea = "";
-
       for (const [key, postJSON] of Object.entries(json)) {
         const postDiv = document.createElement("div");
         postDiv.classList.add(
@@ -14,78 +11,29 @@ async function initPage() {
           "rounded",
           "content",
           "mx-auto",
-          "col-8",
-          "mt-2"
+          "col-8"
         );
-        postDiv.id = postJSON.post_id;
-        let comments = `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">`;
-        if (document.getElementById("user_name")) {
-          commentTextArea = `<div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
-          <div class="row">
-            <div class="col-1 mx-2">
-                <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
-            </div>
-            <div class="col-10 text-start">
-              <div class="input-group">
-                <textarea
-                  id="newComment"
-                  class="bg-dark border-info rounded text-light px-2 w-75"
-                  class="form-control"
-                  style="resize:none;"
-                  id="newComment"
-                  placeholder="Write a comment"></textarea>
-                <div class="input-group-append mx-2">
-                  <button
-                    class="btn bg-info text-dark mt-2"
-                    type="button"
-                    onclick="addComment(${postJSON.post_id})">
-                    Comment
-                  </button>
+        let comments = "";
+        console.log(postJSON);
+        for (const [key, comment] of Object.entries(postJSON.comments)) {
+          comments += `<div class="collapse" id="collapse_post_comments">
+            <div class="row my-3" id="post_comments">
+                <div class="col-1 row-1 mx-1 border rounded-start bg-info">${comment.user_id}</div>
+                <div class="col-8 border rounded-end bg-secondary" id="post_comments">
+                ${comment.body}
                 </div>
-              </div>
             </div>
-          </div>
         </div>`;
         }
-        for (const [key, comment] of Object.entries(postJSON.comments)) {
-          comments += `
-          <div class="row my-3 ms-auto" id="post_comments">
-              <div class="col-1 mx-2">
-                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
-              </div>
-                <div class="col-8 border rounded bg-secondary" id="post_comments">
-                <p class="text-info pt-2">Username of uid: ${comment.user_id}</p>
-                ${comment.body}
-                <div class="row">
-                <div class="text-end" id="comment_reactions">
-                  <button class="btn btn-dark rounded-start">⬆️
-                      <span class="badge text-info">6</span>
-                  </button>
-                  <button class="btn btn-dark rounded-end">⬇️
-                      <span class="badge text-info">9</span>
-                  </button>
-                </div>
-              </div>
-                </div>
-            </div>`;
-        }
-        comments += "</div>";
-        postDiv.innerHTML = `
-      <section class="row" id="post_section">
-        <p class="text-start mx-2 text-info">Username of uid: ${
-          postJSON.user_id
-        }</p>
-        <div data-bs-target="#collapse_post_comments${
-          postJSON.post_id
-        }" data-bs-toggle="collapse">
+
+        postDiv.innerHTML = `<section class="row" id="post_section">
+        <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
                     ${postJSON.heading}
                 </div>
                 <div class="col-10 offset-1" id="post_body">
-                    <div class="border bg-info text-center" id="post_image">${
-                      postJSON.image
-                    }"</div>
+                    <div class="border bg-info text-center" id="post_image">${postJSON.image}"</div>
                     <div class="text-justify my-2">
                         ${postJSON.body}
                     </div>
@@ -105,16 +53,14 @@ async function initPage() {
             <div class="col-12 mb-2">
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
-                        <button class="bg-dark border rounded-start">⬆️<span
+                        <button class="bg-dark border rounded-start">👍<span
                                 class="badge text-info">10</span></button>
-                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">${
-                           Object.keys(postJSON.comments).length
-                         } Comments</p>
+                        <button class="bg-dark border">👎<span class="badge text-info">5</span></button>
+                        <button class="bg-dark border rounded-end">💛<span
+                                class="badge text-info">8</span></button>
                     </div>
                 </div>
             </div>
-            ${commentTextArea}
             ${comments}
         </div>
     </section>`;
@@ -193,7 +139,6 @@ async function login() {
         const loginForm = document.getElementById("login_success");
         // const uid = document.getElementById("login_email");
         // uid.value = json.message;
-        // test
         loginForm.submit();
       }
     });

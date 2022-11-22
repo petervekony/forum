@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Posts struct {
+type newPosts struct {
 	Body    string `json:"postBody"`
 	Heading string `json:"postHeading"`
 	Categories []string `json:"postCats"`
@@ -25,7 +25,7 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 
 	// Unmarshal
-	var post Posts
+	var post newPosts
 	err = json.Unmarshal(req, &post)
 	if err != nil {
 		return "Error: unsuccessful in unmarshaling log in data from user", false

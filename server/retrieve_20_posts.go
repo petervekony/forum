@@ -18,13 +18,16 @@ type JSONData struct {
 	Update_time  string               `json:"update_time"`
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
+	Categories	 []string							`json:"categories"`
+	Reactions		 map[string]string		`json:"reactions"`
 }
 
 type JSONComments struct {
-	CommentID int    `json:"comment_id"`
-	Post_id   int    `json:"post_id"`
-	User_id   int    `json:"user_id"`
-	Body      string `json:"body"`
+	CommentID int    							`json:"comment_id"`
+	Post_id   int    							`json:"post_id"`
+	User_id   int    							`json:"user_id"`
+	Body      string 							`json:"body"`
+	Reactions	map[string]string		`json:"reactions"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -50,7 +53,29 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
+
 		postId := &rD.Post_id
+
+		currentPost := make(map[string]string)
+		currentPost["post_id"] = strconv.Itoa(*postId)
+		categories, err := database.GetPostCategories(db, currentPost)
+		if err != nil {
+			return "", err
+		}
+
+		// getting post's categories
+		var categoryNames []string
+		for _, category := range categories {
+			currentCategory := make(map[string]string)
+			currentCategory["category_id"] = strconv.Itoa(category.Category_id)
+			categoriesName, err := database.GetCategories(db, currentCategory)
+			if err != nil {
+				return "", err
+			}
+			categoryNames = append(categoryNames, categoriesName[0].Category_Name)
+		}
+		rD.Categories = categoryNames
+
 		structSlice[*postId] = *rD
 
 		thisPostId := &rD.Post_id
@@ -72,7 +97,6 @@ func Retrieve20Posts() (string, error) {
 		}
 		thisPostId := &row.Post_id
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
-
 	}
 	res, err := json.Marshal(structSlice)
 	if err != nil {

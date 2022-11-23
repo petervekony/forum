@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gritface/database"
+	"sort"
 	"strconv"
 )
 
@@ -40,8 +41,8 @@ func Retrieve20Posts() (string, error) {
 		return "", err
 	}
 
-	structSlice := make([]JSONData, 0)
-	query := "SELECT * FROM posts ORDER BY post_id DESC LIMIT 20"
+	structSlice := make(map[int]JSONData)
+	query := "SELECT * FROM posts LIMIT 20"
 	fmt.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
@@ -101,7 +102,7 @@ func Retrieve20Posts() (string, error) {
 			}
 		}
 
-		structSlice = append(structSlice, *rD)
+		structSlice[*postId] = *rD
 
 		thisPostId := &rD.Post_id
 		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
@@ -146,7 +147,14 @@ func Retrieve20Posts() (string, error) {
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
 	fmt.Println(structSlice)
-	res, err := json.Marshal(structSlice)
+	sSlice := make([]JSONData, 0, len(structSlice))
+	for _, value := range structSlice {
+		sSlice = append(sSlice, value)
+	}
+	sort.Slice(sSlice, func(i, j int) bool { return sSlice[i].Post_id > sSlice[j].Post_id })
+	fmt.Println("this: ", sSlice)
+	// sorted := sort.SliceStable(structSlice, func(i, j int) bool { return structSlice[i].Post_id < structSlice[j].Post_id })
+	res, err := json.Marshal(sSlice)
 	if err != nil {
 		return "", err
 	}

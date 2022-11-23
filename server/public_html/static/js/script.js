@@ -107,6 +107,9 @@ async function initPage() {
                     <div class="text-justify my-2">
                         <pre><p>${postJSON.body}</p></pre>
                     </div>
+                    <div class="text-secondary">
+                    <p>${categories}</p>
+                    </div>
                     <div class="row text-secondary">
                         <div class="col-6 order-0 text-left" id="post_insert_time">
                             ${postJSON.insert_time}
@@ -117,7 +120,7 @@ async function initPage() {
                       </div>
                     </div>
                   </div>
-                    </div>
+                  </div>
                    <div class="offset-1 py-1">
                    <div class="col-12 mb-2">
                   <div class="row">
@@ -128,9 +131,10 @@ async function initPage() {
                     <p class="mx-1 text-info" id="number_of_comments">${
                         Object.keys(postJSON.comments).length
                         } Comments</p>
-                   </div>
                   </div>
-              </div>
+                  </div>
+
+  
              ${commentTextArea}
             ${comments}
                </div>

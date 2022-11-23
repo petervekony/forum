@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"gritface/database"
+	"sort"
 	"strconv"
 )
 
@@ -18,18 +19,18 @@ type JSONData struct {
 	Update_time  string               `json:"update_time"`
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
-	Categories	 []string							`json:"categories"`
-	Reactions		 []map[int]string			`json:"reactions"`
-	Username		 string								`json:"username"`
+	Categories   []string             `json:"categories"`
+	Reactions    []map[int]string     `json:"reactions"`
+	Username     string               `json:"username"`
 }
 
 type JSONComments struct {
-	CommentID int    							`json:"comment_id"`
-	Post_id   int    							`json:"post_id"`
-	User_id   int    							`json:"user_id"`
-	Body      string 							`json:"body"`
-	Reactions	[]map[int]string		`json:"reactions"`
-	Username	string							`json:"username"`
+	CommentID int              `json:"comment_id"`
+	Post_id   int              `json:"post_id"`
+	User_id   int              `json:"user_id"`
+	Body      string           `json:"body"`
+	Reactions []map[int]string `json:"reactions"`
+	Username  string           `json:"username"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -65,7 +66,7 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		rD.Username = users[0].Name;
+		rD.Username = users[0].Name
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -124,8 +125,7 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		row.Username = users[0].Name;
-
+		row.Username = users[0].Name
 
 		thisPostId := &row.Post_id
 		thisCommentId := &row.CommentID
@@ -144,7 +144,15 @@ func Retrieve20Posts() (string, error) {
 
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
-	res, err := json.Marshal(structSlice)
+
+	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData
+	sSlice := make([]JSONData, 0, len(structSlice))
+	for _, value := range structSlice {
+		sSlice = append(sSlice, value)
+	}
+	sort.Slice(sSlice, func(i, j int) bool { return sSlice[i].Post_id > sSlice[j].Post_id })
+
+	res, err := json.Marshal(sSlice)
 	if err != nil {
 		return "", err
 	}

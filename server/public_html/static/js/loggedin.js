@@ -111,6 +111,8 @@ async function newPost() {
               <div class="text-justify my-2">
                   <pre><p>${userPost.value}</p></pre>
               </div>
+              <div class="text-secondary">
+              <p>${catInnerHTML}</p>
               <div class="row text-secondary">
                   <div class="col-6 order-0 text-left" id="post_insert_time">
                       Created just now..
@@ -132,11 +134,9 @@ async function newPost() {
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
-          <div class="text-secondary">
-          <p>${catInnerHTML}</p>
         </div>
-      </div>
-      <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">
+    
+      <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
       <div class="row">
           <div class="col-1 mx-2">
                 <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">

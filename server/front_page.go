@@ -17,12 +17,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			// Handle error for session check fail
 		}
-
+		fmt.Println("first time I will get here")
 		if uid != "0" && r.Method == "POST" {
 			// user is logged in redirect to front page with posts
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
-
 		tmpl, err := template.ParseFiles("server/public_html/index.html")
 		if err != nil {
 			//error404(w)

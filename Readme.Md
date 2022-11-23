@@ -4,7 +4,7 @@ Brief Project Description
 # Usage
 
 ## Website Link
-
+// this should be in a list
 ## Technologies
 ### Golang
 ### Docker
@@ -16,7 +16,7 @@ Brief Project Description
 
 ## Website and Project Features
 
-
+// this should be in a list
 ### Signup
 ### Login
 ### Cookie based Session
@@ -27,6 +27,10 @@ Brief Project Description
 ### Comment Likes and Dislikes
 
 ## Third Party Packages
+
+// this shoudl be in a list
+
+
 
 
 

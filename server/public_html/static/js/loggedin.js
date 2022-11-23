@@ -100,11 +100,11 @@ async function newPost() {
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <p class="text-start mx-3 mt-2 text-info">${username}</hp>
+  <h5 class="text-start mx-3 mt-2 text-info">${username}</h5>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
-              ${userPostHeading.value}
+              <h4>${userPostHeading.value}</h4>
           </div>
           <div class="col-10 offset-1" id="post_body">
               <div class="border bg-info text-center" id="post_image">Testing image"</div>
@@ -203,7 +203,7 @@ async function addComment(id) {
       )}">
     </div>
     <div class="col-8 border rounded bg-secondary" id="post_comments">
-    <p class="text-info pt-2">${userName.textContent}</p>
+    <p class="text-info pt-1">${userName.textContent}</p>
       <pre><p>${newComment.value}</p></pre>
       <div class="row">
       <div class="text-end mb-1" id="comment_reactions">

@@ -75,7 +75,7 @@ async function initPage() {
  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
  </div>
  <div class="col-8 border rounded bg-secondary" id="post_comments">
- <p class="text-info pt-2">${comment.username}</p>
+ <p class="text-info pt-1">${comment.username}</p>
  <pre><p>${comment.body}</p></pre>
  <div class="row">
  <div class="text-end mb-1" id="comment_reactions">
@@ -92,13 +92,13 @@ async function initPage() {
         }
         comments += "</div>";
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <p class="text-start mx-3 mt-2 text-info">${postJSON.username}</p>
+        <h5 class="text-start mx-3 mt-2 text-info">${postJSON.username}</h5>
         <div data-bs-target="#collapse_post_comments${
           postJSON.post_id
         }" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
-                    <h5>${postJSON.heading}</h5>
+                    <h4>${postJSON.heading}</h4>
                 </div>
                 <div class="col-10 offset-1" id="post_body">
                     <div class="border bg-info text-center" id="post_image">${

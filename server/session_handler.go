@@ -22,6 +22,7 @@ var sessionManager SessionManager
 
 // Check for valid session, if not create a new one. Return session user data
 func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (string, error) {
+
 	cookie, err := sm.isSessionSet(w, r)
 	if err != nil {
 		// Session is not set, create a new one
@@ -44,8 +45,7 @@ func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (
 		// Store cookie in session as uid=0 (unregistered user)
 		sm.sessions[ID] = "0"
 	}
-	// here session value is 0 because user is not logged in
-	fmt.Println("session value is", sm.sessions[cookie.Value])
+
 	return sm.sessions[cookie.Value], nil
 }
 
@@ -61,40 +61,49 @@ func (sm *SessionManager) isSessionSet(w http.ResponseWriter, r *http.Request) (
 	if ok {
 		return c, nil
 	} else {
-		return nil, errors.New("cookie value not alive")
+		return nil, errors.New("Cookie value not alive")
 	}
 }
 
-// function set session UID
 func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.Request) error {
-	// user have logged in, set session UID
+
 	thisSession, err := sm.isSessionSet(w, r)
+
 	if err != nil {
 		// Something wrong with cookie, return error
-		return errors.New("could not retrieve cookie data")
+		return errors.New("Could not retrieve cookie data")
 	}
 	// this is working right
-	// here session value is 0
+	suid := strconv.Itoa(uid)
+
+	// If uid is not 0, loop through current sessions, in case another session allready is logged in with uid, set it to zero
+	if uid > 0 {
+		for sessionId, setUid := range sm.sessions {
+			if setUid == suid && sessionId != thisSession.Value {
+				fmt.Println("Unset previous session because of dual login")
+				sm.sessions[sessionId] = "0"
+			}
+		}
+	}
 	sm.sessions[thisSession.Value] = strconv.Itoa(uid)
-	fmt.Println("session value is now set to", sm.sessions[thisSession.Value])
 	return nil
 }
 
-// functio delete session
+// function to delete the session
 func (sm *SessionManager) deleteSession(w http.ResponseWriter, r *http.Request) (*http.Cookie, error) {
-	// check if user is logged in
+	// check if session is set
 	cookie, err := sm.isSessionSet(w, r)
 	if err != nil {
 		return nil, err
 	}
-
 	// delete the session
-	delete(sessionManager.sessions, cookie.Value)
-
+	delete(sm.sessions, cookie.Value)
 	// remove the cookie
 	cookie = &http.Cookie{
 		Name:   "session",
 		Value:  "",
+		Path:   "/",
+		Secure: true,
 		MaxAge: -1,
 	}
 	return cookie, nil

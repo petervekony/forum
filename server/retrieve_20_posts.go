@@ -18,13 +18,18 @@ type JSONData struct {
 	Update_time  string               `json:"update_time"`
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
+	Categories	 []string							`json:"categories"`
+	Reactions		 []map[int]string			`json:"reactions"`
+	Username		 string								`json:"username"`
 }
 
 type JSONComments struct {
-	CommentID int    `json:"comment_id"`
-	Post_id   int    `json:"post_id"`
-	User_id   int    `json:"user_id"`
-	Body      string `json:"body"`
+	CommentID int    							`json:"comment_id"`
+	Post_id   int    							`json:"post_id"`
+	User_id   int    							`json:"user_id"`
+	Body      string 							`json:"body"`
+	Reactions	[]map[int]string		`json:"reactions"`
+	Username	string							`json:"username"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -50,7 +55,50 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
+
 		postId := &rD.Post_id
+
+		// getting user's name
+		currentUser := make(map[string]string)
+		currentUser["user_id"] = strconv.Itoa(rD.User_id)
+		users, err := database.GetUsers(db, currentUser)
+		if err != nil {
+			return "", err
+		}
+		rD.Username = users[0].Name;
+
+		// getting post's categories
+		currentPost := make(map[string]string)
+		currentPost["post_id"] = strconv.Itoa(*postId)
+		categories, err := database.GetPostCategories(db, currentPost)
+		if err != nil {
+			return "", err
+		}
+		var categoryNames []string
+		for _, category := range categories {
+			currentCategory := make(map[string]string)
+			currentCategory["category_id"] = strconv.Itoa(category.Category_id)
+			categoriesName, err := database.GetCategories(db, currentCategory)
+			if err != nil {
+				return "", err
+			}
+			categoryNames = append(categoryNames, categoriesName[0].Category_Name)
+		}
+		rD.Categories = categoryNames
+
+		// getting post's reactions
+		reactions, err := database.GetReaction(db, currentPost)
+		if err != nil {
+			return "", err
+		}
+		for _, reaction := range reactions {
+			if reaction.Comment_id == 0 {
+				userReaction := make(map[int]string)
+				userReaction[reaction.User_id] = reaction.Reaction
+				rD.Reactions = append(rD.Reactions, userReaction)
+			}
+		}
+
 		structSlice[*postId] = *rD
 
 		thisPostId := &rD.Post_id
@@ -70,9 +118,31 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		thisPostId := &row.Post_id
-		structSlice[*thisPostId].Comments[row.CommentID] = *row
+		currentUser := make(map[string]string)
+		currentUser["user_id"] = strconv.Itoa(row.User_id)
+		users, err := database.GetUsers(db, currentUser)
+		if err != nil {
+			return "", err
+		}
+		row.Username = users[0].Name;
 
+
+		thisPostId := &row.Post_id
+		thisCommentId := &row.CommentID
+		// getting reactions
+		currentComment := make(map[string]string)
+		currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
+		reactions, err := database.GetReaction(db, currentComment)
+		if err != nil {
+			return "", err
+		}
+		for _, reaction := range reactions {
+			userReaction := make(map[int]string)
+			userReaction[reaction.User_id] = reaction.Reaction
+			row.Reactions = append(row.Reactions, userReaction)
+		}
+
+		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
 	res, err := json.Marshal(structSlice)
 	if err != nil {

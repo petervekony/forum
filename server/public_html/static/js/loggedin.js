@@ -1,4 +1,5 @@
 window.onload = setUser();
+window.onload = setCategories();
 
 async function setUser() {
   const userPic = document.getElementById("user_pic");
@@ -25,6 +26,26 @@ async function setUser() {
   addPostBtn.addEventListener("click", newPost);
 }
 
+async function setCategories() {
+  await fetch("/getCategories", {
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then(function (json) {
+      const catsList = document.getElementById("postCats");
+      json.map(function (category) {
+        const catsItem = document.createElement("li");
+        catsItem.innerHTML = `<a class="dropdown-item" href="#">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${category}" id="check1" />
+            <label class="form-check-label" for="check1">${category}</label>
+        </div>
+    </a>`;
+        catsList.append(catsItem);
+      });
+    });
+}
+
 async function newPost() {
   const userPost = document.getElementById("user_post");
   if (!userPost.value) {
@@ -39,16 +60,20 @@ async function newPost() {
     return;
   }
 
-  let postCats = [];
-  const postCatsList = document.getElementById("postCats");
-  postCatsList
-    .querySelectorAll('input[type="checkbox"]:checked')
-    .forEach((checked) => postCats.push(checked.value));
+  let categoriesSelected = [];
+  let catInnerHTML = "";
+  const postCats = document
+    .getElementById("postCats")
+    .querySelectorAll("input:checked");
+  postCats.forEach((x) => {
+    categoriesSelected.push(x.value);
+    catInnerHTML += `#${x.value} `;
+  });
 
   let newPost = {
     postHeading: userPostHeading.value,
     postBody: userPost.value,
-    postCats: postCats,
+    postCats: categoriesSelected,
   };
 
   let postID;
@@ -67,13 +92,15 @@ async function newPost() {
   postDiv.classList.add(
     "border",
     "rounded",
+    "content",
     "mx-auto",
     "col-8",
     "mb-2"
   );
   postDiv.id = postID;
+  const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <p class="text-start mx-2 text-info">{$username}</p>
+  <p class="text-start mx-2 text-info">${username} ${catInnerHTML}</p>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -86,10 +113,9 @@ async function newPost() {
               </div>
               <div class="row text-secondary">
                   <div class="col-6 order-0 text-left" id="post_insert_time">
-                      Create time ex (12:37)
+                      Created just now..
                   </div>
                   <div class="col-6 order-1 text-end" id="post_mod_time">
-                      Update time ex (12:53)
                   </div>
               </div>
           </div>
@@ -100,10 +126,10 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="btn btn-dark border">⬆️<span
-                          class="badge text-secondary">10</span></button>
-                  <button class="btn btn-dark border">⬇️<span class="badge text-secondary">5</span></button>
-                  <p class="text-info" id="number_of_comments"># Comments</p>
+                  <button class="bg-dark border rounded-start">⬆️<span
+                          class="badge text-info">0</span></button>
+                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">0</span></button>
+                  <p class="text-info">0 Comments</p>
               </div>
           </div>
           <div class="text-secondary">
@@ -169,19 +195,23 @@ async function addComment(id) {
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "my-3", "ms-auto");
   commentDiv.id = commentID;
-  commentDiv.innerHTML = `<div class="col-1 mx-2 mb-2">
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg">
+  const userPic = document.getElementById("user_pic");
+  const userName = document.getElementById("user_name");
+  commentDiv.innerHTML = `<div class="col-1 mx-2">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+        "src"
+      )}">
     </div>
     <div class="col-8 border rounded bg-secondary" id="post_comments">
-    <p class="text-info pt-2">{$userName}</p>
-      <p>${newComment.value}</p>
+    <p class="text-info pt-2">${userName.textContent}</p>
+      ${newComment.value}
       <div class="row">
-      <div class="text-end mb-1" id="comment_reactions">
-        <button class="btn btn-dark">⬆️
-            <span class="badge text-info">6</span>
+      <div class="text-end" id="comment_reactions">
+        <button class="btn btn-dark rounded-start">⬆️
+            <span class="badge text-info">0</span>
         </button>
-        <button class="btn btn-dark">⬇️
-            <span class="badge text-info">9</span>
+        <button class="btn btn-dark rounded-end">⬇️
+            <span class="badge text-info">0</span>
         </button>
       </div>
     </div>
@@ -189,9 +219,13 @@ async function addComment(id) {
     </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   if (!commentsDiv) {
-   console.log("broke down")
+    console.log("broke down");
   } else {
     commentsDiv.prepend(commentDiv);
   }
   newComment.value = "";
+  const number_of_comments = postDiv.querySelector("#number_of_comments");
+  console.log(number_of_comments);
+  number_of_comments.textContent =
+    parseInt(number_of_comments.textContent) + 1 + " Comments";
 }

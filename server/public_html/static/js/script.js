@@ -1,10 +1,29 @@
 window.onload = initPage();
-
 async function initPage() {
   await fetch("/posts")
     .then((response) => response.json())
     .then(function (json) {
+      console.log(json);
+      let commentTextArea = "";
       for (const [key, postJSON] of Object.entries(json)) {
+        let categories = "";
+        if (postJSON.categories) {
+          postJSON.categories.map(
+            (category) => (categories += `#${category} `)
+          );
+        }
+        let likeNum = 0,
+          dislikeNum = 0;
+        if (postJSON.reactions) {
+          postJSON.reactions.map(function (reactions) {
+            for (const [reaction_user_id, reaction] of Object.entries(
+              reactions
+            )) {
+              if (reaction == "⬆️") likeNum++;
+              if (reaction == "⬇️") dislikeNum++;
+            }
+          });
+        }
         const postDiv = document.createElement("div");
         postDiv.classList.add(
           "border",
@@ -15,29 +34,68 @@ async function initPage() {
           "mt-2"
         );
         postDiv.id = postJSON.post_id;
-        let comments = "";
+        let comments = `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">`;
+        if (document.getElementById("user_name")) {
+          commentTextArea = `<div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
+ <div class="row">
+ <div class="col-1 mx-2">
+ <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+ </div>
+ <div class="col-10 text-start">
+ <div class="input-group">
+ <textarea
+ id="newComment"
+ class="bg-dark border-info rounded text-light px-2 w-75"
+ class="form-control"
+ style="resize:none;"
+ id="newComment"
+ placeholder="Write a comment"></textarea>
+ <div class="input-group-append mx-2">
+ <button
+ class="btn bg-info text-dark mt-2"
+ type="button"
+ onclick="addComment(${postJSON.post_id})">
+ Comment
+ </button>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>`;
+        }
+        let likeNumComment, dislikeNumComment;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
-          comments += `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">
-            <div class="row my-3 ms-auto" id="post_comments">
-              <div class="col-1 mx-2">
-                <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
-              </div>
-                <div class="col-8 border rounded bg-secondary" id="post_comments">
-                <p class="text-info pt-2">{$username}</p>
-                <p>${comment.body}</p>
-                <div class="row">
-                <div class="text-end mb-1" id="comment_reactions">
-                  <button class="btn btn-dark">⬆️
-                      <span class="badge text-info">6</span>
-                  </button>
-                  <button class="btn btn-dark">⬇️
-                      <span class="badge text-info">9</span>
-                  </button>
-                </div>
-              </div>
-                </div>
-            </div>
-        </div>`;
+          likeNumComment = 0;
+          dislikeNumComment = 0;
+          if (comment.reactions) {
+            console.log(comment.reactions);
+            comment.reactions.map(function (reactions) {
+              for (const [key, reaction] of Object.entries(reactions)) {
+                if (reaction == "⬆️") likeNumComment++;
+                if (reaction == "⬇️") dislikeNumComment++;
+              }
+            });
+          }
+          comments += `
+ <div class="row my-3 ms-auto" id="post_comments">
+ <div class="col-1 mx-2">
+ <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+ </div>
+ <div class="col-8 border rounded bg-secondary" id="post_comments">
+ <p class="text-info pt-2">${comment.username}</p>
+ ${comment.body}
+ <div class="row">
+ <div class="text-end" id="comment_reactions">
+ <button class="btn btn-dark rounded-start">⬆️
+ <span class="badge text-info">${likeNumComment}</span>
+ </button>
+ <button class="btn btn-dark rounded-end">⬇️
+ <span class="badge text-info">${dislikeNumComment}</span>
+ </button>
+ </div>
+ </div>
+ </div>
+ </div>`;
         }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
@@ -68,21 +126,18 @@ async function initPage() {
             <div class="col-12 mb-2">
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
-                        <button class="btn btn-dark border">⬆️<span
-                                class="badge text-secondary">10</span></button>
-                        <button class="btn btn-dark border">⬇️<span class="badge text-secondary">5</span></button>
+                        <button class="bg-dark border rounded-start">⬆️<span
+                                class="badge text-info">10</span></button>
+                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
                          <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
                     </div>
                 </div>
-                <div class="text-secondary">
-                <p>{$categories} #IRL #Shitpost #depression</p>
-              </div>
             </div>
 
             <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
             <div class="row">
                 <div class="col-1 mx-2">
-                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
+                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
                 </div>
                 <div class="col-10 text-start">
                     <div class="input-group">
@@ -116,20 +171,17 @@ async function initPage() {
       }
     });
 }
-
 async function signup() {
   const username = document.getElementById("signup_name").value;
   const email = document.getElementById("signup_email").value;
   const password = document.getElementById("signup_pass").value;
   const confirmPassword = document.getElementById("signup_confirmpass").value;
-
   let newUser = {
     name: username,
     email: email,
     password: password,
     confirmPassword: confirmPassword,
   };
-
   console.log(newUser);
   await fetch("/signup", {
     method: "POST",
@@ -138,11 +190,9 @@ async function signup() {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
-
       const modalHeading = document.getElementById("signup_result_heading");
       const modalBody = document.getElementById("signup_result_body");
       let modalBtn = document.getElementById("login");
-
       if (!json.status) {
         modalHeading.innerHTML = "Oh Snap!";
         modalBody.innerHTML = `${json.message}`;
@@ -151,22 +201,19 @@ async function signup() {
       } else {
         modalHeading.innerHTML = "Welcome!";
         modalBody.innerHTML = `You are now registered to Gritface!<br />
-        You can now login.`;
+ You can now login.`;
         modalBtn.setAttribute("data-bs-target", "#login_modal");
         modalBtn.textContent = "Log in";
       }
     });
 }
-
 async function login() {
   const email = document.getElementById("login_email");
   const password = document.getElementById("login_pass");
-
   let user = {
     email: email.value,
     password: password.value,
   };
-
   password.value = "";
   resetLoginModal();
   console.log(user);
@@ -189,7 +236,6 @@ async function login() {
       }
     });
 }
-
 async function resetLoginModal() {
   const loginPassLabel = document.getElementById("login_pass_label");
   const loginPass = document.getElementById("login_pass");

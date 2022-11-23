@@ -10,7 +10,6 @@ import (
 func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	query := "select * from users WHERE"
 	count := 0
-	fmt.Println(userData)
 	for k, v := range userData {
 		if k == "password" {
 			return nil, errors.New("password is not a valid search parameter")
@@ -25,7 +24,6 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 		}
 		count++
 	}
-	fmt.Println(query)
 	var users []Users
 	rows, err := db.Query(query)
 	if err != nil {
@@ -35,7 +33,7 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	defer rows.Close()
 	for rows.Next() { // Iterate and fetch the records
 		var user Users
-		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Deactive, &user.User_level); // Fetch the record
+		if err := rows.Scan(&user.User_id, &user.Name, &user.Email, &user.Password, &user.Profile_image, &user.Deactive, &user.User_level); // Fetch the record
 		err != nil {
 			fmt.Println(err)
 			return users, err
@@ -231,7 +229,6 @@ func GetUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, err
 		}
 		count++
 	}
-	fmt.Println(query)
 	var userLevels []UserLevel
 	rows, err := db.Query(query)
 	if err != nil {

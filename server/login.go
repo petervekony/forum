@@ -11,6 +11,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var SuccessfulLogin []string
+
 // HashPassword returns the password string as a hash to be stored in the database
 func passwordMatch(password string, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
@@ -49,14 +51,13 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 
 	// // Check if user is logged in
-	// if uid != "0" {
-	// 	// User is logged in, redirect to front page
-	// 	// fmt.Fprintf(w, "User is logged in")
-	// 	// http.Redirect(w, r, "/", http.StatusSeeOther)
-	// 	return "User is logged in", true
-	// }
-	
-	
+	/* 	if uid != "0" {
+		// 	// User is logged in, redirect to front page
+		fmt.Fprintf(w, "User is logged in")
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return "User is logged in", true
+	} */
+
 	// parse the form
 	// r.ParseForm()
 
@@ -76,14 +77,14 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
-	loginUser := make(map[string]string)
-	loginUser["email"] = email
-	users, err := d.GetUsers(db, loginUser)
+	LoginUser := make(map[string]string)
+	LoginUser["email"] = email
+	users, err := d.GetUsers(db, LoginUser)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	
-	fmt.Println(loginUser)
+
+	fmt.Println("logged in users are:", LoginUser)
 	// if no or more than 1 record found, return error
 	if len(users) != 1 {
 		return "Error: email or password is not found!", false

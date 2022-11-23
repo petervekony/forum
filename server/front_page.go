@@ -18,7 +18,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			// Handle error for session check fail
 			fmt.Println("error, session fucked up")
 		}
-
+		fmt.Println("first time I will get here")
+		if uid != "0" && r.Method == "POST" {
+			// user is logged in redirect to front page with posts
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+		}
 		tmpl, err := template.ParseFiles("server/public_html/index.html")
 		if err != nil {
 			//error404(w)
@@ -92,7 +96,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(writeMsg))
 		}
 	} else if r.URL.Path == "/logout" {
-		Logout(w, r);
+		Logout(w, r)
 	} else if r.URL.Path == "/getUser" {
 		userInfo, status := GetUserInfo(w, r)
 		if status {
@@ -110,6 +114,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		message, status := addComment(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/getCategories" {
+		message, status := GetCategories(w, r)
+		fmt.Println(message, status)
+		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(message))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

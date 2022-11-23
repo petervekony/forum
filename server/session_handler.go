@@ -69,14 +69,25 @@ func (sm *SessionManager) isSessionSet(w http.ResponseWriter, r *http.Request) (
 func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.Request) error {
 	// user have logged in, set session UID
 	thisSession, err := sm.isSessionSet(w, r)
+
 	if err != nil {
 		// Something wrong with cookie, return error
-		return errors.New("could not retrieve cookie data")
+		return errors.New("Could not retrieve cookie data")
 	}
 	// this is working right
-	// here session value is 0
+	suid := strconv.Itoa(uid)
+
+	// If uid is not 0, loop through current sessions, in case another session allready is logged in with uid, set it to zero
+	if uid > 0 {
+		for sessionId, setUid := range sm.sessions {
+			if setUid == suid && sessionId != thisSession.Value {
+				fmt.Println("Unset previous session because of dual login")
+				sm.sessions[sessionId] = "0"
+			}
+		}
+	}
 	sm.sessions[thisSession.Value] = strconv.Itoa(uid)
-	fmt.Println("session value is now set to", sm.sessions[thisSession.Value])
+
 	return nil
 }
 

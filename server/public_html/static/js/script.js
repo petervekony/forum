@@ -25,14 +25,7 @@ async function initPage() {
           });
         }
         const postDiv = document.createElement("div");
-        postDiv.classList.add(
-          "border",
-          "rounded",
-          "content",
-          "mx-auto",
-          "col-8",
-          "mt-2"
-        );
+        postDiv.classList.add("border", "rounded", "mx-auto", "col-8", "mt-2");
         postDiv.id = postJSON.post_id;
         let comments = `<div class="collapse" id="collapse_post_comments${postJSON.post_id}">`;
         if (document.getElementById("user_name")) {
@@ -85,11 +78,11 @@ async function initPage() {
  <p class="text-info pt-2">${comment.username}</p>
  <pre><p>${comment.body}</p></pre>
  <div class="row">
- <div class="text-end" id="comment_reactions">
- <button class="btn btn-dark rounded-start">⬆️
+ <div class="text-end mb-1" id="comment_reactions">
+ <button class="btn btn-dark border">⬆️
  <span class="badge text-info">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark rounded-end">⬇️
+ <button class="btn btn-dark border">⬇️
  <span class="badge text-info">${dislikeNumComment}</span>
  </button>
  </div>
@@ -97,18 +90,22 @@ async function initPage() {
  </div>
  </div>`;
         }
-
+        comments += "</div>";
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <p class="text-start mx-2 text-info">${postJSON.username}</p>
-        <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
+        <p class="text-start mx-3 mt-2 text-info">${postJSON.username}</p>
+        <div data-bs-target="#collapse_post_comments${
+          postJSON.post_id
+        }" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
-                    ${postJSON.heading}
+                    <h5>${postJSON.heading}</h5>
                 </div>
                 <div class="col-10 offset-1" id="post_body">
-                    <div class="border bg-info text-center" id="post_image">${postJSON.image}"</div>
+                    <div class="border bg-info text-center" id="post_image">${
+                      postJSON.image
+                    }"</div>
                     <div class="text-justify my-2">
-                        ${postJSON.body}
+                        <pre><p>${postJSON.body}</p></pre>
                     </div>
                     <div class="row text-secondary">
                         <div class="col-6 order-0 text-left" id="post_insert_time">
@@ -117,53 +114,27 @@ async function initPage() {
                         <div class="col-6 order-1 text-end" id="post_mod_time">
                             ${postJSON.update_time}
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="offset-1 py-1">
-            <div class="col-12 mb-2">
-                <div class="row">
-                    <div class="mx-1" id="post_reactions">
-                        <button class="bg-dark border rounded-start">⬆️<span
-                                class="badge text-info">0</span></button>
-                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">0</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">0 Comments</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
-            <div class="row">
-                <div class="col-1 mx-2">
-                    <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
-                </div>
-                <div class="col-10 text-start">
-                    <div class="input-group">
-                        <textarea
-                            class="bg-dark border-info rounded text-light px-2 w-75"
-                            class="form-control"
-                            style="resize:none;"
-                            id="newComment"
-                            placeholder="Write a comment"></textarea>
-                        <div class="input-group-append mx-2">
-                          <button
-                            class="btn bg-info text-dark mt-2"
-                            type="button"
-                            onclick="addComment(${postDiv.id})">
-                            Comment
-                          </button>
-                        </div>
                       </div>
-                </div>
-            </div>
-        </div>
-
-
+                    </div>
+                  </div>
+                    </div>
+                   <div class="offset-1 py-1">
+                   <div class="col-12 mb-2">
+                  <div class="row">
+                  <div class="mx-1" id="post_reactions">
+                 <button class="btn btn-dark border">⬆️<span
+                  class="badge text-info">${likeNum}</span></button>
+                  <button class="btn btn-dark border">⬇️<span class="badge text-info">${dislikeNum}</span></button>
+                    <p class="mx-1 text-info" id="number_of_comments">${
+                        Object.keys(postJSON.comments).length
+                        } Comments</p>
+                   </div>
+                  </div>
+              </div>
+             ${commentTextArea}
             ${comments}
-        </div>
-    </section>`;
+               </div>
+          </section>`;
 
         // loop and create comments
         const container = document.getElementById("container");

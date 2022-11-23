@@ -100,7 +100,7 @@ async function newPost() {
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <p class="text-start mx-2 text-info">${username}</p>
+  <p class="text-start mx-3 mt-2 text-info">${username}</hp>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -126,9 +126,9 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="bg-dark border rounded-start">⬆️<span
+                  <button class="btn btn-dark border">⬆️<span
                           class="badge text-info">0</span></button>
-                  <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">0</span></button>
+                  <button class="btn btn-dark border">⬇️<span class="badge text-info">0</span></button>
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
@@ -206,11 +206,11 @@ async function addComment(id) {
     <p class="text-info pt-2">${userName.textContent}</p>
       <pre><p>${newComment.value}</p></pre>
       <div class="row">
-      <div class="text-end" id="comment_reactions">
-        <button class="btn btn-dark rounded-start">⬆️
+      <div class="text-end mb-1" id="comment_reactions">
+        <button class="btn btn-dark">⬆️
             <span class="badge text-info">0</span>
         </button>
-        <button class="btn btn-dark rounded-end">⬇️
+        <button class="btn btn-dark">⬇️
             <span class="badge text-info">0</span>
         </button>
       </div>

@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"gritface/database"
 	"sort"
 	"strconv"
@@ -43,7 +42,6 @@ func Retrieve20Posts() (string, error) {
 
 	structSlice := make(map[int]JSONData)
 	query := "SELECT * FROM posts LIMIT 20"
-	fmt.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
 		return "", err
@@ -146,14 +144,14 @@ func Retrieve20Posts() (string, error) {
 
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
-	fmt.Println(structSlice)
+
+	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData
 	sSlice := make([]JSONData, 0, len(structSlice))
 	for _, value := range structSlice {
 		sSlice = append(sSlice, value)
 	}
 	sort.Slice(sSlice, func(i, j int) bool { return sSlice[i].Post_id > sSlice[j].Post_id })
-	fmt.Println("this: ", sSlice)
-	// sorted := sort.SliceStable(structSlice, func(i, j int) bool { return structSlice[i].Post_id < structSlice[j].Post_id })
+
 	res, err := json.Marshal(sSlice)
 	if err != nil {
 		return "", err
@@ -161,6 +159,5 @@ func Retrieve20Posts() (string, error) {
 
 	// fmt.Println(structSlice)
 	// fmt.Println(string(res))
-	fmt.Println(string(res))
 	return string(res), nil
 }

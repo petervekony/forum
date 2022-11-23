@@ -86,9 +86,30 @@ func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.
 		}
 	}
 	sm.sessions[thisSession.Value] = strconv.Itoa(uid)
-
 	return nil
 }
+
+// function to delete the session
+func (sm *SessionManager) deleteSession(w http.ResponseWriter, r *http.Request) (*http.Cookie, error) {
+	// check if session is set
+	cookie, err := sm.isSessionSet(w, r)
+	if err != nil {
+		return nil, err
+	}
+	// delete the session
+	delete(sm.sessions, cookie.Value)
+
+	// remove the cookie
+	cookie = &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		Path:   "/",
+		Secure: true,
+		MaxAge: -1,
+	}
+	return cookie, nil
+}
+
 
 func init() {
 	sessionManager = SessionManager{

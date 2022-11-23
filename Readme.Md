@@ -3,9 +3,32 @@ Brief Project Description
 
 # Usage
 
+## Website Link
 
+## Technologies
+### Golang
+### Docker
+### Javascript
+### HTML
+### CSS
 
 ## Project Layout/structure
+
+## Website and Project Features
+
+
+### Signup
+### Login
+### Cookie based Session
+### One active session per user
+### Posts
+### Comments
+### Posts Like and Dislikes
+### Comment Likes and Dislikes
+
+## Third Party Packages
+
+
 
 ### File structure
 ### Database structure

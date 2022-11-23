@@ -14,7 +14,7 @@ func GetPostReactions(w http.ResponseWriter, r *http.Request) (int, string, bool
 	if err != nil {
 		return http.StatusInternalServerError, err.Error(), false
 	}
-	var post Posts
+	var post newPosts
 	// connect to the db
 	db, err := d.DbConnect()
 	if err != nil {

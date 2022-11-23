@@ -11,8 +11,9 @@ import (
 )
 
 type newPosts struct {
-	Body    string `json:"postBody"`
-	Heading string `json:"postHeading"`
+	Post_id    int      `json:"post_id"`
+	Body       string   `json:"postBody"`
+	Heading    string   `json:"postHeading"`
 	Categories []string `json:"postCats"`
 }
 

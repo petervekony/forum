@@ -8,7 +8,7 @@ import (
 )
 
 func getPostCategories(w http.ResponseWriter, r *http.Request) {
-	var post Posts
+	var post newPosts
 
 	// get the post id from the request
 	pid := strconv.Itoa(post.Post_id)

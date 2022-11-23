@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"gritface/database"
 	"strconv"
 )
@@ -18,18 +19,18 @@ type JSONData struct {
 	Update_time  string               `json:"update_time"`
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
-	Categories	 []string							`json:"categories"`
-	Reactions		 []map[int]string			`json:"reactions"`
-	Username		 string								`json:"username"`
+	Categories   []string             `json:"categories"`
+	Reactions    []map[int]string     `json:"reactions"`
+	Username     string               `json:"username"`
 }
 
 type JSONComments struct {
-	CommentID int    							`json:"comment_id"`
-	Post_id   int    							`json:"post_id"`
-	User_id   int    							`json:"user_id"`
-	Body      string 							`json:"body"`
-	Reactions	[]map[int]string		`json:"reactions"`
-	Username	string							`json:"username"`
+	CommentID int              `json:"comment_id"`
+	Post_id   int              `json:"post_id"`
+	User_id   int              `json:"user_id"`
+	Body      string           `json:"body"`
+	Reactions []map[int]string `json:"reactions"`
+	Username  string           `json:"username"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -39,8 +40,9 @@ func Retrieve20Posts() (string, error) {
 		return "", err
 	}
 
-	structSlice := make(map[int]JSONData)
-	query := "SELECT * FROM posts LIMIT 20"
+	structSlice := make([]JSONData, 0)
+	query := "SELECT * FROM posts ORDER BY post_id DESC LIMIT 20"
+	fmt.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
 		return "", err
@@ -65,7 +67,7 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		rD.Username = users[0].Name;
+		rD.Username = users[0].Name
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -99,7 +101,7 @@ func Retrieve20Posts() (string, error) {
 			}
 		}
 
-		structSlice[*postId] = *rD
+		structSlice = append(structSlice, *rD)
 
 		thisPostId := &rD.Post_id
 		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
@@ -124,8 +126,7 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		row.Username = users[0].Name;
-
+		row.Username = users[0].Name
 
 		thisPostId := &row.Post_id
 		thisCommentId := &row.CommentID
@@ -144,6 +145,7 @@ func Retrieve20Posts() (string, error) {
 
 		structSlice[*thisPostId].Comments[row.CommentID] = *row
 	}
+	fmt.Println(structSlice)
 	res, err := json.Marshal(structSlice)
 	if err != nil {
 		return "", err
@@ -151,5 +153,6 @@ func Retrieve20Posts() (string, error) {
 
 	// fmt.Println(structSlice)
 	// fmt.Println(string(res))
+	fmt.Println(string(res))
 	return string(res), nil
 }

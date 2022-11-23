@@ -100,7 +100,7 @@ async function newPost() {
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <p class="text-start mx-2 text-info">${username} ${catInnerHTML}</p>
+  <p class="text-start mx-2 text-info">${username}</p>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -133,7 +133,7 @@ async function newPost() {
               </div>
           </div>
           <div class="text-secondary">
-          <p>{$categories} #IRL #Shitpost #depression</p>
+          <p>${catInnerHTML}</p>
         </div>
       </div>
       <div class="col-10 justify-content-center mx-3 mb-2" id="user_comment">

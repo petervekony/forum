@@ -83,7 +83,7 @@ async function initPage() {
  </div>
  <div class="col-8 border rounded bg-secondary" id="post_comments">
  <p class="text-info pt-2">${comment.username}</p>
- ${comment.body}
+ <pre><p>${comment.body}</p></pre>
  <div class="row">
  <div class="text-end" id="comment_reactions">
  <button class="btn btn-dark rounded-start">⬆️
@@ -99,7 +99,7 @@ async function initPage() {
         }
 
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <p class="text-start mx-2 text-info">{$username}</p>
+        <p class="text-start mx-2 text-info">${postJSON.username}</p>
         <div data-bs-target="#collapse_post_comments${postJSON.post_id}" data-bs-toggle="collapse">
             <div class="text-white rounded my-2 py-2" id="post_div">
                 <div class="col-11 offset-1 my-1" id="post_heading">
@@ -127,9 +127,9 @@ async function initPage() {
                 <div class="row">
                     <div class="mx-1" id="post_reactions">
                         <button class="bg-dark border rounded-start">⬆️<span
-                                class="badge text-info">10</span></button>
-                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">5</span></button>
-                         <p class="mx-1 text-info" id="number_of_comments">13 Comments</p>
+                                class="badge text-info">0</span></button>
+                        <button class="bg-dark border rounded-end">⬇️<span class="badge text-info">0</span></button>
+                         <p class="mx-1 text-info" id="number_of_comments">0 Comments</p>
                     </div>
                 </div>
             </div>

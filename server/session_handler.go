@@ -61,7 +61,7 @@ func (sm *SessionManager) isSessionSet(w http.ResponseWriter, r *http.Request) (
 	if ok {
 		return c, nil
 	} else {
-		return nil, errors.New("Cookie value not alive")
+		return nil, errors.New("cookie value not alive")
 	}
 }
 
@@ -71,7 +71,7 @@ func (sm *SessionManager) setSessionUID(uid int, w http.ResponseWriter, r *http.
 
 	if err != nil {
 		// Something wrong with cookie, return error
-		return errors.New("Could not retrieve cookie data")
+		return errors.New("could not retrieve cookie data")
 	}
 	// this is working right
 	suid := strconv.Itoa(uid)

@@ -16,6 +16,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		uid, err := sessionManager.checkSession(w, r)
 		if err != nil {
 			// Handle error for session check fail
+			fmt.Println("error, session fucked up")
 		}
 		fmt.Println("first time I will get here")
 		if uid != "0" && r.Method == "POST" {
@@ -109,6 +110,15 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		message, status := addPostText(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/addComment" {
+		message, status := addComment(w, r)
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(writeMsg))
+	} else if r.URL.Path == "/getCategories" {
+		message, status := GetCategories(w, r)
+		fmt.Println(message, status)
+		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		w.Write([]byte(message))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

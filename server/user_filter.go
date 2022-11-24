@@ -16,7 +16,31 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 	if err != nil {
 		return "", err
 	}
-	query := "SELECT * from posts WHERE user_id = " + uid
+	filterValue := r.URL.Query()["filter"]
+	useFilter := ""
+	if len(filterValue) != 0 {
+		useFilter = filterValue[0]
+	}
+	query := "SELECT posts.* from posts"
+	switch useFilter {
+	case "userPosts":
+		query += " WHERE user_id=" + uid
+	case "liked":
+		// TODO: change "1" to uid
+		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction='⬆️' AND reaction.user_id=" + "1" + " GROUP BY posts.post_id"
+	default:
+		data := &JSONData{
+			Post_id:  0,
+			User_id:  0,
+			Heading:  "ERROR",
+			Body:     "Invalid filter",
+			Comments: make(map[int]JSONComments),
+		}
+		dataSlice := []JSONData{*data}
+		dummy, _ := json.Marshal(dataSlice)
+		fmt.Println("this fuckery: ", string(dummy))
+		return string(dummy), nil
+	}
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)
 	if err != nil {
@@ -83,6 +107,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
 	}
 	// Query comments
+	// TODO: Fix index error without comments
 	query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
 	rows, err = db.Query(query)
 	if err != nil {

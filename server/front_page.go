@@ -126,12 +126,12 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 
 		// For users choice of filtering posts
-	} else if r.URL.Path == "/userPosts" {
+	} else if r.URL.Path == "/filtered" {
 		allMyPost, err := userFilter(w, r, "userPosts", uid)
 		if err != nil {
 			fmt.Println(err)
 		}
-		
+
 		w.Write([]byte(allMyPost))
 
 	} else {

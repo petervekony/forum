@@ -226,3 +226,14 @@ async function resetLoginModal() {
       }
     });
 }
+
+
+
+async function userPost() {
+  console.log("userPost");
+  await fetch("/userPosts")
+    .then((response) => response.json())
+    .then(function (json) {
+        console.log(postJSON);
+    });
+}

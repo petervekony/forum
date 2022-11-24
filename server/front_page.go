@@ -11,13 +11,18 @@ import (
 
 func FrontPage(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Handling %v\n", r.URL.Path)
+	uid, err := sessionManager.checkSession(w, r)
+	if err != nil {
+		// Handle error for session check fail
+		fmt.Println("error, session fucked up")
+	}
 	if r.URL.Path == "/" { // TBC for session check
 		fmt.Println("cookies handling.")
-		uid, err := sessionManager.checkSession(w, r)
-		if err != nil {
-			// Handle error for session check fail
-			fmt.Println("error, session fucked up")
-		}
+		// uid, err := sessionManager.checkSession(w, r)
+		// if err != nil {
+		// 	// Handle error for session check fail
+		// 	fmt.Println("error, session fucked up")
+		// }
 		fmt.Println("first time I will get here")
 		if uid != "0" && r.Method == "POST" {
 			// user is logged in redirect to front page with posts
@@ -75,7 +80,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write(script)
 	} else if r.URL.Path == "/checkSession" {
-		uid, err := sessionManager.checkSession(w, r)
+
 		fmt.Println("at check session uid is", uid)
 		if err != nil {
 			// No session found, show login page
@@ -119,11 +124,15 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(message, status)
 		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(message))
-	
-	// For users choice of filtering posts	
+
+		// For users choice of filtering posts
 	} else if r.URL.Path == "/userPosts" {
-		userFilter(w,r, "userPosts")
-	
+		allMyPost, err := userFilter(w, r, "userPosts", uid)
+		if err != nil {
+			fmt.Println(err)
+		}
+		w.Write([]byte(allMyPost))
+
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

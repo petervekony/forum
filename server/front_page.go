@@ -119,6 +119,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(message, status)
 		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(message))
+	
+	// For users choice of filtering posts	
+	} else if r.URL.Path == "/userPosts" {
+		userFilter(w,r, "userPosts")
+	
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

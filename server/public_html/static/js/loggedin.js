@@ -128,9 +128,9 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="btn btn-dark border">⬆️<span
-                          class="badge text-info">0</span></button>
-                  <button class="btn btn-dark border">⬇️<span class="badge text-info">0</span></button>
+                  <button class="btn btn-dark border" id="post_upvote">⬆️<span
+                          class="badge text-info" id="post_upvote_count">0</span></button>
+                  <button class="btn btn-dark border" id="post_downvote>⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
@@ -207,11 +207,11 @@ async function addComment(id) {
       <pre><p>${newComment.value}</p></pre>
       <div class="row">
       <div class="text-end mb-1" id="comment_reactions">
-        <button class="btn btn-dark">⬆️
-            <span class="badge text-info">0</span>
+        <button class="btn btn-dark" id="comment_upvote">⬆️
+            <span class="badge text-info" id="comment_upvote_count">0</span>
         </button>
-        <button class="btn btn-dark">⬇️
-            <span class="badge text-info">0</span>
+        <button class="btn btn-dark" id="comment_downvote">⬇️
+            <span class="badge text-info" id="comment_downvote_count">0</span>
         </button>
       </div>
     </div>
@@ -228,4 +228,8 @@ async function addComment(id) {
   console.log(number_of_comments);
   number_of_comments.textContent =
     parseInt(number_of_comments.textContent) + 1 + " Comments";
+}
+
+async function showCategories(id) {
+  
 }

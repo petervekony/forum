@@ -1,20 +1,22 @@
 window.onload = initPage();
-console.log(location.hash)
+// console.log(location.hash)
 
-if (location.hash == "/" || location.hash == "/loginSuccess") {
-  console.log(location.hash)
-  window.onload = initPage();
-} else if (location.hash == "/userPosts") {
-  console.log(location.hash)
-  window.onload = filterPage()
-}
+// if (location.hash == "/" || location.hash == "/loginSuccess") {
+//   console.log(location.hash)
+//   window.onload = initPage();
+// } else if (location.hash == "/userPosts") {
+//   console.log(location.hash)
+//   window.onload = filterPage()
+// }
 
-async function initPage() {
-  await fetch("/posts")
+async function initPage(request="/posts") {
+  await fetch(request)
     .then((response) => response.json())
     .then(function (json) {
       console.log(json);
       let commentTextArea = "";
+      const container = document.getElementById("container");
+      container.innerHTML = "";
       for (const [key, postJSON] of Object.entries(json)) {
         let categories = "";
         if (postJSON.categories) {
@@ -151,7 +153,7 @@ async function initPage() {
           </section>`;
 
         // loop and create comments
-        const container = document.getElementById("container");
+     
         container.append(postDiv);
       }
     });

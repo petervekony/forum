@@ -27,3 +27,12 @@ for adrian
 - new post request and updating
 - add comments to posts (taneli)
 - image upload (tosin)
+
+
+UPDATE 24.11.:
+- post_id=0 print as error
+    -separate function that returns the dummy post
+- handle error pages
+- reaction handling
+- category filtering
+- breakpoints for the page & style improvements

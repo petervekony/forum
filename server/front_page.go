@@ -131,6 +131,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fmt.Println(err)
 		}
+		
 		w.Write([]byte(allMyPost))
 
 	} else {

@@ -130,7 +130,7 @@ async function newPost() {
               <div class="mx-1" id="post_reactions">
                   <button class="btn btn-dark border" id="post_upvote">⬆️<span
                           class="badge text-info" id="post_upvote_count">0</span></button>
-                  <button class="btn btn-dark border" id="post_downvote>⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
+                  <button class="btn btn-dark border" id="post_downvote">⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
@@ -230,6 +230,3 @@ async function addComment(id) {
     parseInt(number_of_comments.textContent) + 1 + " Comments";
 }
 
-async function showCategories(id) {
-  
-}

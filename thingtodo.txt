@@ -34,5 +34,5 @@ UPDATE 24.11.:
     -separate function that returns the dummy post
 - handle error pages
 - reaction handling
-- category filtering
+- category filtering ***done***
 - breakpoints for the page & style improvements

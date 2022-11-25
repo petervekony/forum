@@ -16,6 +16,7 @@ async function setUser() {
       console.log(json);
       // userPic.innerHTML = `<img src="${json.Image}">`;
       userName.textContent = json.Username;
+      userName.profile_image = json.profile_image
     });
 
   // for testing
@@ -172,7 +173,7 @@ async function newPost() {
       <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
       <div class="row">
           <div class="col-1 mx-2">
-                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon_thumbnail7.jpeg" id="user_pic">
           </div>
           <div class="col-10 text-start">
               <div class="input-group">
@@ -231,9 +232,7 @@ async function addComment(id) {
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
   commentDiv.innerHTML = `<div class="col-1 mx-2">
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
-        "src"
-      )}">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}">
     </div>
     <div class="col-8 border rounded bg-secondary" id="post_comments">
     <p class="text-info pt-1">${userName.textContent}</p>

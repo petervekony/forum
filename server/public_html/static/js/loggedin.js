@@ -46,9 +46,9 @@ async function setCategories() {
     </a>`;
         catsList.append(catsItem);
         const filterCatsItem = document.createElement("li");
-        filterCatsItem.innerHTML = `<a class="dropdown-item" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
-        <div class="form-check">
-            <input class="btn btn-dark" type="button" value="${value}" id="check2"/>
+        filterCatsItem.innerHTML = `<a class="dropdown-item bg-dark" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
+        <div class="col-12">
+            <button class="col-12 btn btn-dark text-info border-info" value="${value}" id="check2">${value}</button>
         </div>
     </a>`;
         filterCatsList.append(filterCatsItem);

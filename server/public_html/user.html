@@ -32,7 +32,7 @@
           data-bs-target="#offcanvasExample"
           aria-controls="offcanvasExample"
         >
-          Categories
+          Filters
         </button>
         <ul class="nav navbar-nav offset-2">
           <li>
@@ -105,13 +105,13 @@
           >
             Post history
           </button>
-          <button
+          <!-- <button
             
             class="btn btn-dark border-info text-center text-info"
             id="user_comments"
           >
             Comment history
-          </button>
+          </button> -->
         </div>
         <div class="row mb-2">
           <button
@@ -121,12 +121,12 @@
           >
             Liked posts
           </button>
-          <button
+          <!-- <button
             class="btn btn-dark border-info text-center text-info"
             id="user_liked_comments"
           >
             Liked comments
-          </button>
+          </button> -->
         </div>
         <div class="row mb-2">
           <button
@@ -135,13 +135,13 @@
           >
             Hated posts
           </button>
-          <button
+          <!-- <button
             class="btn btn-dark border-info text-center text-info"
             id="user_disliked_comments"
             onclick="initPage('/filtered?filter=hello')"
           >
             Hated comments
-          </button>
+          </button> -->
         </div>
         <br>
         <br>
@@ -154,12 +154,14 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Categories
+              Choose
             </button>
             <ul
-              class="dropdown-menu dropdown-menu-dark"
+              style="max-width: 90%;"
+              class="dropdown-menu bg-dark"
               aria-labelledby="dropdownMenuButton"
               id="filterCats"
+              style="outline: none; border: none;"
             ></ul>
         </div>
       </div>

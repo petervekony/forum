@@ -124,15 +124,20 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(message, status)
 		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(message))
-
 		// For users choice of filtering posts
 	} else if r.URL.Path == "/filtered" {
 		allMyPost, err := userFilter(w, r, "userPosts", uid)
 		if err != nil {
 			fmt.Println(err)
 		}
-
 		w.Write([]byte(allMyPost))
+	} else if r.URL.Path == "/add_reaction" {
+		message, err := addReaction(w, r)
+		if err != nil {
+			fmt.Println(err)
+		}
+		w.Write([]byte(message))
+		
 
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)

@@ -169,7 +169,7 @@ func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error)
 	defer rows.Close()
 	for rows.Next() { // Iterate and fetch the records
 		var reaction Reaction
-		if err := rows.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction); // Fetch the record
+		if err := rows.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction_id); // Fetch the record
 		err != nil {
 			fmt.Println(err)
 			return reactions, err

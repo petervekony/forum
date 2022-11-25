@@ -19,18 +19,18 @@ type JSONData struct {
 	Update_time  string               `json:"update_time"`
 	Image        string               `json:"image"`
 	Comments     map[int]JSONComments `json:"comments"`
-	Categories   []string             `json:"categories"`
-	Reactions    []map[int]string     `json:"reactions"`
-	Username     string               `json:"username"`
+	Categories	 []string							`json:"categories"`
+	Reactions		 []map[int]string			`json:"reactions"`
+	Username		 string								`json:"username"`
 }
 
 type JSONComments struct {
-	CommentID int              `json:"comment_id"`
-	Post_id   int              `json:"post_id"`
-	User_id   int              `json:"user_id"`
-	Body      string           `json:"body"`
-	Reactions []map[int]string `json:"reactions"`
-	Username  string           `json:"username"`
+	CommentID int    							`json:"comment_id"`
+	Post_id   int    							`json:"post_id"`
+	User_id   int    							`json:"user_id"`
+	Body      string 							`json:"body"`
+	Reactions	[]map[int]string		`json:"reactions"`
+	Username	string							`json:"username"`
 }
 
 func Retrieve20Posts() (string, error) {
@@ -41,7 +41,7 @@ func Retrieve20Posts() (string, error) {
 	}
 
 	structSlice := make(map[int]JSONData)
-	query := "SELECT * FROM posts LIMIT 20"
+	query := "SELECT * FROM posts ORDER BY post_id DESC LIMIT 20"
 	rows, err := db.Query(query)
 	if err != nil {
 		return "", err
@@ -66,7 +66,7 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		rD.Username = users[0].Name
+		rD.Username = users[0].Name;
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -125,34 +125,33 @@ func Retrieve20Posts() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		row.Username = users[0].Name
+		row.Username = users[0].Name;
 
-		thisPostId := &row.Post_id
-		thisCommentId := &row.CommentID
-		// getting reactions
-		currentComment := make(map[string]string)
-		currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
-		reactions, err := database.GetReaction(db, currentComment)
-		if err != nil {
-			return "", err
-		}
-		for _, reaction := range reactions {
-			userReaction := make(map[int]string)
-			userReaction[reaction.User_id] = reaction.Reaction
-			row.Reactions = append(row.Reactions, userReaction)
-		}
 
-		structSlice[*thisPostId].Comments[row.CommentID] = *row
+			thisPostId := &row.Post_id
+			thisCommentId := &row.CommentID
+			// getting reactions
+			currentComment := make(map[string]string)
+			currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
+			reactions, err := database.GetReaction(db, currentComment)
+			if err != nil {
+				return "", err
+			}
+			for _, reaction := range reactions {
+				userReaction := make(map[int]string)
+				userReaction[reaction.User_id] = reaction.Reaction
+				row.Reactions = append(row.Reactions, userReaction)
+			}
+
+			structSlice[*thisPostId].Comments[row.CommentID] = *row
+		}
 	}
-
 	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData
 	sSlice := make([]JSONData, 0, len(structSlice))
 	for _, value := range structSlice {
 		sSlice = append(sSlice, value)
 	}
-	sort.Slice(sSlice, func(i, j int) bool { return sSlice[i].Post_id > sSlice[j].Post_id })
-
-	res, err := json.Marshal(sSlice)
+	res, err := json.Marshal(structSlice)
 	if err != nil {
 		return "", err
 	}

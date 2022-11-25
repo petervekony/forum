@@ -26,7 +26,7 @@
           </li>
         </ul>
         <button
-          class="btn btn-dark text-info border-secondary"
+          class="btn btn-dark text-info"
           type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#offcanvasExample"
@@ -101,7 +101,7 @@
           <button
             class="btn btn-dark border-info text-center text-info mb-2"
             id="user_posts"
-            onclick="initPage('/filtered?filter=userPosts')"
+            onclick="userPost()"
           >
             Post history
           </button>
@@ -117,7 +117,6 @@
           <button
             class="btn btn-dark border-info text-center mb-2 text-info"
             id="liked_posts"
-            onclick="initPage('/filtered?filter=liked')"
           >
             Liked posts
           </button>
@@ -138,7 +137,6 @@
           <button
             class="btn btn-dark border-info text-center text-info"
             id="user_disliked_comments"
-            onclick="initPage('/filtered?filter=hello')"
           >
             Hated comments
           </button>
@@ -147,20 +145,18 @@
         <br>
         <h5 class="text-light mb-2">Categories</h5>
         <div class="row mb-2">
-        <button
-              class="btn btn-info dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              Categories
-            </button>
-            <ul
-              class="dropdown-menu dropdown-menu-dark"
-              aria-labelledby="dropdownMenuButton"
-              id="filterCats"
-            ></ul>
+          <button
+            class="btn btn-dark border-info text-center mb-2 text-info"
+            id="user_disliked_posts"
+          >
+            {Category_1}
+          </button>
+          <button
+            class="btn btn-dark border-info text-center text-info"
+            id="user_disliked_comments"
+          >
+            {Category_2}
+          </button>
         </div>
       </div>
     </div>
@@ -362,7 +358,6 @@
     ></script>
   </body>
   <script src="/static/js/loggedin.js"></script>
-  <script src="/static/js/script.js"></script>
-  <!-- <script src="/static/js/filter.js"></script> -->
+  <script src="/static/js/filter.js"></script>
   
 </html>

@@ -1,14 +1,16 @@
-window.onload = initPage();
+function userPost() {
+    console.log("userPost");
+    window.onload = filterPage()
+  }
+  
+  
 
-async function initPage(request="/posts") {
-  console.log("hello from initpage, " + request);
-  await fetch(request)
+async function filterPage() {
+    await fetch("/userPosts")
     .then((response) => response.json())
     .then(function (json) {
       console.log(json);
       let commentTextArea = "";
-      const container = document.getElementById("container");
-      container.innerHTML = "";
       for (const [key, postJSON] of Object.entries(json)) {
         let categories = "";
         if (postJSON.categories) {
@@ -105,8 +107,9 @@ async function initPage(request="/posts") {
                     <h4>${postJSON.heading}</h4>
                 </div>
                 <div class="col-10 offset-1" id="post_body">
-                    <div class="border-top bg-dark border-info text-center" id="post_image">
-                    </div>
+                    <div class="border bg-info text-center" id="post_image">${
+                      postJSON.image
+                    }"</div>
                     <div class="text-justify my-2">
                         <pre><p>${postJSON.body}</p></pre>
                     </div>
@@ -144,88 +147,8 @@ async function initPage(request="/posts") {
           </section>`;
 
         // loop and create comments
-     
+        const container = document.getElementById("container");
         container.append(postDiv);
       }
     });
 }
-async function signup() {
-  const username = document.getElementById("signup_name").value;
-  const email = document.getElementById("signup_email").value;
-  const password = document.getElementById("signup_pass").value;
-  const confirmPassword = document.getElementById("signup_confirmpass").value;
-  let newUser = {
-    name: username,
-    email: email,
-    password: password,
-    confirmPassword: confirmPassword,
-  };
-  console.log(newUser);
-  await fetch("/signup", {
-    method: "POST",
-    body: JSON.stringify(newUser),
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      const modalHeading = document.getElementById("signup_result_heading");
-      const modalBody = document.getElementById("signup_result_body");
-      let modalBtn = document.getElementById("login");
-      if (!json.status) {
-        modalHeading.innerHTML = "Oh Snap!";
-        modalBody.innerHTML = `${json.message}`;
-        modalBtn.setAttribute("data-bs-target", "#signup_modal");
-        modalBtn.textContent = "Sign up";
-      } else {
-        modalHeading.innerHTML = "Welcome!";
-        modalBody.innerHTML = `You are now registered to Gritface!<br />
- You can now login.`;
-        modalBtn.setAttribute("data-bs-target", "#login_modal");
-        modalBtn.textContent = "Log in";
-      }
-    });
-}
-async function login() {
-  const email = document.getElementById("login_email");
-  const password = document.getElementById("login_pass");
-  let user = {
-    email: email.value,
-    password: password.value,
-  };
-  password.value = "";
-  resetLoginModal();
-  console.log(user);
-  await fetch("/login", {
-    method: "POST",
-    body: JSON.stringify(user),
-  })
-    .then((response) => response.json())
-    .then((json) => {
-      if (!json.status) {
-        const loginPassLabel = document.getElementById("login_pass_label");
-        loginPassLabel.innerHTML = `password<br />${json.message}`;
-      } else {
-        console.log(`logged in successfully with uid ${json.message}`);
-        const loginForm = document.getElementById("login_success");
-        // const uid = document.getElementById("login_email");
-        // uid.value = json.message;
-        // test
-        loginForm.submit();
-      }
-    });
-}
-async function resetLoginModal() {
-  const loginPassLabel = document.getElementById("login_pass_label");
-  const loginPass = document.getElementById("login_pass");
-  loginPassLabel.innerHTML = "password";
-  loginPass.value = "";
-  await fetch("/checkSession")
-    .then((response) => response.json())
-    .then((json) => {
-      if (json.status) {
-        window.location.replace("/loginSuccess");
-      } else {
-        console.log("please sign up");
-      }
-    });
-} 

@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func getPostCategories(w http.ResponseWriter, r *http.Request) {
+func GetPostCategories(w http.ResponseWriter, r *http.Request) {
 	var post newPosts
 
 	// get the post id from the request

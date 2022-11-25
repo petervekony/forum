@@ -168,9 +168,9 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="btn btn-dark" style="height: 50%;" id="post_upvote">⬆️<span
+                  <button class="btn btn-dark border" id="post_upvote">⬆️<span
                           class="badge text-info" id="post_upvote_count">0</span></button>
-                  <button class="btn btn-dark" style="height: 50%;" id="post_downvote">⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
+                  <button class="btn btn-dark border" id="post_downvote">⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
@@ -233,7 +233,7 @@ async function addComment(id) {
     });
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
-  commentDiv.classList.add("row", "my-3", "ms-auto");
+  commentDiv.classList.add("row", "ms-auto");
   commentDiv.id = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
@@ -242,18 +242,16 @@ async function addComment(id) {
         "src"
       )}">
     </div>
-    <div class="col-8 border rounded bg-secondary" id="post_comments">
-    <p class="text-info pt-1">${userName.textContent}</p>
-      <pre><p>${newComment.value}</p></pre>
-      <div class="row">
-      <div class="text-end mb-1" id="comment_reactions">
-        <button class="btn btn-dark" id="comment_upvote">⬆️
+    <div class="col-8 border rounded bg-secondary mb-1" id="post_comments">
+    <p class="text-info mb-0">${userName.textContent}</p>
+      <pre class="mb-0"><p class="mb-0 ps-1 pb-0">${newComment.value}</p></pre>
+      <div class="text-end pb-1 my-0" id="comment_reactions">
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_upvote">⬆️
             <span class="badge text-info" id="comment_upvote_count">0</span>
         </button>
-        <button class="btn btn-dark" id="comment_downvote">⬇️
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_downvote">⬇️
             <span class="badge text-info" id="comment_downvote_count">0</span>
         </button>
-      </div>
     </div>
     </div>
     </div>`;

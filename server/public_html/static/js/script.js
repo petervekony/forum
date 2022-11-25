@@ -78,18 +78,16 @@ async function initPage(request="/posts") {
  <div class="col-1 mx-2">
  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
  </div>
- <div class="col-8 border rounded bg-secondary" id="post_comments">
- <p class="text-info pt-1">${comment.username}</p>
- <pre><p>${comment.body}</p></pre>
- <div class="row">
- <div class="text-end" id="comment_reactions">
- <button class="btn btn-dark" style="height: 70%;">⬆️
- <span class="badge text-info pb-3">${likeNumComment}</span>
+ <div class="col-8 border rounded bg-secondary mb-1" id="post_comments">
+ <p class="text-info mb-0">${comment.username}</p>
+ <pre class="mb-0 pb-0"><p class="mb-0 pb-0 ps-1">${comment.body}</p></pre>
+ <div class="text-end pb-1 my-0" id="comment_reactions">
+ <button class="btn btn-dark px-0 py-0" style="height: 60%;">⬆️
+ <span class="badge text-info">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark" style="height: 70%;">⬇️
- <span class="badge text-info pb-3">${dislikeNumComment}</span>
+ <button class="btn btn-dark px-0 py-0" style="height: 60%;">⬇️
+ <span class="badge text-info">${dislikeNumComment}</span>
  </button>
- </div>
  </div>
  </div>
  </div>`;

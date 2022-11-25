@@ -1,13 +1,4 @@
 window.onload = initPage();
-// console.log(location.hash)
-
-// if (location.hash == "/" || location.hash == "/loginSuccess") {
-//   console.log(location.hash)
-//   window.onload = initPage();
-// } else if (location.hash == "/userPosts") {
-//   console.log(location.hash)
-//   window.onload = filterPage()
-// }
 
 async function initPage(request="/posts") {
   await fetch(request)
@@ -113,9 +104,8 @@ async function initPage(request="/posts") {
                     <h4>${postJSON.heading}</h4>
                 </div>
                 <div class="col-10 offset-1" id="post_body">
-                    <div class="border bg-info text-center" id="post_image">${
-                      postJSON.image
-                    }"</div>
+                    <div class="border-top bg-dark border-info text-center" id="post_image">
+                    </div>
                     <div class="text-justify my-2">
                         <pre><p>${postJSON.body}</p></pre>
                     </div>

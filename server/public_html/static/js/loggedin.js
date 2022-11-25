@@ -14,7 +14,7 @@ async function setUser() {
         window.location.replace("/");
       }
       console.log(json);
-      userPic.innerHTML = `<img src="${json.Image}">`;
+      // userPic.innerHTML = `<img src="${json.Image}">`;
       userName.textContent = json.Username;
     });
 
@@ -107,7 +107,7 @@ async function newPost() {
               <h4>${userPostHeading.value}</h4>
           </div>
           <div class="col-10 offset-1" id="post_body">
-              <div class="border bg-info text-center" id="post_image">Testing image"</div>
+              <div class="border-top border-info bg-dark text-center" id="post_image"></div>
               <div class="text-justify my-2">
                   <pre><p>${userPost.value}</p></pre>
               </div>

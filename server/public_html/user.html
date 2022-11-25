@@ -147,18 +147,20 @@
         <br>
         <h5 class="text-light mb-2">Categories</h5>
         <div class="row mb-2">
-          <button
-            class="btn btn-dark border-info text-center mb-2 text-info"
-            id="user_disliked_posts"
-          >
-            {Category_1}
-          </button>
-          <button
-            class="btn btn-dark border-info text-center text-info"
-            id="user_disliked_comments"
-          >
-            {Category_2}
-          </button>
+        <button
+              class="btn btn-info dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Categories
+            </button>
+            <ul
+              class="dropdown-menu dropdown-menu-dark"
+              aria-labelledby="dropdownMenuButton"
+              id="filterCats"
+            ></ul>
         </div>
       </div>
     </div>

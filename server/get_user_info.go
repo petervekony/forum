@@ -19,7 +19,7 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 	if uid == "0" {
 		return "invalid session", false
-	} 
+	}
 
 	db, err := d.DbConnect()
 	if err != nil {
@@ -35,13 +35,13 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 
 	var info Info
 	info.Image = "https://img.icons8.com/office/2x/circled-user-male-skin-type-4.png"
-	info.Username = users[0].Name;
+	info.Username = users[0].Name
 
 	jsonInfo, err := json.Marshal(info)
-    if err != nil {
-      return err.Error(), false
-    }
-  fmt.Println(string(jsonInfo))
+	if err != nil {
+		return err.Error(), false
+	}
+	fmt.Println(string(jsonInfo))
 	return string(jsonInfo), true
 }
 
@@ -56,14 +56,14 @@ func GetCategories(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 	if uid == "0" {
 		return "invalid session", false
-	} 
+	}
 
 	db, err := d.DbConnect()
 	if err != nil {
 		return err.Error(), false
 	}
 
-	var categories []string
+	categories := make(map[int]string)
 	rows, err := db.Query("select * from categories")
 	if err != nil {
 		return err.Error(), false
@@ -76,7 +76,7 @@ func GetCategories(w http.ResponseWriter, r *http.Request) (string, bool) {
 			return err.Error(), false
 		}
 
-		categories = append(categories, category.Category_Name)
+		categories[category.Category_id] = category.Category_Name
 	}
 
 	res, err := json.Marshal(categories)

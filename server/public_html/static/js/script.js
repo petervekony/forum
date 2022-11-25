@@ -1,6 +1,7 @@
 window.onload = initPage();
 
 async function initPage(request="/posts") {
+  console.log("hello from initpage, " + request);
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {

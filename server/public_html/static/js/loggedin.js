@@ -32,7 +32,28 @@ async function setCategories() {
   })
     .then((response) => response.json())
     .then(function (json) {
+      console.log(json)
       const catsList = document.getElementById("postCats");
+      const filterCatsList = document.getElementById("filterCats");
+      const map = new Map(Object.entries(json));
+      for (const [key, value] of map) {
+        const catsItem = document.createElement("li");
+        catsItem.innerHTML = `<a class="dropdown-item" href="#">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="${value}" id="check1" />
+            <label class="form-check-label" for="check1">${value}</label>
+        </div>
+    </a>`;
+        catsList.append(catsItem);
+        const filterCatsItem = document.createElement("li");
+        filterCatsItem.innerHTML = `<a class="dropdown-item" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
+        <div class="form-check">
+            <input class="btn btn-dark" type="button" value="${value}" id="check2"/>
+        </div>
+    </a>`;
+        filterCatsList.append(filterCatsItem);
+      }
+      /*
       json.map(function (category) {
         const catsItem = document.createElement("li");
         catsItem.innerHTML = `<a class="dropdown-item" href="#">
@@ -43,6 +64,18 @@ async function setCategories() {
     </a>`;
         catsList.append(catsItem);
       });
+      const filterCatsList = document.getElementById("filterCats");
+      json.map(function (category) {
+        const catsItem = document.createElement("li");
+        catsItem.innerHTML = `<a class="dropdown-item" href="#">
+        <div class="form-check">
+            <input class="btn btn-dark" type="button" value="${category}" id="check2" />
+            <label class="form-check-label" for="check2">${category}</label>
+        </div>
+    </a>`;
+        filterCatsList.append(catsItem);
+      });
+      */
     });
 }
 

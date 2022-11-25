@@ -133,7 +133,15 @@ async function newPost() {
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <h5 class="text-start mx-3 mt-2 text-info">${username}</h5>
+  <div class="row">
+  <div class="col-1 ms-2 mt-2">
+  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+  </div>
+  <div class="col-7 mt-4">
+  <h5 class="text-start text-info">${postJSON.username}</h5>
+  </div>
+  </div>
+  
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -161,9 +169,9 @@ async function newPost() {
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="btn btn-dark border" id="post_upvote">⬆️<span
-                          class="badge text-info" id="post_upvote_count">0</span></button>
-                  <button class="btn btn-dark border" id="post_downvote">⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
+                  <button class="btn btn-dark" style="height: 70%;" id="post_upvote">⬆️<span
+                          class="badge text-info pb-3" id="post_upvote_count">0</span></button>
+                  <button class="btn btn-dark" style="height: 70%;" id="post_downvote">⬇️<span class="badge text-info pb-3" id="post_downvote_count">0</span></button>
                   <p class="text-info">0 Comments</p>
               </div>
           </div>
@@ -172,7 +180,7 @@ async function newPost() {
       <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
       <div class="row">
           <div class="col-1 mx-2">
-                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
+                <img class="rounded-circle center-block" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
           </div>
           <div class="col-10 text-start">
               <div class="input-group">
@@ -248,7 +256,7 @@ async function addComment(id) {
         </button>
       </div>
     </div>
-      </div>
+    </div>
     </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   if (!commentsDiv) {

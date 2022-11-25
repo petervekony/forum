@@ -74,7 +74,7 @@ async function initPage(request="/posts") {
             });
           }
           comments += `
- <div class="row my-3 ms-auto" id="post_comments">
+ <div class="row ms-auto" id="post_comments">
  <div class="col-1 mx-2">
  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
  </div>
@@ -82,12 +82,12 @@ async function initPage(request="/posts") {
  <p class="text-info pt-1">${comment.username}</p>
  <pre><p>${comment.body}</p></pre>
  <div class="row">
- <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border">⬆️
- <span class="badge text-info">${likeNumComment}</span>
+ <div class="text-end" id="comment_reactions">
+ <button class="btn btn-dark" style="height: 70%;">⬆️
+ <span class="badge text-info pb-3">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark border">⬇️
- <span class="badge text-info">${dislikeNumComment}</span>
+ <button class="btn btn-dark" style="height: 70%;">⬇️
+ <span class="badge text-info pb-3">${dislikeNumComment}</span>
  </button>
  </div>
  </div>
@@ -96,7 +96,15 @@ async function initPage(request="/posts") {
         }
         comments += "</div>";
         postDiv.innerHTML = `<section class="row" id="post_section">
-        <h5 class="text-start mx-3 mt-2 text-info">${postJSON.username}</h5>
+        <div class="row">
+          <div class="col-1 ms-2 mt-2">
+          <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+          </div>
+          <div class="col-7 mt-4">
+          <h5 class="text-start text-info">${postJSON.username}</h5>
+          </div>
+        </div>
+        
         <div data-bs-target="#collapse_post_comments${
           postJSON.post_id
         }" data-bs-toggle="collapse">

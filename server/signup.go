@@ -5,8 +5,10 @@ import (
 	"fmt"
 	d "gritface/database"
 	"io"
+	"math/rand"
 	"net/http"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"golang.org/x/crypto/bcrypt"
@@ -61,13 +63,12 @@ func EscapeString(value string) string {
 }
 
 type NewUser struct {
-	User_id  int    `json:"user_id"`
+	User_id    int    `json:"user_id"`
 	Name       string `json:"name"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
 	ConfirmPwd string `json:"confirmPassword"`
 }
-
 
 // function to sign up a user
 func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
@@ -203,6 +204,18 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			}
 
 		} else {
+			min := 1
+			max := 7
+			randomNum := rand.Intn(max-min) + min
+			picUpdate := "UPDATE users SET profile_image='static/images/raccoon_thumbnail" + strconv.Itoa(randomNum) + ".jpg' WHERE user_id=" + strconv.Itoa(UID)
+			statement, err := db.Prepare(picUpdate)
+			if err != nil {
+				return "ERROR with picture update", false
+			}
+			_, err = statement.Exec()
+			if err != nil {
+				fmt.Printf("ERROR: Signup successful for %v, but profile pic update failed\n", name)
+			}
 			// fmt.Fprintf(w, "Signup successful")
 			// needed to finalize endpoint
 			fmt.Printf("Sign up successful for %v\n", name)

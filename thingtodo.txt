@@ -38,3 +38,7 @@ UPDATE 24.11.:
 - breakpoints for the page & style improvements
 - load more button for posts
 - fix js json
+
+
+sqlite pwd protection
+go build -tags sqlite_userauth -o auth .

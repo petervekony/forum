@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	d "gritface/database"
-	"gritface/log"
+	logger "gritface/log"
 	s "gritface/server"
 	"net/http"
 )
@@ -35,7 +35,7 @@ func main() {
 	}
 	// start server
 	fmt.Println("Server is running on port 443...")
-	log.WTL("Server listening on '" + ser.Addr + "'")
+	logger.WTL("Server listening on '" + ser.Addr + "'")
 
 	// localhost.crt and localhost.key files were created using the following CLI commands:
 	// openssl req  -new  -newkey rsa:2048  -nodes  -keyout localhost.key  -out localhost.csr

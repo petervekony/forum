@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	"gritface/log"
 	"net/http"
 	"strconv"
 
@@ -116,6 +117,7 @@ func (sm *SessionManager) GetSessionVariable(w http.ResponseWriter, r *http.Requ
 	thisSession, err := sm.isSessionSet(w, r)
 	if err != nil {
 		// Something wrong with cookie, return error
+		log.WTL("Errors while opening session, " + err.Error())
 		return nil, errors.New("Something is wrong with the session")
 	}
 

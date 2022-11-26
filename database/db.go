@@ -94,6 +94,15 @@ func DbConnect() (*sql.DB, error) {
 		return nil, err
 	}
 
+	// Enable foreign key contraints
+	enableContraints := `PRAGMA foreign_keys = ON;`
+
+	enableContraintsQuery, err := forumdb.Prepare(enableContraints) // Prepare SQL Statement
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	enableContraintsQuery.Exec()
+
 	return forumdb, nil
 }
 

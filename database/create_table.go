@@ -11,7 +11,7 @@ func createTable(db *sql.DB) error {
 		"password" TEXT NOT NULL,
 		"profile_image" TEXT DEFAULT '',
 		"deactive" INTEGER DEFAULT 0,
-		"user_level" TEXT
+		"user_level" TEXT DEFAULT "user"
 	  );`
 
 	usersStatement, err := db.Prepare(createUsersTable) // Prepare SQL Statement
@@ -45,7 +45,8 @@ func createTable(db *sql.DB) error {
 		"post_id" INTEGER NOT NULL,
 		"user_id" INTEGER NOT NULL,
 		"body" TEXT NOT NULL,
-		"insert_time" TEXT NOT NULL
+		"insert_time" TEXT NOT NULL,
+		FOREIGN KEY("post_id") REFERENCES posts("post_id")
 	  );`
 
 	commentsStatement, err := db.Prepare(createcommentsTable) // Prepare SQL Statement
@@ -72,7 +73,9 @@ func createTable(db *sql.DB) error {
 		"post_id" INTEGER NOT NULL,
 		"comment_id" INTEGER NOT NULL,
 		"reaction_id" TEXT NOT NULL,
-		PRIMARY KEY (user_id, post_id, comment_id)
+		PRIMARY KEY (user_id, post_id, comment_id),
+		FOREIGN KEY("post_id") REFERENCES posts("post_id"),
+		FOREIGN KEY("comment_id") REFERENCES comments("comment_id")
 	  );`
 	reactionStatement, err := db.Prepare(createreactionTable) // Prepare SQL Statement
 	if err != nil {
@@ -83,7 +86,9 @@ func createTable(db *sql.DB) error {
 	//post category table
 	createpostscategoryTable := `CREATE TABLE postsCategory (
 		"category_id" INTEGER NOT NULL,
-		"post_id" INTEGER NOT NULL
+		"post_id" INTEGER NOT NULL,
+		FOREIGN KEY("post_id") REFERENCES posts("post_id"),
+		FOREIGN KEY("category_id") REFERENCES categories("category_id")
 	  );`
 	postcategoryStatement, err := db.Prepare(createpostscategoryTable) // Prepare SQL Statement
 	if err != nil {

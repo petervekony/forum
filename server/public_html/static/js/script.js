@@ -9,6 +9,7 @@ async function initPage(request="/posts") {
       let commentTextArea = "";
       const container = document.getElementById("container");
       container.innerHTML = "";
+      const userPic = document.getElementById("user_pic");
       for (const [key, postJSON] of Object.entries(json)) {
         let categories = "";
         if (postJSON.categories) {
@@ -36,7 +37,7 @@ async function initPage(request="/posts") {
           commentTextArea = `<div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
  <div class="row">
  <div class="col-1 mx-2">
- <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic"></img>
+ <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="${userPic.getAttribute("src")}"></img>
  </div>
  <div class="col-10 text-start">
  <div class="input-group">
@@ -62,6 +63,7 @@ async function initPage(request="/posts") {
         }
         let likeNumComment, dislikeNumComment;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
+          if (comment.profile_image == "") comment.profile_image = "static/images/raccoon_thumbnail7.jpg";
           likeNumComment = 0;
           dislikeNumComment = 0;
           if (comment.reactions) {
@@ -76,7 +78,7 @@ async function initPage(request="/posts") {
           comments += `
  <div class="row ms-auto" id="post_comments">
  <div class="col-1 mx-2">
- <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+ <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="${comment.profile_image}" id="user_pic">
  </div>
  <div class="col-8 border rounded bg-secondary mb-1" id="post_comments">
  <p class="text-info mb-0">${comment.username}</p>

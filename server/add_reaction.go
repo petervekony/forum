@@ -64,9 +64,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	fmt.Println(query)
 	defer res.Close()
-
 	var recID string
 	var count int
 	for res.Next() {
@@ -74,7 +72,6 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(recID, count)
 	}
 
 	retData := make(map[string]interface{})
@@ -82,11 +79,11 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	retData["status"] = true
 	retData["1"] = count
 	retData["2"] = count
-	fmt.Println(retData)
+	retData["userReaction"] = reactID
 	strLine, err := json.Marshal(retData)
 	if err != nil {
 		return nil, err
 	}
-
+	fmt.Println(string(strLine))
 	return strLine, nil
 }

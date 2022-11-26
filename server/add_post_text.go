@@ -44,6 +44,27 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
+	// Now timetamp (ts)
+	nowT := time.Now()
+	nowTS := nowT.Unix()
+
+	// Check for session last post insert ts
+	lastInsertTS, err := sessionManager.GetSessionVariable(w, r, "last_post_insert")
+	if err != nil {
+		if err.Error() != "Value not set" {
+			// Something went realy wrong
+			return err.Error(), false
+		}
+	}
+
+	if lastInsertTS != nil {
+		fmt.Println("Last insert TS was " + fmt.Sprint(lastInsertTS) + " vs now : " + fmt.Sprint(nowTS))
+		// This is okay
+		if lastInsertTS.(int64)+12 > nowTS {
+			return "Add new post cooldown!", false
+		}
+	}
+
 	db, err := d.DbConnect()
 	if err != nil {
 		return err.Error(), false
@@ -69,5 +90,10 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 		}
 	}
 	postID_str := strconv.Itoa(postID)
+
+	// Store last post insert ts
+	fmt.Println("Store new post to session " + fmt.Sprint(nowTS))
+	err = sessionManager.StoreSessionVariable(w, r, "last_post_insert", nowTS)
+
 	return postID_str, true
 }

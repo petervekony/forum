@@ -23,18 +23,18 @@
         <div class="col-3 mb-2 text-center" style="width: 100%">
             <img
                 class="rounded-circle"
-                style="max-width: 200%; border: 2px solid #54b4d3"
+                style="max-width: 200%; border: 2px solid #dc3545"
                 src="static/images/raccoon_thumbnail1.jpg"
                 />
         </div>
-        <div class="text-center text-info" style="width: 100%">
+        <div class="text-center text-danger" style="width: 100%">
             <h1 class="my-4" id="error_code">{ERROR_CODE}</h1>
             <h3 class="my-4" id="error_message">{error_message}</h3>
             <br />
             <div class="my-4 mx-4">
                 <button
-                    class="btn btn-dark border border-info text-info"
-                    onclick=""
+                    class="btn btn-dark border border-danger text-danger"
+                    onclick="history.back()"
                     id="back_button">
                     Go back
                 </button>

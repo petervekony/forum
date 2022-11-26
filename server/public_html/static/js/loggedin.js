@@ -18,9 +18,6 @@ async function setUser() {
       userName.textContent = json.Username;
     });
 
-  // for testing
-  // userPic.textContent = "cookie monster's pic";
-  // userName.textContent = "cookie monster";
 
   const addPostBtn = document.getElementById("add_post_button");
   addPostBtn.addEventListener("click", newPost);

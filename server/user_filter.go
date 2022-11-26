@@ -28,6 +28,8 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 	case "liked":
 		// TODO: change "1" to uid
 		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction='⬆️' AND reaction.user_id=" + "1" + " GROUP BY posts.post_id"
+	case "hated":
+		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction='⬇️' AND reaction.user_id=" + "1" + " GROUP BY posts.post_id"
 	case "category":
 		cat := r.URL.Query()["cat"][0]
 		fmt.Println("WHOLE FUCKING QUERY: ", r.URL.Query())

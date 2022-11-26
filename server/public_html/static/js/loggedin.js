@@ -16,9 +16,8 @@ async function setUser() {
       console.log(json);
       // userPic.innerHTML = `<img src="${json.Image}">`;
       userName.textContent = json.Username;
-      userName.profile_image = json.profile_image
+      userName.profile_image = json.profile_image;
     });
-
 
   const addPostBtn = document.getElementById("add_post_button");
   addPostBtn.addEventListener("click", newPost);
@@ -30,7 +29,7 @@ async function setCategories() {
   })
     .then((response) => response.json())
     .then(function (json) {
-      console.log(json)
+      console.log(json);
       const catsList = document.getElementById("postCats");
       const filterCatsList = document.getElementById("filterCats");
       const map = new Map(Object.entries(json));
@@ -130,16 +129,19 @@ async function newPost() {
   );
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
+  const userPic = document.getElementById("user_pic");
   postDiv.innerHTML = `<section class="row" id="post_section">
     <div class="row">
       <div class="col-1 ms-2 mt-2">
-        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}" id="">
+        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+          "src"
+        )}">
       </div>
       <div class="col-7 mt-4">
         <h5 class="text-start text-info">${username}</h5>
       </div>
     </div>
-  <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
+  <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
               <h4>${userPostHeading.value}</h4>
@@ -161,23 +163,30 @@ async function newPost() {
           </div>
       </div>
   </div>
+  </div>
 
   <div class="offset-1 py-1">
       <div class="col-12 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions">
-                  <button class="btn btn-dark border" id="post_upvote">⬆️<span
-                          class="badge text-info" id="post_upvote_count">0</span></button>
-                  <button class="btn btn-dark border" id="post_downvote">⬇️<span class="badge text-info" id="post_downvote_count">0</span></button>
-                  <p class="text-info">0 Comments</p>
+                  <button class="btn btn-dark border" onclick="addReaction(${
+                    postID
+                  }, 0, 1)">⬆️<span
+                          class="badge text-info" id="rb${postID}01" >0</span></button>
+                  <button class="btn btn-dark border" onclick="addReaction(${
+                    postID
+                  }, 0, 2)">⬇️<span class="badge text-info" id="rb${postID}02" >0</span></button>
+                  <p class="mx-1 text-info" id="number_of_comments">0 Comment</p>
               </div>
           </div>
         </div>
-    
+
       <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
       <div class="row">
           <div class="col-1 mx-2">
-                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon_thumbnail7.jpeg" id="user_pic">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+                  "src"
+                )}">
           </div>
           <div class="col-10 text-start">
               <div class="input-group">
@@ -198,6 +207,7 @@ async function newPost() {
                 </div>
           </div>
       </div>
+  <div class="collapse" id="collapse_post_comments${postID}">
   </div>
 </section>`;
   const container = document.getElementById("container");
@@ -236,22 +246,29 @@ async function addComment(id) {
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
   commentDiv.innerHTML = `<div class="col-1 mx-2">
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+        "src"
+      )}">
     </div>
     <div class="col-8 border rounded bg-secondary mb-1" id="post_comments">
     <p class="text-info mb-0">${userName.textContent}</p>
       <pre class="mb-0"><p class="mb-0 ps-1 pb-0">${newComment.value}</p></pre>
       <div class="text-end pb-1 my-0" id="comment_reactions">
-        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_upvote">⬆️
-            <span class="badge text-info" id="comment_upvote_count">0</span>
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" onclick="addReaction(${
+          id
+        }, ${commentID}, 1)">⬆️
+            <span class="badge text-info" id="rb${id}${commentID}1">0</span>
         </button>
-        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_downvote">⬇️
-            <span class="badge text-info" id="comment_downvote_count">0</span>
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" onclick="addReaction(${
+          id
+        }, ${commentID}, 2)">⬇️
+            <span class="badge text-info" id="rb${id}${commentID}2">0</span>
         </button>
     </div>
     </div>
     </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
+  console.log(postDiv);
   if (!commentsDiv) {
     console.log("broke down");
   } else {
@@ -263,4 +280,3 @@ async function addComment(id) {
   number_of_comments.textContent =
     parseInt(number_of_comments.textContent) + 1 + " Comments";
 }
-

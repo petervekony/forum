@@ -37,7 +37,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write(script)
 	} else if r.URL.Path == "/posts" {
-		posts, err := Retrieve20Posts()
+		posts, err := Retrieve20Posts(0)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -137,7 +137,13 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println(err)
 		}
 		w.Write([]byte(message))
-
+	} else if r.URL.Path == "/loadPosts" {
+		lastPostID := GetLastPostID(w, r)
+		posts, err := Retrieve20Posts(lastPostID)
+		if err != nil {
+			log.Fatal(err)
+		}
+		w.Write([]byte(posts))
 	} else {
 		fmt.Println("Trying to reach unknown path ", r.URL.Path)
 		// w.WriteHeader(404)

@@ -2,7 +2,10 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"gritface/database"
+	"io"
+	"net/http"
 	"sort"
 	"strconv"
 )
@@ -35,7 +38,7 @@ type JSONComments struct {
 	Profile_image string           `json:"profile_image"`
 }
 
-func Retrieve20Posts() (string, error) {
+func Retrieve20Posts(last_post_id int) (string, error) {
 	db, err := database.DbConnect()
 
 	if err != nil {
@@ -44,6 +47,10 @@ func Retrieve20Posts() (string, error) {
 
 	structSlice := make(map[int]JSONData)
 	query := "SELECT * FROM posts ORDER BY post_id DESC LIMIT 20"
+	if last_post_id != 0 {
+		query = "SELECT * FROM posts " + "WHERE post_id < " + strconv.Itoa(last_post_id) + " ORDER BY post_id DESC LIMIT 20"
+	}
+	fmt.Println(query)
 	rows, err := db.Query(query)
 	if err != nil {
 		return "", err
@@ -165,4 +172,26 @@ func Retrieve20Posts() (string, error) {
 	// fmt.Println(structSlice)
 	// fmt.Println(string(res))
 	return string(res), nil
+}
+
+type LastPost struct {
+	ID int `json:"lastPostID"`
+}
+
+func GetLastPostID(w http.ResponseWriter, r *http.Request) int {
+	req, err := io.ReadAll(r.Body)
+	defer r.Body.Close()
+	if err != nil {
+		fmt.Println(err)
+		return 0
+	}
+
+	// Unmarshal
+	var lastPost LastPost
+	err = json.Unmarshal(req, &lastPost)
+	if err != nil {
+		return 0
+	}
+
+	return lastPost.ID
 }

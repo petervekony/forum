@@ -64,14 +64,6 @@ type UserLevel struct {
 	value      int
 }
 
-func (u *Users) GetName() string {
-	return u.Name
-}
-
-func (u *Users) GetEmail() string {
-	return u.Email
-}
-
 // hash password returned the password string as a hash to be stored in the database
 // this is doen for security reasons
 func HashPassword(password string) (string, error) {
@@ -93,7 +85,6 @@ func DbConnect() (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return forumdb, nil
 }
 
@@ -110,7 +101,6 @@ func DatabaseExist() (*sql.DB, error) {
 		}
 		file.Close()
 		fmt.Println("database created")
-
 		newDb = true
 	} else if err != nil {
 		return nil, err
@@ -125,7 +115,6 @@ func DatabaseExist() (*sql.DB, error) {
 		return nil, err
 	}
 	defer conn.Close()
-
 	if newDb {
 		err = createTable(forumdb) // Create Database Tables
 		if err != nil {
@@ -177,7 +166,6 @@ func DatabaseExist() (*sql.DB, error) {
 				} else {
 					goto handleInvalidDatabase
 				}
-
 				return DatabaseExist()
 			}
 		}
@@ -217,25 +205,24 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertReaction(forumdb, 1, 1, 5, "2")
 	InsertReaction(forumdb, 1, 1, 0, "2")
 	InsertReaction(forumdb, 1, 2, 0, "2")
-
 	InsertPostCategory(forumdb, 1, 1)
 }
 
-func QueryResultDisplay(db *sql.DB) {
-	row, err := db.Query(`
-		SELECT users.name, posts.heading
-		FROM users
-		INNER JOIN posts ON users.user_id=posts.user_id
-		WHERE users.user_id == 1;`)
-	// Query the Database
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer row.Close()
-	for row.Next() { // Iterate and fetch the records
-		var name string
-		var heading string
-		row.Scan(&name, &heading)                 // Fetch the record
-		fmt.Println("user: ", name, "|", heading) // Print the record
-	}
-}
+// func QueryResultDisplay(db *sql.DB) {
+// 	row, err := db.Query(`
+// 		SELECT users.name, posts.heading
+// 		FROM users
+// 		INNER JOIN posts ON users.user_id=posts.user_id
+// 		WHERE users.user_id == 1;`)
+// 	// Query the Database
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	defer row.Close()
+// 	for row.Next() { // Iterate and fetch the records
+// 		var name string
+// 		var heading string
+// 		row.Scan(&name, &heading)                 // Fetch the record
+// 		fmt.Println("user: ", name, "|", heading) // Print the record
+// 	}
+// }

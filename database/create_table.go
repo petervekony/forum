@@ -101,6 +101,5 @@ func createTable(db *sql.DB) error {
 		return err
 	}
 	userlevelStatement.Exec() // Execute SQL Statements
-
 	return nil
 }

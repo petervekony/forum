@@ -5,12 +5,10 @@ async function initPage(request="/posts") {
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {
-      console.log(json);
       let commentTextArea = "";
       const container = document.getElementById("container");
       container.innerHTML = "";
       for (const [key, postJSON] of Object.entries(json)) {
-        console.log("log from here",postJSON);
         let categories = "";
         if (postJSON.categories) {
           postJSON.categories.map(
@@ -21,8 +19,6 @@ async function initPage(request="/posts") {
           dislikeNum = 0;
         if (postJSON.reactions) {
           postJSON.reactions.map(function (reactions) {
-            console.log("post json is from here",postJSON)
-            console.log("reactions",reactions);
             for (const [reaction_user_id, reaction] of Object.entries(
               reactions
             )) {
@@ -65,11 +61,9 @@ async function initPage(request="/posts") {
         }
         let likeNumComment, dislikeNumComment;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
-          console.log("comments struct"+JSON.stringify(postJSON.comments));
           likeNumComment = 0;
           dislikeNumComment = 0;
           if (comment.reactions) {
-            console.log(comment.reactions);
             comment.reactions.map(function (reactions) {
               for (const [key, reaction] of Object.entries(reactions)) {
                 if (reaction == "1") likeNumComment++;
@@ -171,7 +165,6 @@ async function addReaction(postID, commentID, reactionID) {
   .then(function (json) {
   target = document.getElementById("rb"+postID+commentID+reactionID);
   target.innerHTML = (parseInt(target.innerHTML)+1).toString();
-  console.log(target.innerHTML);
   });
 }
 

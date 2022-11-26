@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// post struct
 type JSONData struct {
 	Post_id      int                  `json:"post_id"`
 	User_id      int                  `json:"user_id"`
@@ -33,6 +34,7 @@ type JSONComments struct {
 	Username  string           `json:"username"`
 }
 
+// function retrieves 20 posts from the database and load it on the main page
 func Retrieve20Posts() (string, error) {
 	db, err := database.DbConnect()
 
@@ -157,7 +159,6 @@ func Retrieve20Posts() (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	// fmt.Println(structSlice)
 	// fmt.Println(string(res))
 	return string(res), nil	

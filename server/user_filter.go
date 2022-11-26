@@ -36,16 +36,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		query += " INNER JOIN postsCategory ON posts.post_id=postsCategory.post_id WHERE postsCategory.category_id=" + cat
 		fmt.Println(query)
 	default:
-		data := &JSONData{
-			Post_id:  0,
-			User_id:  0,
-			Heading:  "ERROR",
-			Body:     "Invalid filter",
-			Comments: make(map[int]JSONComments),
-		}
-		dataSlice := []JSONData{*data}
-		dummy, _ := json.Marshal(dataSlice)
-		return string(dummy), nil
+		return DummyPost(), nil
 	}
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)

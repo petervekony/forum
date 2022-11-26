@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 	"fmt"
+	"gritface/log"
 	"net/http"
 	"strconv"
 
@@ -14,7 +15,7 @@ type SessionManager struct {
 }
 type SessionData struct {
 	UId  string
-	Misc map[string]string
+	Misc map[string]interface{}
 }
 
 var sessionManager SessionManager
@@ -38,7 +39,8 @@ func (sm *SessionManager) checkSession(w http.ResponseWriter, r *http.Request) (
 		http.SetCookie(w, cookie)
 		// Store cookie in session as uid=0 (unregistered user)
 		var thisSessionData = &SessionData{
-			UId: "0",
+			UId:  "0",
+			Misc: make(map[string]interface{}),
 		}
 		sm.sessions[ID] = thisSessionData
 	}
@@ -98,6 +100,34 @@ func (sm *SessionManager) deleteSession(w http.ResponseWriter, r *http.Request) 
 	}
 	return cookie, nil
 }
+
+func (sm *SessionManager) StoreSessionVariable(w http.ResponseWriter, r *http.Request, varName string, varValue interface{}) error {
+	thisSession, err := sm.isSessionSet(w, r)
+	if err != nil {
+		// Something wrong with cookie, return error
+		return errors.New("Something is wrong with the session")
+	}
+
+	sm.sessions[thisSession.Value].Misc[varName] = varValue
+
+	return nil
+}
+
+func (sm *SessionManager) GetSessionVariable(w http.ResponseWriter, r *http.Request, varName string) (interface{}, error) {
+	thisSession, err := sm.isSessionSet(w, r)
+	if err != nil {
+		// Something wrong with cookie, return error
+		log.WTL("Errors while opening session, " + err.Error())
+		return nil, errors.New("Something is wrong with the session")
+	}
+
+	if len(sm.sessions[thisSession.Value].Misc) < 1 {
+		return nil, errors.New("Value not set")
+	}
+
+	return sm.sessions[thisSession.Value].Misc[varName], nil
+}
+
 func init() {
 	sessionManager = SessionManager{
 		sessions: make(map[string]*SessionData),

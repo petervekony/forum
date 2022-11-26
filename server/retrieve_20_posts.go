@@ -161,4 +161,6 @@ func Retrieve20Posts() (string, error) {
 	// fmt.Println(structSlice)
 	// fmt.Println(string(res))
 	return string(res), nil
+
+	
 }

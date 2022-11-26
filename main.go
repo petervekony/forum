@@ -34,8 +34,8 @@ func main() {
 		Handler: limiter.LimitMiddleware(http.DefaultServeMux),
 	}
 	// start server
-	fmt.Println("Server is running on port 443...")
-	logger.WTL("Server listening on '" + ser.Addr + "'")
+	//	fmt.Println("Server is running on port 443...")
+	logger.WTL("Server listening on '"+ser.Addr+"'", true)
 
 	// localhost.crt and localhost.key files were created using the following CLI commands:
 	// openssl req  -new  -newkey rsa:2048  -nodes  -keyout localhost.key  -out localhost.csr

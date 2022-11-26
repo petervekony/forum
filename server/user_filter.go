@@ -32,6 +32,11 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.comment_id=0 AND reaction.reaction_id='2' AND reaction.user_id=" + uid + " GROUP BY posts.post_id"
 	case "category":
 		cat := r.URL.Query()["cat"][0]
+		// catId, err := strconv.Atoi(cat)
+		if err != nil {
+			return DummyPost("Invalid category"), nil
+		}
+
 		catCheck := "SELECT * FROM categories WHERE category_id=" + cat
 		checkRows, err := db.Query(catCheck)
 		if err != nil {

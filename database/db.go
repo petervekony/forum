@@ -5,6 +5,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	logger "gritface/log"
 	"os"
 	"strings"
 
@@ -110,7 +111,8 @@ func DatabaseExist() (*sql.DB, error) {
 			return nil, err
 		}
 		file.Close()
-		fmt.Println("database created")
+
+		logger.WTL("Database created", true)
 		newDb = true
 	} else if err != nil {
 		return nil, err
@@ -118,6 +120,7 @@ func DatabaseExist() (*sql.DB, error) {
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
 	// Open the created Sqlite3 File
 	if err != nil {
+		logger.WTL("Database could not be opened", false)
 		return nil, err
 	}
 	conn, err := forumdb.Conn(context.Background())

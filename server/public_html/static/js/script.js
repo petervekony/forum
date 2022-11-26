@@ -73,6 +73,7 @@ async function initPage(request="/posts") {
               }
             });
           }
+          // if (comment.profile_image == "") comment.profile_image = "static/images/raccoon_thumbnail7.jpg";
           comments += `
  <div class="row ms-auto" id="post_comments">
  <div class="col-1 mx-2">
@@ -99,7 +100,7 @@ async function initPage(request="/posts") {
         postDiv.innerHTML = `<section class="row" id="post_section">
         <div class="row">
           <div class="col-1 ms-2 mt-2">
-          <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="static/images/raccoon.jpeg" id="user_pic">
+          <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="${postJSON.profile_image}" id="user_pic">
           </div>
           <div class="col-7 mt-4">
           <h5 class="text-start text-info">${postJSON.username}</h5>

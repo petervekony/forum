@@ -20,5 +20,8 @@ func GetProfilePic(uid string) (string, error) {
 	if len(user) < 1 {
 		return "", errors.New("ERROR: User not found")
 	}
+	if user[0].Profile_image == "" {
+		return "static/images/raccoon_thumbnail7.jpg", nil
+	}
 	return user[0].Profile_image, nil
 }

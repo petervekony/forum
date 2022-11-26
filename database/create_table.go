@@ -74,8 +74,7 @@ func createTable(db *sql.DB) error {
 		"comment_id" INTEGER NOT NULL,
 		"reaction_id" TEXT NOT NULL,
 		PRIMARY KEY (user_id, post_id, comment_id),
-		FOREIGN KEY("post_id") REFERENCES posts("post_id"),
-		FOREIGN KEY("comment_id") REFERENCES comments("comment_id")
+		FOREIGN KEY("post_id") REFERENCES posts("post_id")
 	  );`
 	reactionStatement, err := db.Prepare(createreactionTable) // Prepare SQL Statement
 	if err != nil {

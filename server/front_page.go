@@ -65,11 +65,24 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else if r.URL.Path == "/loginSuccess" {
 		fmt.Printf("User %v just logged in successfully.\n", r.FormValue("login_email"))
 		// loginEmail := r.FormValue("login_email")
-		script, err := os.ReadFile("server/public_html/user.html")
+		// script, err := os.ReadFile("server/public_html/user.html")
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+
+		templ, err := template.ParseFiles("server/public_html/user.html")
 		if err != nil {
 			log.Fatal(err)
 		}
-		w.Write(script)
+		pic, err := GetProfilePic(uid)
+		if err != nil {
+			log.Fatal(err)
+		}
+		addPageInfo := map[string]string{
+			"user_pic": pic,
+		}
+		templ.Execute(w, addPageInfo)
+		//w.Write(script)
 	} else if r.URL.Path == "/checkSession" {
 		if err != nil {
 			// No session found, show login page

@@ -8,29 +8,31 @@ import (
 
 // post struct
 type JSONData struct {
-	Post_id      int                  `json:"post_id"`
-	User_id      int                  `json:"user_id"`
-	Heading      string               `json:"heading"`
-	Body         string               `json:"body"`
-	Closed_user  int                  `json:"closed_user"`
-	Closed_admin int                  `json:"closed_admin"`
-	Closed_date  string               `json:"closed_date"`
-	Insert_time  string               `json:"insert_time"`
-	Update_time  string               `json:"update_time"`
-	Image        string               `json:"image"`
-	Comments     map[int]JSONComments `json:"comments"`
-	Categories   []string             `json:"categories"`
-	Reactions    []map[int]string     `json:"reactions"`
-	Username     string               `json:"username"`
+	Post_id       int                  `json:"post_id"`
+	User_id       int                  `json:"user_id"`
+	Heading       string               `json:"heading"`
+	Body          string               `json:"body"`
+	Closed_user   int                  `json:"closed_user"`
+	Closed_admin  int                  `json:"closed_admin"`
+	Closed_date   string               `json:"closed_date"`
+	Insert_time   string               `json:"insert_time"`
+	Update_time   string               `json:"update_time"`
+	Image         string               `json:"image"`
+	Comments      map[int]JSONComments `json:"comments"`
+	Categories    []string             `json:"categories"`
+	Reactions     []map[int]string     `json:"reactions"`
+	Username      string               `json:"username"`
+	Profile_image string               `json:"profile_image"`
 }
 
 type JSONComments struct {
-	CommentID int              `json:"comment_id"`
-	Post_id   int              `json:"post_id"`
-	User_id   int              `json:"user_id"`
-	Body      string           `json:"body"`
-	Reactions []map[int]string `json:"reactions"`
-	Username  string           `json:"username"`
+	CommentID     int              `json:"comment_id"`
+	Post_id       int              `json:"post_id"`
+	User_id       int              `json:"user_id"`
+	Body          string           `json:"body"`
+	Reactions     []map[int]string `json:"reactions"`
+	Username      string           `json:"username"`
+	Profile_image string           `json:"profile_image"`
 }
 
 // function retrieves 20 posts from the database and load it on the main page
@@ -68,6 +70,7 @@ func Retrieve20Posts() (string, error) {
 			return "", err
 		}
 		rD.Username = users[0].Name
+		rD.Profile_image = users[0].Profile_image
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -108,25 +111,27 @@ func Retrieve20Posts() (string, error) {
 	}
 
 	// Query comments
-	query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
-	rows, err = db.Query(query)
-	if err != nil {
-		return "", err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		row := &JSONComments{}
-		err = rows.Scan(&row.CommentID, &row.Post_id, &row.User_id, &row.Body)
+	if len(nextQuery) > 5 {
+		query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
+		rows, err = db.Query(query)
 		if err != nil {
 			return "", err
 		}
-		currentUser := make(map[string]string)
-		currentUser["user_id"] = strconv.Itoa(row.User_id)
-		users, err := database.GetUsers(db, currentUser)
-		if err != nil {
-			return "", err
-		}
-		row.Username = users[0].Name
+		defer rows.Close()
+		for rows.Next() {
+			row := &JSONComments{}
+			err = rows.Scan(&row.CommentID, &row.Post_id, &row.User_id, &row.Body)
+			if err != nil {
+				return "", err
+			}
+			currentUser := make(map[string]string)
+			currentUser["user_id"] = strconv.Itoa(row.User_id)
+			users, err := database.GetUsers(db, currentUser)
+			if err != nil {
+				return "", err
+			}
+			row.Username = users[0].Name
+			row.Profile_image = users[0].Profile_image
 
 		thisPostId := &row.Post_id
 		thisCommentId := &row.CommentID

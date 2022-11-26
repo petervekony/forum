@@ -16,11 +16,9 @@ async function setUser() {
       console.log(json);
       // userPic.innerHTML = `<img src="${json.Image}">`;
       userName.textContent = json.Username;
+      userName.profile_image = json.profile_image
     });
 
-  // for testing
-  // userPic.textContent = "cookie monster's pic";
-  // userName.textContent = "cookie monster";
 
   const addPostBtn = document.getElementById("add_post_button");
   addPostBtn.addEventListener("click", newPost);
@@ -46,9 +44,9 @@ async function setCategories() {
     </a>`;
         catsList.append(catsItem);
         const filterCatsItem = document.createElement("li");
-        filterCatsItem.innerHTML = `<a class="dropdown-item" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
-        <div class="form-check">
-            <input class="btn btn-dark" type="button" value="${value}" id="check2"/>
+        filterCatsItem.innerHTML = `<a class="dropdown-item bg-dark" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
+        <div class="col-12">
+            <button class="col-12 btn btn-dark text-info border-info" value="${value}" id="check2">${value}</button>
         </div>
     </a>`;
         filterCatsList.append(filterCatsItem);
@@ -133,7 +131,14 @@ async function newPost() {
   postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   postDiv.innerHTML = `<section class="row" id="post_section">
-  <h5 class="text-start mx-3 mt-2 text-info">${username}</h5>
+    <div class="row">
+      <div class="col-1 ms-2 mt-2">
+        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}" id="">
+      </div>
+      <div class="col-7 mt-4">
+        <h5 class="text-start text-info">${username}</h5>
+      </div>
+    </div>
   <div data-bs-target="#collapse_post_comments" data-bs-toggle="collapse">
       <div class="text-white rounded my-2 py-2" id="post_div">
           <div class="col-11 offset-1 my-1" id="post_heading">
@@ -172,7 +177,7 @@ async function newPost() {
       <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
       <div class="row">
           <div class="col-1 mx-2">
-                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="user_pic">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="static/images/raccoon_thumbnail7.jpeg" id="user_pic">
           </div>
           <div class="col-10 text-start">
               <div class="input-group">
@@ -226,29 +231,25 @@ async function addComment(id) {
     });
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
-  commentDiv.classList.add("row", "my-3", "ms-auto");
+  commentDiv.classList.add("row", "ms-auto");
   commentDiv.id = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
   commentDiv.innerHTML = `<div class="col-1 mx-2">
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
-        "src"
-      )}">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}">
     </div>
-    <div class="col-8 border rounded bg-secondary" id="post_comments">
-    <p class="text-info pt-1">${userName.textContent}</p>
-      <pre><p>${newComment.value}</p></pre>
-      <div class="row">
-      <div class="text-end mb-1" id="comment_reactions">
-        <button class="btn btn-dark" id="comment_upvote">⬆️
+    <div class="col-8 border rounded bg-secondary mb-1" id="post_comments">
+    <p class="text-info mb-0">${userName.textContent}</p>
+      <pre class="mb-0"><p class="mb-0 ps-1 pb-0">${newComment.value}</p></pre>
+      <div class="text-end pb-1 my-0" id="comment_reactions">
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_upvote">⬆️
             <span class="badge text-info" id="comment_upvote_count">0</span>
         </button>
-        <button class="btn btn-dark" id="comment_downvote">⬇️
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" id="comment_downvote">⬇️
             <span class="badge text-info" id="comment_downvote_count">0</span>
         </button>
-      </div>
     </div>
-      </div>
+    </div>
     </div>`;
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   if (!commentsDiv) {

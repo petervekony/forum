@@ -32,7 +32,7 @@
           data-bs-target="#offcanvasExample"
           aria-controls="offcanvasExample"
         >
-          Categories
+          Filters
         </button>
         <ul class="nav navbar-nav offset-2">
           <li>
@@ -57,14 +57,14 @@
       </div>
       <div class="nav-item active col-5 text-end mx-3">
         <form>
-          <button
+          <!-- <button
             class="btn bg-dark border-secondary text-info"
             formaction="/settings"
             data-bs-toggle="modal"
             data-bs-target="/settings"
           >
             Profile
-          </button>
+          </button> -->
           <button
             class="btn bg-dark border-secondary text-info"
             formaction="/logout"
@@ -105,13 +105,13 @@
           >
             Post history
           </button>
-          <button
+          <!-- <button
             
             class="btn btn-dark border-info text-center text-info"
             id="user_comments"
           >
             Comment history
-          </button>
+          </button> -->
         </div>
         <div class="row mb-2">
           <button
@@ -121,27 +121,28 @@
           >
             Liked posts
           </button>
-          <button
+          <!-- <button
             class="btn btn-dark border-info text-center text-info"
             id="user_liked_comments"
           >
             Liked comments
-          </button>
+          </button> -->
         </div>
         <div class="row mb-2">
           <button
             class="btn btn-dark border-info text-center mb-2 text-info"
             id="user_disliked_posts"
+            onclick="initPage('/filtered?filter=hated')"
           >
             Hated posts
           </button>
-          <button
+          <!-- <button
             class="btn btn-dark border-info text-center text-info"
             id="user_disliked_comments"
             onclick="initPage('/filtered?filter=hello')"
           >
             Hated comments
-          </button>
+          </button> -->
         </div>
         <br>
         <br>
@@ -154,12 +155,14 @@
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Categories
+              Choose
             </button>
             <ul
-              class="dropdown-menu dropdown-menu-dark"
+              style="max-width: 90%;"
+              class="dropdown-menu bg-dark"
               aria-labelledby="dropdownMenuButton"
               id="filterCats"
+              style="outline: none; border: none;"
             ></ul>
         </div>
       </div>
@@ -172,7 +175,7 @@
           <div class="col-1 mx-2">
             <img
               class="center-block rounded-circle"
-              src="static/images/raccoon.jpeg"
+              src="{{.user_pic}}"
               id="user_pic"
               style="border: 2px solid #54B4D3;"
             />

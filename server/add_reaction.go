@@ -23,13 +23,14 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	comID, err := strconv.Atoi(r.URL.Query().Get("comment_id"))
+	sComID := r.URL.Query().Get("comment_id")
+	comID, err := strconv.Atoi(sComID)
 	if err != nil {
 		return nil, err
 	}
 	reactID := r.URL.Query().Get("reaction_id")
-	postID, err := strconv.Atoi(r.URL.Query().Get("post_id"))
+	sPostID := r.URL.Query().Get("post_id")
+	postID, err := strconv.Atoi(sPostID)
 	if err != nil {
 		return nil, err
 	}
@@ -57,13 +58,31 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		fmt.Println("error inserting reaction: ", err.Error())
 		return nil, err
 	}
-	//strLine := strconv.Itoa(line)
+
+	query := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM reaction WHERE post_id = " + sPostID + " AND comment_id = " + sComID + " GROUP BY reaction_id"
+	res, err := db.Query(query)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	fmt.Println(query)
+	defer res.Close()
+
+	var recID string
+	var count int
+	for res.Next() {
+		err = res.Scan(&recID, &count)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(recID, count)
+	}
 
 	retData := make(map[string]interface{})
 
 	retData["status"] = true
-	retData["change1"] = 1
-	retData["change2"] = -1
+	retData["1"] = count
+	retData["2"] = count
+	fmt.Println(retData)
 	strLine, err := json.Marshal(retData)
 	if err != nil {
 		return nil, err

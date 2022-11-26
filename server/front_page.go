@@ -126,7 +126,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 		// For users choice of filtering posts
 	} else if r.URL.Path == "/filtered" {
-		allMyPost, err := userFilter(w, r, "userPosts", uid)
+		allMyPost, err := UserFilter(w, r, "userPosts", uid)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -139,10 +139,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 
 	} else {
-		fmt.Println("Trying to reach unknown path ", r.URL.Path)
-		// w.WriteHeader(404)
-		// w.Write([]byte("404 Page not found."))
-		// testing
-		return
+		w.WriteHeader(404)
+		ErrorPage(w, 404)
 	}
 }

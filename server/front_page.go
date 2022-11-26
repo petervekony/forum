@@ -63,13 +63,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/loginSuccess" {
+		if uid == "0" {
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 		fmt.Printf("User %v just logged in successfully.\n", r.FormValue("login_email"))
-		// loginEmail := r.FormValue("login_email")
-		// script, err := os.ReadFile("server/public_html/user.html")
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-
 		templ, err := template.ParseFiles("server/public_html/user.html")
 		if err != nil {
 			log.Fatal(err)

@@ -36,3 +36,5 @@ UPDATE 24.11.:
 - reaction handling
 - category filtering ***done***
 - breakpoints for the page & style improvements
+- load more button for posts
+- fix js json

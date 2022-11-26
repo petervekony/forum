@@ -32,20 +32,17 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction_id='2' AND reaction.user_id=" + uid + " GROUP BY posts.post_id"
 	case "category":
 		cat := r.URL.Query()["cat"][0]
-		fmt.Println("WHOLE FUCKING QUERY: ", r.URL.Query())
-		query += " INNER JOIN postsCategory ON posts.post_id=postsCategory.post_id WHERE postsCategory.category_id=" + cat
-		fmt.Println(query)
-	default:
-		data := &JSONData{
-			Post_id:  0,
-			User_id:  0,
-			Heading:  "ERROR",
-			Body:     "Invalid filter",
-			Comments: make(map[int]JSONComments),
+		catCheck := "SELECT * FROM postsCategory WHERE category_id=" + cat
+		checkRows, err := db.Query(catCheck)
+		if err != nil {
+			fmt.Println(err)
 		}
-		dataSlice := []JSONData{*data}
-		dummy, _ := json.Marshal(dataSlice)
-		return string(dummy), nil
+		if d.QueryRows(checkRows) < 1 {
+			return DummyPost("Invalid category"), nil
+		}
+		query += " INNER JOIN postsCategory ON posts.post_id=postsCategory.post_id WHERE postsCategory.category_id=" + cat
+	default:
+		return DummyPost("Invalid filter"), nil
 	}
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)

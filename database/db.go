@@ -13,13 +13,13 @@ import (
 )
 
 type Users struct {
-	User_id     int
-	Name        string
-	Email       string
-	Password    string
+	User_id       int
+	Name          string
+	Email         string
+	Password      string
 	Profile_image string
-	Deactive    int
-	User_level  string
+	Deactive      int
+	User_level    string
 }
 type Posts struct {
 	Post_id      int
@@ -49,10 +49,10 @@ type Categories struct {
 }
 
 type Reaction struct {
-	User_id    int
-	Post_id    int
-	Comment_id int
-	Reaction   string
+	User_id     int
+	Post_id     int
+	Comment_id  int
+	Reaction_id string
 }
 
 type PostCategory struct {
@@ -209,16 +209,14 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertCategory(forumdb, "books")
 	InsertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
 	InsertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
-	InsertReaction(forumdb, 1, 1, 1, "⬆️")
-	InsertReaction(forumdb, 1, 2, 2, "⬆️")
-	InsertReaction(forumdb, 8, 2, 2, "⬇️")
-	InsertReaction(forumdb, 1, 1, 3, "⬇️")
-	InsertReaction(forumdb, 1, 1, 4, "⬇️")
-	InsertReaction(forumdb, 1, 1, 5, "⬇️")
-	InsertReaction(forumdb, 1, 1, 0, "⬇️")
-	InsertReaction(forumdb, 1, 2, 0, "⬇️")
-
-
+	InsertReaction(forumdb, 1, 1, 1, "1")
+	InsertReaction(forumdb, 1, 2, 2, "1")
+	InsertReaction(forumdb, 8, 2, 2, "1")
+	InsertReaction(forumdb, 1, 1, 3, "2")
+	InsertReaction(forumdb, 1, 1, 4, "2")
+	InsertReaction(forumdb, 1, 1, 5, "2")
+	InsertReaction(forumdb, 1, 1, 0, "2")
+	InsertReaction(forumdb, 1, 2, 0, "2")
 
 	InsertPostCategory(forumdb, 1, 1)
 }

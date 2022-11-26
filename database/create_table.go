@@ -71,7 +71,7 @@ func createTable(db *sql.DB) error {
 		"user_id" INTEGER NOT NULL,
 		"post_id" INTEGER NOT NULL,
 		"comment_id" INTEGER NOT NULL,
-		"reaction" text NOT NULL,
+		"reaction_id" TEXT NOT NULL,
 		PRIMARY KEY (user_id, post_id, comment_id)
 	  );`
 	reactionStatement, err := db.Prepare(createreactionTable) // Prepare SQL Statement

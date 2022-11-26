@@ -86,3 +86,39 @@ func GetCategories(w http.ResponseWriter, r *http.Request) (string, bool) {
 
 	return string(res), true
 }
+
+func GetReactions(w http.ResponseWriter, r *http.Request) (string, bool) {
+	// session checking
+	uid, err := sessionManager.checkSession(w, r)
+	if err != nil {
+		return err.Error(), false
+	}
+	if uid == "0" {
+		return "invalid session", false
+	}
+
+	db, err := d.DbConnect()
+	if err != nil {
+		return err.Error(), false
+	}
+	query := "select * from reactions WHERE user_id=" + uid
+	row, err := db.Query(query)
+	if err != nil {
+		return err.Error(), false
+	}
+	defer row.Close()
+	reactions := make(map[string]string)
+	for row.Next() {
+		var reaction d.Reaction
+		if err := row.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction_id); err != nil {
+			return err.Error(), false
+		}
+		reactions[reaction.Reaction_id] = reaction.Reaction_id
+	}
+	res, err := json.Marshal(reactions)
+	if err != nil {
+		return err.Error(), false
+	}
+	return string(res), true
+
+}

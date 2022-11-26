@@ -100,7 +100,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		for _, reaction := range reactions {
 			if reaction.Comment_id == 0 {
 				userReaction := make(map[int]string)
-				userReaction[reaction.User_id] = reaction.Reaction
+				userReaction[reaction.User_id] = reaction.Reaction_id
 				rD.Reactions = append(rD.Reactions, userReaction)
 			}
 		}
@@ -143,7 +143,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 			}
 			for _, reaction := range reactions {
 				userReaction := make(map[int]string)
-				userReaction[reaction.User_id] = reaction.Reaction
+				userReaction[reaction.User_id] = reaction.Reaction_id
 				row.Reactions = append(row.Reactions, userReaction)
 			}
 

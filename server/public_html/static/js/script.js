@@ -10,6 +10,7 @@ async function initPage(request="/posts") {
       const container = document.getElementById("container");
       container.innerHTML = "";
       for (const [key, postJSON] of Object.entries(json)) {
+        console.log("log from here",postJSON);
         let categories = "";
         if (postJSON.categories) {
           postJSON.categories.map(
@@ -20,11 +21,13 @@ async function initPage(request="/posts") {
           dislikeNum = 0;
         if (postJSON.reactions) {
           postJSON.reactions.map(function (reactions) {
+            console.log("post json is from here",postJSON)
+            console.log("reactions",reactions);
             for (const [reaction_user_id, reaction] of Object.entries(
               reactions
             )) {
-              if (reaction == "⬆️") likeNum++;
-              if (reaction == "⬇️") dislikeNum++;
+              if (reaction == "1") likeNum++;
+              if (reaction == "2") dislikeNum++;
             }
           });
         }
@@ -62,14 +65,15 @@ async function initPage(request="/posts") {
         }
         let likeNumComment, dislikeNumComment;
         for (const [key, comment] of Object.entries(postJSON.comments)) {
+          console.log("comments struct"+JSON.stringify(postJSON.comments));
           likeNumComment = 0;
           dislikeNumComment = 0;
           if (comment.reactions) {
             console.log(comment.reactions);
             comment.reactions.map(function (reactions) {
               for (const [key, reaction] of Object.entries(reactions)) {
-                if (reaction == "⬆️") likeNumComment++;
-                if (reaction == "⬇️") dislikeNumComment++;
+                if (reaction == "1") likeNumComment++;
+                if (reaction == "2") dislikeNumComment++;
               }
             });
           }
@@ -82,12 +86,14 @@ async function initPage(request="/posts") {
  <p class="text-info pt-1">${comment.username}</p>
  <pre><p>${comment.body}</p></pre>
  <div class="row">
+
+
  <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border">⬆️
- <span class="badge text-info">${likeNumComment}</span>
+ <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1)">⬆️
+ <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}1">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark border">⬇️
- <span class="badge text-info">${dislikeNumComment}</span>
+ <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2)">⬇️
+ <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}2">${dislikeNumComment}</span>
  </button>
  </div>
  </div>
@@ -127,10 +133,19 @@ async function initPage(request="/posts") {
                    <div class="offset-1 py-1">
                    <div class="col-12 mb-2">
                   <div class="row">
-                  <div class="mx-1" id="post_reactions">
-                 <button class="btn btn-dark border">⬆️<span
-                  class="badge text-info">${likeNum}</span></button>
-                  <button class="btn btn-dark border">⬇️<span class="badge text-info">${dislikeNum}</span></button>
+
+                  <div class="mx-1">
+                 <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, 0, 1)">⬆️<span
+                  class="badge text-info" id="rb${postJSON.post_id}01">${likeNum}</span>
+                  </button>
+
+
+                  <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, 0, 2)">⬇️
+                  <span class="badge text-info" id="rb${postJSON.post_id}02">${dislikeNum}</span>
+                  </button>
+
+
+
                     <p class="mx-1 text-info" id="number_of_comments">${
                         Object.keys(postJSON.comments).length
                         } Comments</p>
@@ -149,6 +164,19 @@ async function initPage(request="/posts") {
       }
     });
 }
+
+async function addReaction(postID, commentID, reactionID) {
+  await fetch("/add_reaction?post_id=" + postID + "&comment_id=" + commentID + "&reaction_id=" + reactionID)
+  .then((response) => response.json())
+  .then(function (json) {
+  target = document.getElementById("rb"+postID+commentID+reactionID);
+  target.innerHTML = (parseInt(target.innerHTML)+1).toString();
+  console.log(target.innerHTML);
+  });
+}
+
+
+
 async function signup() {
   const username = document.getElementById("signup_name").value;
   const email = document.getElementById("signup_email").value;
@@ -229,3 +257,5 @@ async function resetLoginModal() {
       }
     });
 } 
+
+

@@ -81,7 +81,9 @@ func InsertComment(db *sql.DB, post_id int, user_id int, body string, insert_tim
 // function inserts reaction into the database
 // returns the row affected and error
 func InsertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reaction_id string) (int, error) {
-	insertReaction := `INSERT INTO reaction(user_id, post_id, comment_id, reaction_id) VALUES (?, ?, ?, ?)`
+	insertReaction := `INSERT INTO reaction(user_id, post_id, comment_id, reaction_id) VALUES (?, ?, ?, ?)
+	ON CONFLICT(user_id, post_id, comment_id) DO UPDATE SET reaction_id=` + reaction_id
+
 	statement, err := db.Prepare(insertReaction) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {

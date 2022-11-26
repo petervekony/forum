@@ -13,7 +13,7 @@ func init() {
 	// Rotatet log files
 	if _, err := os.Stat(logFile); err == nil {
 		// Rotate last log
-		e := os.Rename(logFile, "log/log01.txt")
+		e := os.Rename(logFile, "log/main01.log")
 		if e != nil {
 			log.Fatal(e)
 		}

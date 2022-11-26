@@ -180,6 +180,11 @@ async function initPage(request = "/posts") {
         container.append(postDiv);
       }
     });
+  if (request != "/posts") {
+    document.getElementById("load_more_btn").style.display = "none";
+  } else {
+    document.getElementById("load_more_btn").style.display = "";
+  }
 }
 
 async function addReaction(postID, commentID, reactionID) {

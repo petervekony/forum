@@ -133,7 +133,7 @@ async function newPost() {
   postDiv.innerHTML = `<section class="row" id="post_section">
     <div class="row">
       <div class="col-1 ms-2 mt-2">
-        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="static/images/raccoon.jpeg" id="">
+        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute("src")}" id="">
       </div>
       <div class="col-7 mt-4">
         <h5 class="text-start text-info">${username}</h5>

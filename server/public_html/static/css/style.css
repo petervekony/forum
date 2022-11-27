@@ -14,3 +14,7 @@ textarea {
 form:focus {
   outline: none !important;
 }
+
+.bg-reactColor {
+  background-color: #c4c4c4;
+}

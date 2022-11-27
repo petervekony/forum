@@ -89,10 +89,10 @@ async function initPage(request = "/posts") {
 
 
  <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1)">⬆️
+ <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}1" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1, this)">⬆️
  <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}1">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2)">⬇️
+ <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}2" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2, this)">⬇️
  <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}2">${dislikeNumComment}</span>
  </button>
  </div>
@@ -144,18 +144,18 @@ async function initPage(request = "/posts") {
                   <div class="row">
 
                   <div class="mx-1">
-                 <button class="btn btn-dark border" onclick="addReaction(${
+                 <button class="btn btn-dark border" id="rbc${postJSON.post_id}01" onclick="addReaction(${
                    postJSON.post_id
-                 }, 0, 1)">⬆️<span
+                 }, 0, 1, this)">⬆️<span
                   class="badge text-info" id="rb${
                     postJSON.post_id
                   }01">${likeNum}</span>
                   </button>
 
 
-                  <button class="btn btn-dark border" onclick="addReaction(${
+                  <button class="btn btn-dark border" id="rbc${postJSON.post_id}02" onclick="addReaction(${
                     postJSON.post_id
-                  }, 0, 2)">⬇️
+                  }, 0, 2, this)">⬇️
                   <span class="badge text-info" id="rb${
                     postJSON.post_id
                   }02">${dislikeNum}</span>
@@ -187,7 +187,7 @@ async function initPage(request = "/posts") {
   }
 }
 
-async function addReaction(postID, commentID, reactionID) {
+async function addReaction(postID, commentID, reactionID, targetButton) {
   await fetch(
     "/add_reaction?post_id=" +
       postID +
@@ -198,8 +198,11 @@ async function addReaction(postID, commentID, reactionID) {
   )
     .then((response) => response.json())
     .then(function (json) {
-      target = document.getElementById("rb" + postID + commentID + reactionID);
-      target.innerHTML = (parseInt(target.innerHTML) + 1).toString();
+      for(let i=1; i < 3; i++) {
+        document.getElementById("rb" + postID + commentID + i).innerHTML = json['rb'+i];
+        document.getElementById("rbc" + postID + commentID + i).classList.remove("active")
+      }
+      targetButton.classList.add("active");
     });
 }
 
@@ -378,10 +381,10 @@ async function loadPosts() {
 
 
  <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1)">⬆️
+ <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}1" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1, this)">⬆️
  <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}1">${likeNumComment}</span>
  </button>
- <button class="btn btn-dark border" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2)">⬇️
+ <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}2" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2, this)">⬇️
  <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}2">${dislikeNumComment}</span>
  </button>
  </div>
@@ -433,18 +436,18 @@ async function loadPosts() {
                   <div class="row">
 
                   <div class="mx-1">
-                 <button class="btn btn-dark border" onclick="addReaction(${
+                 <button class="btn btn-dark border" id="rbc${postJSON.post_id}01" onclick="addReaction(${
                    postJSON.post_id
-                 }, 0, 1)">⬆️<span
+                 }, 0, 1, this)">⬆️<span
                   class="badge text-info" id="rb${
                     postJSON.post_id
                   }01">${likeNum}</span>
                   </button>
 
 
-                  <button class="btn btn-dark border" onclick="addReaction(${
+                  <button class="btn btn-dark border" id="rbc${postJSON.post_id}02" onclick="addReaction(${
                     postJSON.post_id
-                  }, 0, 2)">⬇️
+                  }, 0, 2, this)">⬇️
                   <span class="badge text-info" id="rb${
                     postJSON.post_id
                   }02">${dislikeNum}</span>

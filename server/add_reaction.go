@@ -67,18 +67,18 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	defer res.Close()
 	var recID string
 	var count int
+	retData := make(map[string]interface{})
+	retData["rb1"] = 0
+	retData["rb2"] = 0
 	for res.Next() {
 		err = res.Scan(&recID, &count)
 		if err != nil {
 			fmt.Println(err)
 		}
+		retData["rb"+recID] = count
 	}
 
-	retData := make(map[string]interface{})
-
 	retData["status"] = true
-	retData["1"] = count
-	retData["2"] = count
 	retData["userReaction"] = reactID
 	strLine, err := json.Marshal(retData)
 	if err != nil {

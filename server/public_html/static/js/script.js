@@ -163,7 +163,9 @@ async function initPage(request = "/posts") {
 
 
 
-                    <p class="mx-1 text-info" id="number_of_comments">${
+                    <p class="mx-1 text-info" id="number_of_comments"
+                    data-bs-target="#collapse_post_comments${postJSON.post_id}"
+                    data-bs-toggle="collapse">${
                       Object.keys(postJSON.comments).length
                     } Comments</p>
                   </div>
@@ -452,7 +454,9 @@ async function loadPosts() {
 
 
 
-                    <p class="mx-1 text-info" id="number_of_comments">${
+                    <p class="mx-1 text-info" id="number_of_comments" 
+                        data-bs-toggle="collapse_post_comments${
+                        postJSON.post_id}" data-bs-toggle="collapse">${
                       Object.keys(postJSON.comments).length
                     } Comments</p>
                   </div>

@@ -176,7 +176,9 @@ async function newPost() {
                   <button class="btn btn-dark border" onclick="addReaction(${
                     postID
                   }, 0, 2)">⬇️<span class="badge text-info" id="rb${postID}02" >0</span></button>
-                  <p class="mx-1 text-info" id="number_of_comments">0 Comment</p>
+                  <p class="mx-1 text-info" id="number_of_comments"
+                    data-bs-toggle="collapse_post_comments${postID}" data-bs-toggle="collapse">
+                  0 Comment</p>
               </div>
           </div>
         </div>

@@ -78,23 +78,18 @@ async function initPage(request = "/posts") {
           }
           // if (comment.profile_image == "") comment.profile_image = "static/images/raccoon_thumbnail7.jpg";
           comments += `
- <div class="row ms-auto" id="post_comments">
+ <div class="row ms-auto pb-1" id="post_comments_container${postJSON.post_id}${comment.comment_id}">
  <div class="col-1 mx-2">
  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="${comment.profile_image}" id="user_pic">
  </div>
- <div class="col-8 border rounded bg-secondary" id="post_comments">
+ <div class="col-8 border rounded bg-secondary" id="post_comment_body${postJSON.post_id}${comment.comment_id}">
  <p class="text-info pt-1">${comment.username}</p>
  <pre><p>${comment.body}</p></pre>
- <div class="row">
 
 
- <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}1" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1, this)">⬆️
- <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}1">${likeNumComment}</span>
- </button>
- <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}2" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2, this)">⬇️
- <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}2">${dislikeNumComment}</span>
- </button>
+ <div class="text-end pb-1 my-0" id="comment_reactions_container${postJSON.post_id}${comment.comment_id}">
+ ${reactionButton(postJSON.post_id, comment.comment_id, 1, likeNumComment)}
+ ${reactionButton(postJSON.post_id, comment.comment_id, 2, dislikeNumComment)}
  </div>
  </div>
  </div>`;
@@ -144,23 +139,10 @@ async function initPage(request = "/posts") {
                   <div class="row">
 
                   <div class="mx-1">
-                 <button class="btn btn-dark border" id="rbc${postJSON.post_id}01" onclick="addReaction(${
-                   postJSON.post_id
-                 }, 0, 1, this)">⬆️<span
-                  class="badge text-info" id="rb${
-                    postJSON.post_id
-                  }01">${likeNum}</span>
-                  </button>
 
-
-                  <button class="btn btn-dark border" id="rbc${postJSON.post_id}02" onclick="addReaction(${
-                    postJSON.post_id
-                  }, 0, 2, this)">⬇️
-                  <span class="badge text-info" id="rb${
-                    postJSON.post_id
-                  }02">${dislikeNum}</span>
-                  </button>
-
+                  ${reactionButton(postJSON.post_id, 0, 1, likeNum)}
+                  
+                  ${reactionButton(postJSON.post_id, 0, 2, dislikeNum)}
 
 
                     <p class="mx-1 text-info" id="number_of_comments">${
@@ -185,6 +167,32 @@ async function initPage(request = "/posts") {
   } else {
     document.getElementById("load_more_btn").style.display = "";
   }
+}
+
+function reactionButton(postId, commentId, reactId, reactCount, setActive=false) {
+  let returndata = "";
+  var reactIcon = `⬇️`;
+  if(reactId == 1) {
+    reactIcon = `⬆️`;
+  }
+
+  let addClass = "";
+  if(setActive) {
+    addClass += "active"
+  }
+
+  var setStyle = ""
+  if(commentId > 0) {
+    setStyle += "height:60%;";
+    addClass += "px-0 py-0";
+  } else {
+    addClass += " border";
+  }
+
+  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}${commentId}${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)">${reactIcon}
+                  <span class="badge text-info" id="rb${postId}${commentId}${reactId}">${reactCount}</span>
+                  </button>`
+  return returndata;
 }
 
 async function addReaction(postID, commentID, reactionID, targetButton) {
@@ -381,12 +389,8 @@ async function loadPosts() {
 
 
  <div class="text-end mb-1" id="comment_reactions">
- <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}1" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 1, this)">⬆️
- <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}1">${likeNumComment}</span>
- </button>
- <button class="btn btn-dark border" id="rbc${postJSON.post_id}${comment.comment_id}2" onclick="addReaction(${postJSON.post_id}, ${comment.comment_id}, 2, this)">⬇️
- <span class="badge text-info" id="rb${postJSON.post_id}${comment.comment_id}2">${dislikeNumComment}</span>
- </button>
+ ${reactionButton(postJSON.post_id, comment.comment_id, 1, likeNumComment)}
+ ${reactionButton(postJSON.post_id, comment.comment_id, 2, dislikeNumComment)}
  </div>
  </div>
  </div>`;
@@ -436,22 +440,10 @@ async function loadPosts() {
                   <div class="row">
 
                   <div class="mx-1">
-                 <button class="btn btn-dark border" id="rbc${postJSON.post_id}01" onclick="addReaction(${
-                   postJSON.post_id
-                 }, 0, 1, this)">⬆️<span
-                  class="badge text-info" id="rb${
-                    postJSON.post_id
-                  }01">${likeNum}</span>
-                  </button>
-
-
-                  <button class="btn btn-dark border" id="rbc${postJSON.post_id}02" onclick="addReaction(${
-                    postJSON.post_id
-                  }, 0, 2, this)">⬇️
-                  <span class="badge text-info" id="rb${
-                    postJSON.post_id
-                  }02">${dislikeNum}</span>
-                  </button>
+                  
+                  ${reactionButton(postJSON.post_id, 0, 1, likeNum)}
+                  
+                  ${reactionButton(postJSON.post_id, 0, 2, dislikeNum)}
 
 
 

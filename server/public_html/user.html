@@ -18,10 +18,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no" />
 </head>
 
-<body class="bg-dark">
-  <nav class="navbar navbar-expand-md navbar-light bg-info">
-    <div class="navbar-collapse collapse sm order-1 order-md-0
-        dual-collapse2">
+  <body class="bg-dark">
+    <nav class="navbar navbar-expand-md navbar-light bg-info" style="vertical-align: middle;">
       <ul class="navbar-nav mx-3">
         <li class="nav-item active">
           <a class="nav-link" href="/">
@@ -29,46 +27,33 @@
           </a>
         </li>
       </ul>
-      <button class="btn btn-dark text-info border-secondary" type="button" data-bs-toggle="offcanvas"
-        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-        Filters
+      <button type="button" class="navbar-toggler mx-3 my-0" style="border: 2px solid;" data-bs-toggle="collapse" data-bs-target="#navbar_collapse">
+          <span class="navbar-toggler-icon"></span>
       </button>
-      <!-- <ul class="nav navbar-nav offset-2">
-        <li>
-          <form action="search" method="GET" class="navbar-form">
-            <div class="form-group">
-              <div class="input-group">
-                <input type="search" name="search" id="" placeholder="Search..." class="form-control" />
-                <button id="search-button" class="btn bg-dark text-info">
-                  search
-                </button>
-              </div>
-            </div>
-          </form>
-        </li>
-      </ul> -->
+      
+      <div class="collapse col-8" id="navbar_collapse">
+        <a data-bs-toggle="modal" data-bs-target="#signup_modal" class="navbar-item nav-link ms-3 mb-2" style="font-family: 'Fredoka One', cursive;">FILTERS</a>
+        <a data-bs-toggle="modal" data-bs-target="#login_modal" class="navbar-item nav-link text-dark ms-3" style="font-family: 'Fredoka One', cursive;">LOG OUT</a>
+      </div>
+
+      <div class="col-3 text-start d-none d-lg-inline">
+        <button class="btn bg-dark border-secondary text-info justify-content-center p-2" style="height:40px; font-family: 'Fredoka One', cursive;" data-bs-toggle="modal" data-bs-target="#signup_modal">
+          Filters
+        </button>
+      </div>
+    
+    <div class="col-3 text-end ms-auto mx-2 d-none d-lg-inline">
+      <button class="btn bg-dark border-secondary text-info p-2" style="height:40px; font-family: 'Fredoka One', cursive;" data-bs-toggle="modal" data-bs-target="#login_modal"
+        onclick="resetLoginModal()">
+        Log out
+        <span class="material-symbols-outlined p-0" style="font-size: 22px; vertical-align: middle;">
+          logout
+        </span>
+      </button>
     </div>
-    <div class="nav-item active col-5 text-end mx-3">
-      <form>
-        <!-- <button
-            class="btn bg-dark border-secondary text-info"
-            formaction="/settings"
-            data-bs-toggle="modal"
-            data-bs-target="/settings"
-          >
-            Profile
-          </button> -->
-        <div class="justify-content-center">
-          <button class="btn bg-dark border-secondary text-info" formaction="/logout">
-            Log out
-            <span class="material-symbols-outlined">logout
-            </span>
-          </button>
-        </div>
-      </form>
-    </div>
-  </nav>
-  <br />
+    </nav>
+  
+    <br />
   <div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header mx-3 mt-3">

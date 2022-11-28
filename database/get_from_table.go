@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	logger "gritface/log"
+	"strconv"
 )
 
 // Get users from database
@@ -147,7 +148,11 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 }
 
 // get reaction from db
-func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error) {
+func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, string, error) {
+	uid := reactionData["uid"]
+	delete(reactionData, "uid")
+
+	userReaction := "0"
 	query := "select * from reaction WHERE"
 	count := 0
 	for k, v := range reactionData {
@@ -165,7 +170,7 @@ func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error)
 	rows, err := db.Query(query)
 	if err != nil {
 		logger.WTL(err.Error(), false)
-		return nil, err
+		return nil, userReaction, err
 	}
 	defer rows.Close()
 	for rows.Next() { // Iterate and fetch the records
@@ -173,11 +178,16 @@ func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error)
 		if err := rows.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction_id); // Fetch the record
 		err != nil {
 			logger.WTL(err.Error(), false)
-			return reactions, err
+			return reactions, userReaction, err
 		}
+
+		if strconv.Itoa(reaction.User_id) == uid {
+			userReaction = reaction.Reaction_id
+		}
+
 		reactions = append(reactions, reaction)
 	}
-	return reactions, nil
+	return reactions, userReaction, nil
 }
 
 // get post categories from db

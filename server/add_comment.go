@@ -10,11 +10,6 @@ import (
 	"time"
 )
 
-type Comments struct {
-	Body       string   `json:"postComment"`
-	Post_id	   int      `json:"postID"`
-}
-
 func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()

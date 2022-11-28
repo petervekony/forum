@@ -199,7 +199,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
                 ${reactionButton(postID, 0, 1, likeNum)}
                 ${reactionButton(postID, 0, 2, dislikeNum)}
                 <p class="mx-1 text-info" id="number_of_comments"
-                  data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
+                  data-bs-toggle="collapse_post_comments${postID}" data-bs-toggle="collapse">
                 ${commentsLength} Comment</p>
             </div>
         </div>
@@ -231,12 +231,12 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-lg-10 col-md-10 col-sm-11 justify-content-center mx-2 mb-2" id="user_comment">
+  return `<div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
   <div class="row">
   <div class="col-1 mx-2">
   <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="${userPic}"></img>
   </div>
-  <div class="col-lg-10 col-md-10 col-sm-11 text-start">
+  <div class="col-10 text-start">
   <div class="input-group">
   <textarea
   id="newComment"

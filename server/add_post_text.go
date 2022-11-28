@@ -10,13 +10,6 @@ import (
 	"time"
 )
 
-type newPosts struct {
-	Post_id    int      `json:"post_id"`
-	Body       string   `json:"postBody"`
-	Heading    string   `json:"postHeading"`
-	Categories []string `json:"postCats"`
-}
-
 func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()

@@ -116,16 +116,16 @@ func InsertPostCategory(db *sql.DB, post_id int, category_id int) (int, error) {
 	return int(insertId), nil                        
 }
 
-func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id string, reaction_id string) (int, error) {
+func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id string, reaction_id string) (bool, error) {
 	deleteReaction := "DELETE FROM reaction WHERE user_id =" + user_id + " AND post_id=" + post_id + " AND comment_id=" + comment_id
 	stmt, err := db.Prepare(deleteReaction) // Execute statement with parameters
 	if err != nil {
-		return 0, err
+		return false, err
 	}
-	val, err := stmt.Exec()
+	_, err = stmt.Exec()
 	if err != nil {
 		fmt.Println(err)
+		return false, err
 	}
-	rowAffected, _ := val.RowsAffected()
-	return int(rowAffected), nil
+	return true, nil
 }

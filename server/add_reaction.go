@@ -1,7 +1,6 @@
 package server
 
 import (
-	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -12,6 +11,9 @@ import (
 )
 
 func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+	var recID string
+	var count int
+	retData := make(map[string]interface{})
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {
 		return nil, err
@@ -35,10 +37,6 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("comID: ", comID)
-	fmt.Println("reactID: ", reactID)
-	fmt.Println("postID: ", postID)
-
 	nreactID, err := strconv.Atoi(reactID)
 	if err != nil {
 		return nil, err
@@ -55,22 +53,31 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	}
 	checkQuery := "SELECT * FROM reaction WHERE user_id = " + uid + " AND post_id = " + sPostID + " AND comment_id = " + sComID + " AND reaction_id =" + reactID
 	fmt.Println(checkQuery)
-	_, err = db.Query(checkQuery)
-	fmt.Println("error is", err)
-	if err != sql.ErrNoRows {
-		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
-		if err != nil {
-			fmt.Println("error inserting reaction: ", err.Error())
-			return nil, err
+	result, err := db.Query(checkQuery)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer result.Close()
+	var newUserID, newPostID, newCommentID, newReactionID int
+	if result.Next() {
+		err = result.Scan(&newUserID, &newPostID, &newCommentID, &newReactionID)
+		fmt.Println("newreactionid and nreactid are ", newReactionID, nreactID, newCommentID, newPostID, newUserID)
+		if newReactionID == nreactID {
+			fmt.Println("3 here")
+			_, err = d.DeleteReaction(db, uid, sPostID, sComID, reactID)
+			if err != nil {
+				return nil, err
+			}
+			reactID = "0"
+			retData["reaction_id"] = reactID
 		}
 	} else {
-		num, err := d.DeleteReaction(db, uid, sPostID, sComID, reactID)
+		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
 		if err != nil {
-			fmt.Println(err)
+			return nil, err
 		}
-		fmt.Println("number of rows affected is", num)
-		reactID = "0"
 	}
+
 
 	// sends data to the frontend from here
 
@@ -80,10 +87,9 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		fmt.Println(err.Error())
 	}
 	fmt.Println(query)
+	fmt.Println(reactID)
 	defer res.Close()
-	var recID string
-	var count int
-	retData := make(map[string]interface{})
+
 	retData["rb1"] = 0
 	retData["rb2"] = 0
 	for res.Next() {

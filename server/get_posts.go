@@ -110,7 +110,9 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		rD.Categories = categoryNames
 
 		// getting post's reactions
-		reactions, err := d.GetReaction(db, currentPost)
+		currentPost["comment_id"] = "0"
+		currentPost["uid"] = uid
+		reactions, _, err := d.GetReaction(db, currentPost)
 		if err != nil {
 			return "", err
 		}
@@ -154,7 +156,8 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 			// getting reactions
 			currentComment := make(map[string]string)
 			currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
-			reactions, err := d.GetReaction(db, currentComment)
+			currentComment["uid"] = uid
+			reactions, _, err := d.GetReaction(db, currentComment)
 			if err != nil {
 				return "", err
 			}

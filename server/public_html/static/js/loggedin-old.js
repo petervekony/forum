@@ -76,31 +76,20 @@ async function setCategories() {
     });
 }
 
-function isPostEmpty(userPost, userPostHeading) {
-  if (!userPost.value) {
-    console.log("Post is empty");
-    return false;
-  }
-  if (!userPostHeading.value) {
-    console.log("Post title is empty");
-    return false;
-  }
-  return true
-}
-
 async function newPost() {
   const userPost = document.getElementById("user_post");
-  const userPostHeading = document.getElementById("user_post_title");
+  if (!userPost.value) {
+    console.log("Post is empty");
+    return;
+  }
+  console.log(`New post button clicked and value is ${userPost.value}`);
 
-  // validate empty post
-  if (isPostEmpty(userPost, userPostHeading)) {
-    console.log(`New post button clicked and value is ${userPost.value}`)
-  } else {
-    alert("Please enter all fields!");
-    return
+  const userPostHeading = document.getElementById("user_post_title");
+  if (!userPostHeading.value) {
+    console.log("Post title is empty");
+    return;
   }
 
-  // get selected categories and form the text for in the front end in the new post
   let categoriesSelected = [];
   let catInnerHTML = "";
   const postCats = document
@@ -111,7 +100,6 @@ async function newPost() {
     catInnerHTML += `#${x.value} `;
   });
 
-  // creating JSON and making request to the server for registering new post
   let newPost = {
     postHeading: userPostHeading.value,
     postBody: userPost.value,
@@ -129,9 +117,8 @@ async function newPost() {
       postID = json.message;
     });
 
-  // create new post in DOM
+  // create new post in DOM (old)
   const postDiv = document.createElement("div");
-  postDiv.id = postID;
   postDiv.classList.add(
     "border",
     "rounded",
@@ -140,18 +127,99 @@ async function newPost() {
     "col-8",
     "mb-2"
   );
+  postDiv.id = postID;
   const username = document.getElementById("user_name").textContent;
   const userPic = document.getElementById("user_pic");
+  postDiv.innerHTML = `<section class="row" id="post_section">
+    <div class="row">
+      <div class="col-1 ms-2 mt-2">
+        <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+          "src"
+        )}">
+      </div>
+      <div class="col-7 mt-4">
+        <h5 class="text-start text-info">${username}</h5>
+      </div>
+    </div>
+  <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
+      <div class="text-white rounded my-2 py-2" id="post_div">
+          <div class="col-11 offset-1 my-1" id="post_heading">
+              <h4>${userPostHeading.value}</h4>
+          </div>
+          <div class="col-10 offset-1" id="post_body">
+              <div class="border-top border-info bg-dark text-center" id="post_image"></div>
+              <div class="text-justify my-2">
+                  <pre><p>${userPost.value}</p></pre>
+              </div>
+              <div class="text-secondary">
+              <p>${catInnerHTML}</p>
+              <div class="row text-secondary">
+                  <div class="col-6 order-0 text-left" id="post_insert_time">
+                      Created just now..
+                  </div>
+                  <div class="col-6 order-1 text-end" id="post_mod_time">
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  </div>
 
-  postDiv.innerHTML = createPostDiv(userPic.getAttribute("src"), username, postID, userPostHeading.value, userPost.value, catInnerHTML, "Created just now...", "", "0", "", 0, 0);
+  <div class="offset-1 py-1">
+      <div class="col-8 mb-2">
+          <div class="row">
+              <div class="mx-1" id="post_reactions_container${postID}">
+                  <button class="btn btn-dark border" onclick="addReaction(${
+                    postID
+                  }, 0, 1)">⬆️<span
+                          class="badge text-info" id="rb${postID}01" >0</span></button>
+                  <button class="btn btn-dark border" onclick="addReaction(${
+                    postID
+                  }, 0, 2)">⬇️<span class="badge text-info" id="rb${postID}02" >0</span></button>
+                  <p class="mx-1 text-info" id="number_of_comments"
+                    data-bs-toggle="collapse_post_comments${postID}" data-bs-toggle="collapse">
+                  0 Comment</p>
+              </div>
+          </div>
+        </div>
+
+      <div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
+      <div class="row">
+          <div class="col-1 mx-2">
+                <img class="rounded-circle center-block" style="max-width: 55px; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+                  "src"
+                )}">
+          </div>
+          <div class="col-10 text-start">
+              <div class="input-group">
+                  <textarea
+                      class="bg-dark border-info rounded text-light px-2 w-75"
+                      class="form-control"
+                      style="resize:none;"
+                      id="newComment"
+                      placeholder="Write a comment"></textarea>
+                  <div class="input-group-append mx-2">
+                    <button
+                      class="btn bg-info text-dark mt-2"
+                      type="button"
+                      onclick="addComment(${postDiv.id})">
+                      Comment
+                    </button>
+                  </div>
+                </div>
+          </div>
+      </div>
+  <div class="collapse" id="collapse_post_comments${postID}">
+  </div>
+</section>`;
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";
   userPostHeading.value = "";
 }
 
-async function addComment(postID) {
-  const postDiv = document.getElementById(postID);
+async function addComment(id) {
+  const postDiv = document.getElementById(id);
   const newComment = postDiv.querySelector("#newComment");
   if (!newComment.value) {
     console.log("Comment is empty");
@@ -160,9 +228,9 @@ async function addComment(postID) {
   console.log(`New comment button clicked and value is ${newComment.value}`);
   let comment = {
     postComment: newComment.value,
-    postID: postID,
+    postID: id,
   };
-  console.log(postID);
+  console.log(id);
   let commentID = 1;
   await fetch("/addComment", {
     method: "POST",
@@ -176,12 +244,35 @@ async function addComment(postID) {
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
   commentDiv.classList.add("row", "ms-auto");
-  commentDiv.postID = commentID;
+  commentDiv.id = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0);
-
-  const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
+  commentDiv.innerHTML = `<div class="col-1 mx-2">
+      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${userPic.getAttribute(
+        "src"
+      )}">
+    </div>
+    <div class="col-8 border rounded bg-secondary mb-1" id="post_comments_container${id}${commentID}">
+    <div class="row">
+    <p class="text-info col-8 mb-0">${userName.textContent}</p>
+    <p class="col-2 ms-auto text-end text-bs-gray-500">12.14</p>
+    </div>
+      <pre class="mb-0"><p class="mb-0 ps-1 pb-0">${newComment.value}</p></pre>
+      <div class="text-end pb-1 my-0" id="comment_reactions">
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" onclick="addReaction(${
+          id
+        }, ${commentID}, 1)">⬆️
+            <span class="badge text-info" id="rb${id}${commentID}1">0</span>
+        </button>
+        <button class="btn btn-dark px-0 py-0" style="height: 60%;" onclick="addReaction(${
+          id
+        }, ${commentID}, 2)">⬇️
+            <span class="badge text-info" id="rb${id}${commentID}2">0</span>
+        </button>
+    </div>
+    </div>
+    </div>`;
+  const commentsDiv = postDiv.querySelector(`#collapse_post_comments${id}`);
   console.log(postDiv);
   if (!commentsDiv) {
     console.log("broke down");

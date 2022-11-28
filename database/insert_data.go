@@ -126,7 +126,6 @@ func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id strin
 	if err != nil {
 		fmt.Println(err)
 	}
-
 	rowAffected, _ := val.RowsAffected()
 	return int(rowAffected), nil
 }

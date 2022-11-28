@@ -53,7 +53,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if nUID == 0 {
 		return nil, errors.New("invalid session")
 	}
-	checkQuery := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM FROM reaction WHERE user_id = " + uid + " AND post_id = " + sPostID + " AND comment_id = " + sComID + " AND reaction_id ="+ reactID
+	checkQuery := "SELECT * FROM reaction WHERE user_id = " + uid + " AND post_id = " + sPostID + " AND comment_id = " + sComID + " AND reaction_id =" + reactID
 	fmt.Println(checkQuery)
 	_, err = db.Query(checkQuery)
 	fmt.Println("error is", err)

@@ -117,7 +117,7 @@
 
 ----------------------------->
 
-  <div class="offcanvas offcanvas-start bg-dark text-info" style="width: 50%;" tabindex="-1" id="offcanvasExample"
+  <div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header mx-3 mt-3">
       <h4 class="offcanvas-title" id="offcanvasExampleLabel">
@@ -202,26 +202,26 @@
     <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 mb-2" id="post_title">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_title" id="user_post_title" rows="1"
-        placeholder="Add a title"></textarea>
+        placeholder="Add a title" style="font-size: 0.8em;"></textarea>
       <!-- </form> -->
     </div>
     <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 text-secondary border-info">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_content" id="user_post" rows="3"
-        placeholder="What's on your mind?"></textarea>
+        placeholder="What's on your mind?" style="font-size: 0.8em;"></textarea>
       <!-- </form> -->
       <div class="user_post_footer text-end mb-4">
         <div class="dropdown">
           <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false" style="font-size: 0.8em;">
             Categories
           </button>
-          <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton" id="postCats"></ul>
+          <ul class="dropdown-menu dropdown-menu-dark p-0" aria-labelledby="dropdownMenuButton" style="font-size: 0.8em;" id="postCats"></ul>
 
           <!-- <button type="button" class="btn btn-info" id="add_img_button">
               +IMG
             </button> -->
-          <button type="button" class="btn btn-info" id="add_post_button">
+          <button type="button" class="btn btn-info" id="add_post_button" style="font-size: 0.8em;">
             POST
           </button>
         </div>
@@ -361,3 +361,9 @@
 <script src="/static/js/script.js"></script>
 
 </html>
+
+
+<!-- <div class="row">
+  <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
+  <img class="rounded-circle" style="max-width: 110%; border: 2px solid #54B4D3" src="${userPic}"></img>
+  </div> -->

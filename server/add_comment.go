@@ -11,8 +11,8 @@ import (
 )
 
 type Comments struct {
-	Body       string   `json:"postComment"`
-	Post_id	   int      `json:"postID"`
+	Body    string `json:"postComment"`
+	Post_id int    `json:"postID"`
 }
 
 func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {

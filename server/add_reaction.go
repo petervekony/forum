@@ -53,17 +53,27 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		return nil, errors.New("invalid session")
 	}
 
-	_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
+	f, err := d.InsertReaction(db, nUID, postID, comID, reactID)
 	if err != nil {
 		fmt.Println("error inserting reaction: ", err.Error())
 		return nil, err
 	}
+	if f == 0 {
+		num, err := d.DeleteReaction(db, uid, sPostID, sComID, reactID)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("number of rows affected is", num)
+		reactID = "0"
+	}
+	// sends data to the frontend from here
 
 	query := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM reaction WHERE post_id = " + sPostID + " AND comment_id = " + sComID + " GROUP BY reaction_id"
 	res, err := db.Query(query)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	fmt.Println(query)
 	defer res.Close()
 	var recID string
 	var count int

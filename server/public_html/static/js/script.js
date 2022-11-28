@@ -58,7 +58,9 @@ async function addReaction(postID, commentID, reactionID, targetButton) {
         document.getElementById("rb" + postID + "_" + commentID + "_" + i).innerHTML = json['rb'+i];
         document.getElementById("rbc" + postID + "_" + commentID + "_" + i).classList.remove("active")
       }
-      targetButton?.classList.add("active");
+      if(json.userReaction > 0) {
+        targetButton.classList.add("active");
+      }
     });
 }
 

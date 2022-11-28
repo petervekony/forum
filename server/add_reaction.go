@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -52,13 +53,17 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if nUID == 0 {
 		return nil, errors.New("invalid session")
 	}
-
-	f, err := d.InsertReaction(db, nUID, postID, comID, reactID)
-	if err != nil {
-		fmt.Println("error inserting reaction: ", err.Error())
-		return nil, err
-	}
-	if f == 0 {
+	checkQuery := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM FROM reaction WHERE user_id = " + uid + " AND post_id = " + sPostID + " AND comment_id = " + sComID + " AND reaction_id ="+ reactID
+	fmt.Println(checkQuery)
+	_, err = db.Query(checkQuery)
+	fmt.Println("error is", err)
+	if err != sql.ErrNoRows {
+		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
+		if err != nil {
+			fmt.Println("error inserting reaction: ", err.Error())
+			return nil, err
+		}
+	} else {
 		num, err := d.DeleteReaction(db, uid, sPostID, sComID, reactID)
 		if err != nil {
 			fmt.Println(err)
@@ -66,6 +71,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		fmt.Println("number of rows affected is", num)
 		reactID = "0"
 	}
+
 	// sends data to the frontend from here
 
 	query := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM reaction WHERE post_id = " + sPostID + " AND comment_id = " + sComID + " GROUP BY reaction_id"

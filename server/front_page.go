@@ -37,9 +37,9 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write(script)
 	} else if r.URL.Path == "/posts" {
-		posts, err := Retrieve20Posts(0)
+		posts, err := getPosts(r, uid, 0)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 		w.Write([]byte(posts))
 	} else if r.URL.Path == "/signup" {
@@ -112,21 +112,33 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
 	} else if r.URL.Path == "/addPost" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+		}
 		message, status := addPostText(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/addComment" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+		}
 		message, status := addComment(w, r)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/getCategories" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+		}
 		message, status := GetCategories(w, r)
 		fmt.Println(message, status)
 		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(message))
 		// For users choice of filtering posts
 	} else if r.URL.Path == "/filtered" {
-		allMyPost, err := userFilter(w, r, "userPosts", uid)
+		allMyPost, err := getPosts(r, uid, 0)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -139,9 +151,9 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(message))
 	} else if r.URL.Path == "/loadPosts" {
 		lastPostID := GetLastPostID(w, r)
-		posts, err := Retrieve20Posts(lastPostID)
+		posts, err := getPosts(r, uid, lastPostID)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err)
 		}
 		w.Write([]byte(posts))
 	} else {

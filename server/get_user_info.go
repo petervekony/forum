@@ -7,11 +7,6 @@ import (
 	"net/http"
 )
 
-type Info struct {
-	Image    string `json:"Image"`
-	Username string `json:"Username"`
-}
-
 func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {

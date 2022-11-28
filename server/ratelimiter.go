@@ -2,32 +2,10 @@ package server
 
 import (
 	"net/http"
-	"sync"
 	"time"
 
 	"golang.org/x/time/rate"
 )
-
-// IPRateLimiter is a struct that holds the connected IP addresses, a RWMutex, a rate.Limit on requests/second and a limit on package bursts
-type IPRateLimiter struct {
-	ips         map[string]*rate.Limiter
-	lastCleaned time.Time
-	mu          *sync.RWMutex
-	r           rate.Limit
-	b           int
-}
-
-// NewIPRateLimiter returns a pointer to a new IPRateLimiter object
-func NewIPRateLimiter(r rate.Limit, b int) *IPRateLimiter {
-	i := &IPRateLimiter{
-		ips:         make(map[string]*rate.Limiter),
-		lastCleaned: time.Now(),
-		mu:          &sync.RWMutex{},
-		r:           r,
-		b:           b,
-	}
-	return i
-}
 
 // AddIP adds the IP adress to the connection map in IPRateLimiter
 func (i *IPRateLimiter) AddIP(ip string) *rate.Limiter {

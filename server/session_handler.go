@@ -9,15 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type SessionManager struct {
-	sessions map[string]*SessionData
-}
-
-type SessionData struct {
-	UId  string
-	Misc map[string]interface{}
-}
-
 var sessionManager SessionManager
 
 // Check for valid session, if not create a new one. Return session user data

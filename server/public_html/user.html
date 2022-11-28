@@ -34,21 +34,21 @@
     </button>
 
     <div class="collapse col-8" id="navbar_collapse">
-      <a data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" class="navbar-item nav-link ms-3 mb-2"
+      <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" class="navbar-item nav-link ms-3 mb-2"
         style="font-family: 'Fredoka One', cursive;">FILTERS</a>
-      <a formaction="/logout" class="navbar-item nav-link text-dark ms-3"
+      <a href="/logout" class="navbar-item nav-link text-dark ms-3"
         style="font-family: 'Fredoka One', cursive;">LOG OUT</a>
     </div>
 
-    <div class="col-3 text-start d-none d-lg-inline">
+    <div class="col-3 text-start d-none d-md-inline">
       <button class="btn bg-dark border-secondary text-info justify-content-center p-2"
-        style="height:40px; font-family: 'Fredoka One', cursive;" data-bs-target="#offcanvasExample"
+        style="height:40px; font-family: 'Fredoka One', cursive;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
         aria-controls="offcanvasExample">
         Filters
       </button>
     </div>
 
-    <div class="col-3 text-end ms-auto mx-2 d-none d-lg-inline">
+    <div class="col-3 text-end ms-auto mx-2 d-none d-md-inline">
       <button class="btn bg-dark border-secondary text-info p-2"
         style="height:40px; font-family: 'Fredoka One', cursive;" formaction="/logout">
         Log out
@@ -62,8 +62,62 @@
 
 
 
-  <br />
-  <div class="offcanvas offcanvas-start bg-dark text-info" tabindex="-1" id="offcanvasExample"
+<!-------------------------KKKKK--------------------------------------------
+  <nav class="navbar navbar-expand-md navbar-light bg-info">
+    <div class="navbar-collapse collapse w-100 order-1 order-md-0
+        dual-collapse2">
+      <ul class="navbar-nav mx-3">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">
+            <h1 style="font-family: 'Fredoka One', cursive;">GRITFACE</h1>
+          </a>
+        </li>
+      </ul>
+      <button class="btn btn-dark text-info border-secondary" type="button" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+        Filters
+      </button>
+      <ul class="nav navbar-nav offset-2">
+        <li>
+          <form action="search" method="GET" class="navbar-form">
+            <div class="form-group">
+              <div class="input-group">
+                <input type="search" name="search" id="" placeholder="Search..." class="form-control" />
+                <button id="search-button" class="btn bg-dark text-info">
+                  search
+                </button>
+              </div>
+            </div>
+          </form>
+        </li>
+      </ul> -->
+
+      <!--------------------------------------
+    </div>
+    <div class="nav-item active col-5 text-end mx-3">
+      <form>
+        <button
+            class="btn bg-dark border-secondary text-info"
+            formaction="/settings"
+            data-bs-toggle="modal"
+            data-bs-target="/settings"
+          >
+            Profile
+          </button>
+        <div class="justify-content-center">
+          <button class="btn bg-dark border-secondary text-info" formaction="/logout">
+            Log out
+            <span class="material-symbols-outlined">logout
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </nav>
+
+----------------------------->
+
+  <div class="offcanvas offcanvas-start bg-dark text-info" style="width: 50%;" tabindex="-1" id="offcanvasExample"
     aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header mx-3 mt-3">
       <h4 class="offcanvas-title" id="offcanvasExampleLabel">
@@ -122,21 +176,20 @@
           aria-expanded="false">
           Choose
         </button>
-        <ul style="max-width: 90%;" class="dropdown-menu bg-dark" aria-labelledby="dropdownMenuButton" id="filterCats"
-          style="outline: none; border: none;"></ul>
+        <ul class="dropdown-menu bg-dark justify-content-center" aria-labelledby="dropdownMenuButton" id="filterCats"
+          style="width: 80;"></ul>
       </div>
     </div>
   </div>
 
-  <div class="container">
+  <div class="container col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0">
     <div class="user_post">
-      <div class="row offset-2 mb-4">
-        <!-- <div class="col-1 bg-info rounded text-center" id="user_pic">$pic</div> -->
-        <div class="col-1 mx-2">
+      <div class="row mb-4 mt-2">
+        <div class="col-lg-2 offset-lg-2 col-sm-1 col-md-2">
           <img class="center-block rounded-circle" src="{{.user_pic}}" id="user_pic"
-            style="border: 2px solid #54B4D3;" />
+            style="border: 2px solid #54B4D3; max-width: 120%;" />
         </div>
-        <h1 class="col-6 text-info text-start mx-4 px-4 my-2" id="user_name"></h1>
+        <h1 class="col-lg-3 text-left text-info" id="user_name"></h1>
       </div>
     </div>
     <style>
@@ -145,13 +198,14 @@
         outline: none;
       }
     </style>
-    <div class="col-8 offset-2 mb-2" id="post_title">
+
+    <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 mb-2" id="post_title">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_title" id="user_post_title" rows="1"
         placeholder="Add a title"></textarea>
       <!-- </form> -->
     </div>
-    <div class="col-8 offset-2 text-secondary border-info">
+    <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 text-secondary border-info">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_content" id="user_post" rows="3"
         placeholder="What's on your mind?"></textarea>
@@ -175,7 +229,7 @@
     </div>
   </div>
 
-  <div class="container features" id="container">
+  <div class="container features col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0" id="container">
     <!-- <div class="border rounded content mx-auto col-8 mb-2">
             <section class="row" id="post_section">
                 <p class="text-start mx-2 text-info">{$username}</p>

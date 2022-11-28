@@ -31,7 +31,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
   var setStyle = ""
   if(commentId > 0) {
     setStyle += "height:60%;";
-    addClass += "px-0 py-0";
+    addClass += " px-0 py-0";
   } else {
     addClass += " border";
   }
@@ -157,7 +157,13 @@ async function loadPosts() {
     });
 }
 
-function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody, postCats, postInsertTime, postUpdateTime, commentsLength, comments, likeNum, dislikeNum) {
+function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody, postCats, postInsertTime, postUpdateTime, commentsLength, comments, likeNum, dislikeNum, userReaction) {
+  let userRection1, userRection2 = false;
+  if(userReaction == "1") {
+    userRection1 =true;
+  } else if(userReaction == "2") {
+    userRection2 =true;
+  }
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-1 ms-2 mt-2">
@@ -196,8 +202,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
     <div class="col-12 mb-2">
         <div class="row">
             <div class="mx-1" id="post_reactions_container${postID}">
-                ${reactionButton(postID, 0, 1, likeNum)}
-                ${reactionButton(postID, 0, 2, dislikeNum)}
+                ${reactionButton(postID, 0, 1, likeNum, userRection1)}
+                ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
                 <p class="mx-1 text-info" id="number_of_comments"
                   data-bs-toggle="collapse_post_comments${postID}" data-bs-toggle="collapse">
                 ${commentsLength} Comment</p>
@@ -211,7 +217,13 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </section>`
 }
 
-function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0) {
+function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0) {
+  let userRection1, userRection2 = false;
+  if(userReaction == "1") {
+    userRection1 = true;
+  } else if(userReaction == "2") {
+    userRection2 = true;
+  }
   return `
   <div class="row ms-auto pb-1" id="post_comments_container${postID}${commentID}">
   <div class="col-1 mx-2">
@@ -223,8 +235,8 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">
-  ${reactionButton(postID, commentID, 1, likeNumComment)}
-  ${reactionButton(postID, commentID, 2, dislikeNumComment)}
+  ${reactionButton(postID, commentID, 1, likeNumComment, userRection1)}
+  ${reactionButton(postID, commentID, 2, dislikeNumComment, userRection2)}
   </div>
   </div>
   </div>`;
@@ -305,11 +317,12 @@ function createPosts(json) {
           }
         });
       }
-      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment);
+      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment, comment.user_reaction);
     }
     
     // assemble the whole post div
-    postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum);
+    console.log(JSON.stringify(postJSON));
+    postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
     container.append(postDiv);
   }

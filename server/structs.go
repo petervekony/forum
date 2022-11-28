@@ -22,6 +22,7 @@ type JSONData struct {
 	Comments      map[int]JSONComments `json:"comments"`
 	Categories    []string             `json:"categories"`
 	Reactions     []map[int]string     `json:"reactions"`
+	UserReaction  string               `json:"user_reaction"`
 	Username      string               `json:"username"`
 	Profile_image string               `json:"profile_image"`
 }
@@ -33,6 +34,7 @@ type JSONComments struct {
 	User_id       int              `json:"user_id"`
 	Body          string           `json:"body"`
 	Reactions     []map[int]string `json:"reactions"`
+	UserReaction  string           `json:"user_reaction"`
 	Username      string           `json:"username"`
 	Profile_image string           `json:"profile_image"`
 }

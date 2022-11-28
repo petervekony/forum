@@ -143,7 +143,7 @@ async function newPost() {
   const username = document.getElementById("user_name").textContent;
   const userPic = document.getElementById("user_pic");
 
-  postDiv.innerHTML = createPostDiv(userPic.getAttribute("src"), username, postID, userPostHeading.value, userPost.value, catInnerHTML, "Created just now...", "", "0", "", 0, 0);
+  postDiv.innerHTML = createPostDiv(userPic.getAttribute("src"), username, postID, userPostHeading.value, userPost.value, catInnerHTML, "Created just now...", "", "0", "", 0, 0, 0);
   const container = document.getElementById("container");
   container.prepend(postDiv);
   userPost.value = "";
@@ -179,7 +179,7 @@ async function addComment(postID) {
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0);
+  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0);
 
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
   console.log(postDiv);

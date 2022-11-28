@@ -112,7 +112,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		// getting post's reactions
 		currentPost["comment_id"] = "0"
 		currentPost["uid"] = uid
-		reactions, _, err := d.GetReaction(db, currentPost)
+		reactions, userReaction, err := d.GetReaction(db, currentPost)
 		if err != nil {
 			return "", err
 		}
@@ -123,6 +123,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				rD.Reactions = append(rD.Reactions, userReaction)
 			}
 		}
+		rD.UserReaction = userReaction
 
 		structSlice[*postId] = *rD
 
@@ -157,7 +158,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 			currentComment := make(map[string]string)
 			currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
 			currentComment["uid"] = uid
-			reactions, _, err := d.GetReaction(db, currentComment)
+			reactions, userReaction, err := d.GetReaction(db, currentComment)
 			if err != nil {
 				return "", err
 			}
@@ -166,6 +167,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				userReaction[reaction.User_id] = reaction.Reaction_id
 				row.Reactions = append(row.Reactions, userReaction)
 			}
+			row.UserReaction = userReaction
 
 			structSlice[*thisPostId].Comments[row.CommentID] = *row
 		}

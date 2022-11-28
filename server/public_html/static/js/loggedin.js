@@ -166,7 +166,7 @@ async function newPost() {
   </div>
 
   <div class="offset-1 py-1">
-      <div class="col-12 mb-2">
+      <div class="col-8 mb-2">
           <div class="row">
               <div class="mx-1" id="post_reactions_container${postID}">
                   <button class="btn btn-dark border" onclick="addReaction(${
@@ -253,7 +253,10 @@ async function addComment(id) {
       )}">
     </div>
     <div class="col-8 border rounded bg-secondary mb-1" id="post_comments_container${id}${commentID}">
-    <p class="text-info mb-0">${userName.textContent}</p>
+    <div class="row">
+    <p class="text-info col-8 mb-0">${userName.textContent}</p>
+    <p class="col-2 ms-auto text-end text-bs-gray-500">12.14</p>
+    </div>
       <pre class="mb-0"><p class="mb-0 ps-1 pb-0">${newComment.value}</p></pre>
       <div class="text-end pb-1 my-0" id="comment_reactions">
         <button class="btn btn-dark px-0 py-0" style="height: 60%;" onclick="addReaction(${

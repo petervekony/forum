@@ -18,9 +18,9 @@ async function initPage(request = "/posts") {
 
 function reactionButton(postId, commentId, reactId, reactCount, setActive=false) {
   let returndata = "";
-  var reactIcon = `⬇️`;
+  var reactIcon = `fa-circle-down`;
   if(reactId == 1) {
-    reactIcon = `⬆️`;
+    reactIcon = `fa-circle-up`;
   }
 
   let addClass = "";
@@ -36,7 +36,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
     addClass += " border";
   }
 
-  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)">${reactIcon}
+  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
                   <span class="badge text-info" id="rb${postId}_${commentId}_${reactId}">${reactCount}</span>
                   </button>`
   return returndata;

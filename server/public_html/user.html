@@ -13,9 +13,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
   <link rel="icon" type="image/x-icon" href="/static/images/favicon2.ico" />
   <link rel="stylesheet" href="/static/css/style.css" />
+  <script src="https://kit.fontawesome.com/6c7df8cc12.js" crossorigin="anonymous"></script>
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1," />
+  <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no" />
   <!-- user-scalable=no -->
 </head>
 
@@ -49,13 +50,11 @@
     </div>
 
     <div class="col-3 text-end ms-auto mx-2 d-none d-md-inline">
-      <button class="btn bg-dark border-secondary text-info p-2"
-        style="height:40px; font-family: 'Fredoka One', cursive;" formaction="/logout">
+      <a href="/logout" style="text-decoration: none;"><button class="btn bg-dark border-secondary text-info p-2"
+        style="height:40px; font-family: 'Fredoka One', cursive;">
         Log out
-        <span class="material-symbols-outlined p-0" style="font-size: 22px; vertical-align: middle;">
-          logout
-        </span>
-      </button>
+        <i class="fa-solid fa-right-from-bracket"></i>
+      </button></a>
     </div>
   </nav>
 
@@ -123,7 +122,7 @@
       <h4 class="offcanvas-title" id="offcanvasExampleLabel">
         What you want to see?
       </h4>
-      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      <i class="fa-regular fa-circle-xmark" data-bs-dismiss="offcanvas" aria-label="Close"></i>
     </div>
     <br>
     <br>

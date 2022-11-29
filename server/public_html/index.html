@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous" />
-
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
@@ -17,6 +17,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1 maximum-scale=1, user-scalable=no" />
+  <script src="https://kit.fontawesome.com/6c7df8cc12.js" crossorigin="anonymous"></script>
   <script src="/static/js/script.js"></script>
   <script src="/static/js/checkSession.js"></script>
 </head>
@@ -39,16 +40,14 @@
       <a data-bs-toggle="modal" data-bs-target="#login_modal" class="navbar-item nav-link text-dark ms-3" style="font-family: 'Fredoka One', cursive;">LOGIN</a>
     </div>
   
-  <div class="col-8 text-end ms-auto mx-2 d-none d-lg-inline">
+  <div class="col-8 text-end ms-auto mx-2 d-none d-lg-inline d-md-inline">
     <button class="btn bg-dark border-secondary text-info justify-content-center" style="font-family: 'Fredoka One', cursive;" data-bs-toggle="modal" data-bs-target="#signup_modal">
       Sign up
     </button>
-    <button class="btn bg-dark border-secondary text-info p-1" style="font-family: 'Fredoka One', cursive;" data-bs-toggle="modal" data-bs-target="#login_modal"
+    <button class="btn bg-dark border-secondary text-info justify-content-center" style="font-family: 'Fredoka One', cursive;" data-bs-toggle="modal" data-bs-target="#login_modal"
       onclick="resetLoginModal()">
       Login
-      <span class="material-symbols-outlined p-0" style="font-size: 29px; vertical-align: middle;">
-        login
-      </span>
+      <i class="fa-solid fa-right-to-bracket"></i>
     </button>
   </div>
   </nav>

@@ -160,6 +160,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				return "", err
 			}
 			row.Username = users[0].Name
+			row.Profile_image = users[0].Profile_image
 
 			thisPostId := &row.Post_id
 			thisCommentId := &row.CommentID

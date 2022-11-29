@@ -5,11 +5,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
-	"github.com/mattn/go-sqlite3"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -117,15 +115,7 @@ func DatabaseExist() (*sql.DB, error) {
 	} else if err != nil {
 		return nil, err
 	}
-
-	sql.Register("sqlite3_log", &sqlite3.SQLiteDriver{
-		ConnectHook: func(conn *sqlite3.SQLiteConn) error {
-			log.Printf("Auth enabled: %v\n", conn.AuthEnabled())
-			return nil
-		},
-	})
-
-	forumdb, err := sql.Open("sqlite3_log", "file:"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
+	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
 	// Open the created Sqlite3 File
 	if err != nil {
 		return nil, err

@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -51,32 +52,33 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if nUID == 0 {
 		return nil, errors.New("invalid session")
 	}
-	checkQuery := "SELECT * FROM reaction WHERE user_id = " + uid + " AND post_id = " + sPostID + " AND comment_id = " + sComID + " AND reaction_id =" + reactID
-	fmt.Println(checkQuery)
-	result, err := db.Query(checkQuery)
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer result.Close()
 
-	var newUserID, newPostID, newCommentID, newReactionID int
-	if result.Next() {
-		err = result.Scan(&newUserID, &newPostID, &newCommentID, &newReactionID)
-		fmt.Println("newreactionid and nreactid are ", newReactionID, nreactID, newCommentID, newPostID, newUserID)
-		if newReactionID == nreactID {
-			fmt.Println("3 here")
-			_, err = d.DeleteReaction(db, uid, sPostID, sComID, reactID)
-			if err != nil {
-				return nil, err
-			}
-			reactID = "0"
-			retData["reaction_id"] = reactID
-		}
-	} else {
+	queryStr := "SELECT count(post_id) as rowCount FROM reaction WHERE user_id=? AND post_id = ? AND comment_id = ? AND reaction_id = ?"
+	queryChk, err := db.Prepare(queryStr)
+	if err != nil {
+		return nil, err
+	}
+
+	defer queryChk.Close()
+
+	var rowCount string
+	err = queryChk.QueryRow(nUID, postID, comID, reactID).Scan(&rowCount)
+
+	if (err == sql.ErrNoRows || err == nil) && rowCount == "0" {
+		// If no rows where found
 		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
 		if err != nil {
 			return nil, err
 		}
+	} else if rowCount == "1" {
+		// There is exactly a line like this allready, delete it
+		_, err = d.DeleteReaction(db, uid, sPostID, sComID, reactID)
+		if err != nil {
+			return nil, err
+		}
+		reactID = "0"
+	} else { // Something went wrong
+		return nil, err
 	}
 
 	// sends data to the frontend from here
@@ -86,8 +88,6 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	fmt.Println(query)
-	fmt.Println(reactID)
 	defer res.Close()
 
 	retData["rb1"] = 0
@@ -106,6 +106,5 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(strLine))
 	return strLine, nil
 }

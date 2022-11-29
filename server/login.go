@@ -19,11 +19,6 @@ func passwordMatch(password string, hash string) bool {
 	return err == nil
 }
 
-// type User struct {
-// 	Email    string `json:"email"`
-// 	Password string `json:"password"`
-// }
-
 func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()

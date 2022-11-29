@@ -1,13 +1,16 @@
 window.onload = initPage();
 
 async function initPage(request = "/posts") {
-  console.log("hello from initpage, " + request);
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {
       console.log(json)
-      document.getElementById("container").innerHTML = "";
-      createPosts(json);
+      if(request.startsWith("/filtered?filter=postId")) {
+        createPosts(json, true);
+      } else {
+        document.getElementById("container").innerHTML = "";
+        createPosts(json);
+      }
     });
   if (request != "/posts") {
     document.getElementById("load_more_btn").style.display = "none";
@@ -31,9 +34,9 @@ function addClickForPassword(element, ele_id) {
 
 function reactionButton(postId, commentId, reactId, reactCount, setActive=false) {
   let returndata = "";
-  var reactIcon = `⬇️`;
+  var reactIcon = `fa-circle-down`;
   if(reactId == 1) {
-    reactIcon = `⬆️`;
+    reactIcon = `fa-circle-up`;
   }
 
   let addClass = "";
@@ -49,7 +52,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
     addClass += " border";
   }
 
-  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)">${reactIcon}
+  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
                   <span class="badge text-info" id="rb${postId}_${commentId}_${reactId}">${reactCount}</span>
                   </button>`
   return returndata;
@@ -183,8 +186,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   }
   return `<section class="row" id="post_section">
   <div class="row">
-    <div class="col-1 ms-2 mt-2">
-      <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3;" src="${postUserPic}">
+    <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
+      <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="${postUserPic}">
     </div>
     <div class="col-7 mt-4">
       <h5 class="text-start text-info">${postUsername}</h5>
@@ -198,16 +201,16 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         <div class="col-10 offset-1" id="post_body">
             <div class="border-top border-info bg-dark text-center" id="post_image"></div>
             <div class="text-justify my-2">
-                <pre><p>${postBody}</p></pre>
+                <pre>${postBody}</pre>
             </div>
             <div class="text-secondary">
             <p>${postCats}</p>
             <div class="row text-secondary">
                 <div class="col-6 order-0 text-left" id="post_insert_time">
-                    ${postInsertTime}
+                    <p>${postInsertTime}</p>
                 </div>
                 <div class="col-6 order-1 text-end" id="post_mod_time">
-                    ${postUpdateTime}
+                    <p>${postUpdateTime}</p>
                 </div>
             </div>
         </div>
@@ -215,14 +218,14 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </div>
 </div>
 
-<div class="offset-1 py-1">
-    <div class="col-12 mb-2">
+<!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
+    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
         <div class="row">
-            <div class="mx-1" id="post_reactions_container${postID}">
-                ${reactionButton(postID, 0, 1, likeNum, userRection1)}
-                ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
+            <div class="mx-3" id="post_reactions_container${postID}">
+                ${reactionButton(postID, 0, 1, likeNum)}
+                ${reactionButton(postID, 0, 2, dislikeNum)}
                 <p class="mx-1 text-info" id="number_of_comments"
-                  data-bs-toggle="collapse_post_comments${postID}" data-bs-toggle="collapse">
+                  data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
                 ${commentsLength} Comment</p>
             </div>
         </div>
@@ -242,13 +245,23 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     userRection2 = true;
   }
   return `
-  <div class="row ms-auto pb-1" id="post_comments_container${postID}${commentID}">
-  <div class="col-1 mx-2">
-  <img class="rounded-circle" style="max-width: 120%; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
-  </div>
-  <div class="col-8 border rounded bg-secondary" id="post_comment_body${postID}${commentID}">
-  <p class="text-info pt-1">${commentUsername}</p>
-  <pre><p>${newComment}</p></pre>
+  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
+    <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    
+    <p class="text-end pe-2 text-secondary">{$12.14}</p>
+      <div class="row pb-0 mb-0">
+      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
+        <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
+        </div>
+
+
+        <div class="col-8 pb-0 mb-0 h-50 d-inline">
+        <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
+        </div>
+        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
+        </div>
+  
+  
 
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">
@@ -260,35 +273,34 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-10 justify-content-center mx-2 mb-2" id="user_comment">
-  <div class="row">
-  <div class="col-1 mx-2">
-  <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3" src="${userPic}"></img>
-  </div>
-  <div class="col-10 text-start">
-  <div class="input-group">
-  <textarea
+  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2" id="user_comment">
+
+  <!-- <div class="row">
+  <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
+  <img class="rounded-circle" style="max-width: 110%; border: 2px solid #54B4D3" src="${userPic}"></img>
+  </div> -->
+
+  
+  <div class="input-group mb-2">
+  <input type="text"
+  class="form-control bg-dark border-info rounded-start text-light pt-1 px-1"
   id="newComment"
-  class="bg-dark border-info rounded text-light px-2 w-75"
-  class="form-control"
-  style="resize:none;"
-  id="newComment"
-  placeholder="Write a comment"></textarea>
-  <div class="input-group-append mx-2">
+  style="resize:none; font-size: 0.8em;"
+  placeholder="Write a comment">
   <button
-  class="btn bg-info text-dark mt-2"
+  class="btn bg-info text-dark"
   type="button"
+  style="width: 15%;"
   onclick="addComment(${postID})">
-  Comment
+  <i class="fa-regular fa-comment"></i>
   </button>
-  </div>
   </div>
   </div>
   </div>
   </div>`
 };
 
-function createPosts(json) {
+function createPosts(json, addToTop=false) {
   const container = document.getElementById("container");
   const userPic = document.getElementById("user_pic");
   for (const [key, postJSON] of Object.entries(json)) {
@@ -315,7 +327,7 @@ function createPosts(json) {
 
     // create post div
     const postDiv = document.createElement("div");
-    postDiv.classList.add("border", "rounded", "mx-auto", "col-8", "mt-2");
+    postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
     postDiv.id = postJSON.post_id;
 
     // loop and create divs of comments
@@ -340,6 +352,10 @@ function createPosts(json) {
     // assemble the whole post div
     postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
-    container.append(postDiv);
+    if(addToTop) {
+      container.prepend(postDiv);
+    } else {
+      container.append(postDiv);
+    }
   }
 }

@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var limiter = s.NewIPRateLimiter(20, 10)
+var limiter = s.NewIPRateLimiter(50, 40)
 
 func init() {
 	go limiter.CleanUpVisitorMap()
@@ -42,7 +42,7 @@ func main() {
 	// openssl  x509  -req  -days 365  -in localhost.csr  -signkey localhost.key  -out localhost.crt
 	err = ser.ListenAndServeTLS("localhost.crt", "localhost.key")
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WTL(err.Error(), true)
 	}
 
 }

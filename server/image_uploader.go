@@ -1,5 +1,6 @@
 package server
 
+// this file is currently not used but will be used to serve the image
 import (
 	"database/sql"
 	"errors"

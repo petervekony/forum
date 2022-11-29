@@ -58,6 +58,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		fmt.Println(err)
 	}
 	defer result.Close()
+
 	var newUserID, newPostID, newCommentID, newReactionID int
 	if result.Next() {
 		err = result.Scan(&newUserID, &newPostID, &newCommentID, &newReactionID)
@@ -77,7 +78,6 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 			return nil, err
 		}
 	}
-
 
 	// sends data to the frontend from here
 

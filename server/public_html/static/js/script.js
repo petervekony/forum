@@ -199,7 +199,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </div>
 
 <!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
-    <div class="col-11 mx-4 mb-4 mb-lg-2 mb-md-2">
+    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
         <div class="row">
             <div class="mx-3" id="post_reactions_container${postID}">
                 ${reactionButton(postID, 0, 1, likeNum)}
@@ -227,6 +227,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   return `
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
     <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    
     <p class="text-end pe-2 text-secondary">{$12.14}</p>
       <div class="row pb-0 mb-0">
       <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">

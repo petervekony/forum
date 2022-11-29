@@ -126,12 +126,15 @@ async function newPost() {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
+      if (!json.status) {
+        alert("No spamming posts please!")
+        return
+      }
       postID = json.message;
+      initPage('/filtered?filter=postId&id=' + postID);
+      userPost.value = "";
+      userPostHeading.value = ""; 
     });
-
-    initPage('/filtered?filter=postId&id=' + postID);
-    userPost.value = "";
-    userPostHeading.value = ""; 
 }
 
 async function addComment(postID) {
@@ -163,10 +166,10 @@ async function addComment(postID) {
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0);
+  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0, "Commented just now...");
 
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
-  console.log(postDiv);
+  commentsDiv.classList.add("show");
   if (!commentsDiv) {
     console.log("broke down");
   } else {

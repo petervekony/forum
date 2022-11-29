@@ -237,7 +237,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </section>`
 }
 
-function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0) {
+function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0, update_time) {
   let userRection1, userRection2 = false;
   if(userReaction == "1") {
     userRection1 = true;
@@ -248,7 +248,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
     <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
-    <p class="text-end pe-2 text-secondary">{$12.14}</p>
+    <p class="text-end pe-2 text-secondary">${update_time}</p>
       <div class="row pb-0 mb-0">
       <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
         <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
@@ -346,7 +346,7 @@ function createPosts(json, addToTop=false) {
           }
         });
       }
-      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment, comment.user_reaction);
+      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment, comment.user_reaction, comment.insert_time.substring(0, 19));
     }
     
     // assemble the whole post div

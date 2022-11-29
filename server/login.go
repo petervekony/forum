@@ -58,11 +58,11 @@ func login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	// r.ParseForm()
 
 	// get the email and password
-	email := EscapeString(user.Email)
+	email := escapeString(user.Email)
 	password := user.Password
 
 	// check if the email and password are ascii
-	if !IsAscii(email) || !IsAscii(password) {
+	if !isAscii(email) || !isAscii(password) {
 		// fmt.Fprintf(w, "Invalid email or password")
 		return "Error: invalid email or password", false
 	}

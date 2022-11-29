@@ -96,6 +96,7 @@ type ErrorMessage struct {
 	Message   string
 }
 
+// new user struct is user to create a new user
 type NewUser struct {
 	User_id    int    `json:"user_id"`
 	Name       string `json:"name"`

@@ -47,7 +47,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(posts))
 	} else if r.URL.Path == "/signup" {
 		fmt.Printf("Signing up, path %v\n", r.URL.Path)
-		signupMsg, signupSuccess := SignUp(w, r)
+		signupMsg, signupSuccess := signUp(w, r)
 		if signupSuccess {
 			fmt.Println(signupMsg)
 			writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", signupMsg, true)

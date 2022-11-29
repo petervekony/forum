@@ -85,20 +85,15 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			"user_pic": pic,
 		}
 		templ.Execute(w, addPageInfo)
-		//w.Write(script)
 	} else if r.URL.Path == "/checkSession" {
 		if err != nil {
 			// No session found, show login page
-			//handle error
-			// fmt.Fprintln(w, err.Error())
 			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
 			w.Write([]byte(writeMsg))
 		}
 		// Check if user is logged in
 		if uid != "0" {
 			// User is logged in, redirect to front page
-			// fmt.Fprintf(w, "User is logged in")
-			// http.Redirect(w, r, "/", http.StatusSeeOther)
 			writeMsg := fmt.Sprintf("{\"status\": %v}", true)
 			w.Write([]byte(writeMsg))
 		} else {

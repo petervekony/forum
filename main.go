@@ -42,7 +42,7 @@ func main() {
 	// openssl  x509  -req  -days 365  -in localhost.csr  -signkey localhost.key  -out localhost.crt
 	err = ser.ListenAndServeTLS("localhost.crt", "localhost.key")
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WTL(err.Error(), true)
 	}
 
 }

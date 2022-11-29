@@ -14,3 +14,18 @@ textarea {
 form:focus {
   outline: none !important;
 }
+
+.bg-reactColor {
+  background-color: #c4c4c4;
+}
+
+p {
+  font-size: 0.8em !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+pre {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}

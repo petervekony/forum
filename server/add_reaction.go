@@ -1,6 +1,7 @@
 package server
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -11,6 +12,9 @@ import (
 )
 
 func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+	var recID string
+	var count int
+	retData := make(map[string]interface{})
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {
 		return nil, err
@@ -34,10 +38,6 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("comID: ", comID)
-	fmt.Println("reactID: ", reactID)
-	fmt.Println("postID: ", postID)
-
 	nreactID, err := strconv.Atoi(reactID)
 	if err != nil {
 		return nil, err
@@ -53,11 +53,35 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		return nil, errors.New("invalid session")
 	}
 
-	_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
+	queryStr := "SELECT count(post_id) as rowCount FROM reaction WHERE user_id=? AND post_id = ? AND comment_id = ? AND reaction_id = ?"
+	queryChk, err := db.Prepare(queryStr)
 	if err != nil {
-		fmt.Println("error inserting reaction: ", err.Error())
 		return nil, err
 	}
+
+	defer queryChk.Close()
+
+	var rowCount string
+	err = queryChk.QueryRow(nUID, postID, comID, reactID).Scan(&rowCount)
+
+	if (err == sql.ErrNoRows || err == nil) && rowCount == "0" {
+		// If no rows where found
+		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
+		if err != nil {
+			return nil, err
+		}
+	} else if rowCount == "1" {
+		// There is exactly a line like this allready, delete it
+		_, err = d.DeleteReaction(db, uid, sPostID, sComID, reactID)
+		if err != nil {
+			return nil, err
+		}
+		reactID = "0"
+	} else { // Something went wrong
+		return nil, err
+	}
+
+	// sends data to the frontend from here
 
 	query := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM reaction WHERE post_id = " + sPostID + " AND comment_id = " + sComID + " GROUP BY reaction_id"
 	res, err := db.Query(query)
@@ -65,25 +89,22 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 		fmt.Println(err.Error())
 	}
 	defer res.Close()
-	var recID string
-	var count int
+
+	retData["rb1"] = 0
+	retData["rb2"] = 0
 	for res.Next() {
 		err = res.Scan(&recID, &count)
 		if err != nil {
 			fmt.Println(err)
 		}
+		retData["rb"+recID] = count
 	}
 
-	retData := make(map[string]interface{})
-
 	retData["status"] = true
-	retData["1"] = count
-	retData["2"] = count
 	retData["userReaction"] = reactID
 	strLine, err := json.Marshal(retData)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(string(strLine))
 	return strLine, nil
 }

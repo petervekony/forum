@@ -5,64 +5,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	logger "gritface/log"
 	"os"
 	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
 )
-
-type Users struct {
-	User_id       int
-	Name          string
-	Email         string
-	Password      string
-	Profile_image string
-	Deactive      int
-	User_level    string
-}
-type Posts struct {
-	Post_id      int
-	User_id      int
-	Heading      string
-	Body         string
-	Closed_user  int
-	Closed_admin int
-	Closed_date  string
-	Insert_time  string
-	Update_time  string
-	Image        string
-}
-
-type Comments struct {
-	Comment_id  int
-	Post_id     int
-	User_id     int
-	Body        string
-	Insert_time string
-}
-
-type Categories struct {
-	Category_id   int
-	Category_Name string
-	Closed        int
-}
-
-type Reaction struct {
-	User_id     int
-	Post_id     int
-	Comment_id  int
-	Reaction_id string
-}
-
-type PostCategory struct {
-	Category_id int
-	Post_id     int
-}
-type UserLevel struct {
-	User_level string
-	value      int
-}
 
 // hash password returned the password string as a hash to be stored in the database
 // this is doen for security reasons
@@ -110,7 +59,8 @@ func DatabaseExist() (*sql.DB, error) {
 			return nil, err
 		}
 		file.Close()
-		fmt.Println("database created")
+
+		logger.WTL("Database created", true)
 		newDb = true
 	} else if err != nil {
 		return nil, err
@@ -118,6 +68,7 @@ func DatabaseExist() (*sql.DB, error) {
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
 	// Open the created Sqlite3 File
 	if err != nil {
+		logger.WTL("Database could not be opened", false)
 		return nil, err
 	}
 	conn, err := forumdb.Conn(context.Background())
@@ -185,6 +136,7 @@ func DatabaseExist() (*sql.DB, error) {
 	return forumdb, nil
 }
 
+// remove this when cleaning up
 func exampleDbData(forumdb *sql.DB) {
 	InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
 	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
@@ -217,22 +169,3 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertReaction(forumdb, 1, 2, 0, "2")
 	InsertPostCategory(forumdb, 1, 1)
 }
-
-// func QueryResultDisplay(db *sql.DB) {
-// 	row, err := db.Query(`
-// 		SELECT users.name, posts.heading
-// 		FROM users
-// 		INNER JOIN posts ON users.user_id=posts.user_id
-// 		WHERE users.user_id == 1;`)
-// 	// Query the Database
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	defer row.Close()
-// 	for row.Next() { // Iterate and fetch the records
-// 		var name string
-// 		var heading string
-// 		row.Scan(&name, &heading)                 // Fetch the record
-// 		fmt.Println("user: ", name, "|", heading) // Print the record
-// 	}
-// }

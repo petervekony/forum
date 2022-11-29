@@ -9,41 +9,66 @@ import (
 	"strconv"
 )
 
-func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid string) (string, error) {
+// getPosts function connects to the database and based on the parameters provided or the r.URL.Query values, returns the result of SQLite queries as a JSON string. It also returns an error if there is any.
+func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 
 	db, err := d.DbConnect()
 
 	if err != nil {
 		return "", err
 	}
-	filterValue := r.URL.Query()["filter"]
-	useFilter := ""
-	if len(filterValue) != 0 {
-		useFilter = filterValue[0]
-	}
+	// base query
 	query := "SELECT posts.* from posts"
-	switch useFilter {
-	case "userPosts":
-		query += " WHERE user_id=" + uid
-	case "liked":
-		// TODO: change "1" to uid
-		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction_id='1' AND reaction.user_id=" + uid + " AND reaction.comment_id=0 GROUP BY posts.post_id"
-	case "hated":
-		query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.comment_id=0 AND reaction.reaction_id='2' AND reaction.user_id=" + uid + " GROUP BY posts.post_id"
-	case "category":
-		cat := r.URL.Query()["cat"][0]
-		catCheck := "SELECT * FROM categories WHERE category_id=" + cat
-		checkRows, err := db.Query(catCheck)
-		if err != nil {
-			fmt.Println(err)
+	limit := true
+	if len(r.URL.Query()) > 0 {
+		limit = false
+		filterValue := r.URL.Query()["filter"]
+		useFilter := ""
+		if len(filterValue) != 0 {
+			useFilter = filterValue[0]
 		}
-		if d.QueryRows(checkRows) < 1 {
-			return DummyPost("Invalid category"), nil
+		switch useFilter {
+		case "userPosts":
+			// if the user wants to see their own posts
+			query += " WHERE user_id=" + uid
+		case "liked":
+			// if the user wants to see posts liked by them
+			query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction_id='1' AND reaction.user_id=" + uid + " AND reaction.comment_id=0 GROUP BY posts.post_id"
+		case "hated":
+			// if the user wants to see posts disliked by them
+			query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.comment_id=0 AND reaction.reaction_id='2' AND reaction.user_id=" + uid + " GROUP BY posts.post_id"
+		case "category":
+			// if the user wants to see posts in a certain category
+			cat := r.URL.Query()["cat"][0]
+			if err != nil {
+				// if there is an error, we return a dummy post that informs the user of an error, but doesn't break the site
+				return DummyPost("Invalid category"), nil
+			}
+
+			// check if the category_id exists, if not, we return the dummy post
+			catCheck := "SELECT * FROM categories WHERE category_id=" + cat
+			checkRows, err := db.Query(catCheck)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if d.QueryRows(checkRows) < 1 {
+				return DummyPost("Invalid category"), nil
+			}
+			query += " INNER JOIN postsCategory ON posts.post_id=postsCategory.post_id WHERE postsCategory.category_id=" + cat
+		default:
+			return DummyPost("Invalid filter"), nil
 		}
-		query += " INNER JOIN postsCategory ON posts.post_id=postsCategory.post_id WHERE postsCategory.category_id=" + cat
-	default:
-		return DummyPost("Invalid filter"), nil
 	}
+	if last_post_id != 0 {
+		// if the user wants to load more posts, we need the last post's post_id
+		query += " WHERE post_id < " + strconv.Itoa(last_post_id)
+	}
+	query += " ORDER BY posts.post_id DESC"
+	if limit {
+		// if there is no filtering, there is a limit of 20 posts loaded at once
+		query += " LIMIT 20"
+	}
+	fmt.Println(query)
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)
 	if err != nil {
@@ -52,6 +77,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 	fmt.Println("Query: ", query)
 	defer rows.Close()
 	nextQuery := ""
+	// after the posts' query, the function declares a JSONData object for each of them and assigns the data to the corresponding field
 	for rows.Next() {
 		rD := &JSONData{
 			Comments: make(map[int]JSONComments),
@@ -71,6 +97,7 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 			return "", err
 		}
 		rD.Username = users[0].Name
+		rD.Profile_image = users[0].Profile_image
 
 		// getting post's categories
 		currentPost := make(map[string]string)
@@ -92,7 +119,9 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		rD.Categories = categoryNames
 
 		// getting post's reactions
-		reactions, err := d.GetReaction(db, currentPost)
+		currentPost["comment_id"] = "0"
+		currentPost["uid"] = uid
+		reactions, userReaction, err := d.GetReaction(db, currentPost)
 		if err != nil {
 			return "", err
 		}
@@ -103,13 +132,14 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 				rD.Reactions = append(rD.Reactions, userReaction)
 			}
 		}
+		rD.UserReaction = userReaction
 
 		structSlice[*postId] = *rD
 
 		thisPostId := &rD.Post_id
 		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
 	}
-	// Query comments
+	// after the posts' query, we need to query for the comments, if there are any
 	if len(nextQuery) > 4 {
 		query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
 		rows, err = db.Query(query)
@@ -130,13 +160,15 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 				return "", err
 			}
 			row.Username = users[0].Name
+			row.Profile_image = users[0].Profile_image
 
 			thisPostId := &row.Post_id
 			thisCommentId := &row.CommentID
 			// getting reactions
 			currentComment := make(map[string]string)
 			currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
-			reactions, err := d.GetReaction(db, currentComment)
+			currentComment["uid"] = uid
+			reactions, userReaction, err := d.GetReaction(db, currentComment)
 			if err != nil {
 				return "", err
 			}
@@ -145,11 +177,13 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 				userReaction[reaction.User_id] = reaction.Reaction_id
 				row.Reactions = append(row.Reactions, userReaction)
 			}
+			row.UserReaction = userReaction
 
 			structSlice[*thisPostId].Comments[row.CommentID] = *row
 		}
 	}
-	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData
+
+	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData, because marshalling maps into JSON data always ends up in ascending order by the keys
 	sSlice := make([]JSONData, 0, len(structSlice))
 	for _, value := range structSlice {
 		sSlice = append(sSlice, value)
@@ -161,6 +195,5 @@ func userFilter(w http.ResponseWriter, r *http.Request, filter string, uid strin
 		return "", err
 	}
 
-	// fmt.Println(structSlice)
 	return string(res), nil
 }

@@ -22,7 +22,11 @@ func init() {
 }
 
 // Write To Log
-func WTL(logString string) {
+func WTL(logString string, toStdOut bool) {
+	if toStdOut {
+		fmt.Println(logString)
+	}
+
 	// Open log file
 	fh, err := os.OpenFile(logFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 

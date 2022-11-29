@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	logger "gritface/log"
+	"strconv"
 )
 
 // Get users from database
@@ -27,7 +29,7 @@ func GetUsers(db *sql.DB, userData map[string]string) ([]Users, error) {
 	var users []Users
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL("Error while trying to query "+query+"\n"+err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -61,7 +63,7 @@ func GetPosts(db *sql.DB, postData map[string]string) ([]Posts, error) {
 	var posts []Posts
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -69,7 +71,7 @@ func GetPosts(db *sql.DB, postData map[string]string) ([]Posts, error) {
 		var post Posts
 		if err := rows.Scan(&post.Post_id, &post.User_id, &post.Heading, &post.Body, &post.Closed_user, &post.Closed_admin, &post.Closed_date, &post.Insert_time, &post.Update_time, &post.Image); // Fetch the record
 		err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), false)
 			return posts, err
 		}
 		posts = append(posts, post)
@@ -95,7 +97,7 @@ func GetComments(db *sql.DB, commentData map[string]string) ([]Comments, error) 
 	var comments []Comments
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -103,7 +105,7 @@ func GetComments(db *sql.DB, commentData map[string]string) ([]Comments, error) 
 		var comment Comments
 		if err := rows.Scan(&comment.Comment_id, &comment.User_id, &comment.Post_id, &comment.Body, &comment.Insert_time); // Fetch the record
 		err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), false)
 			return comments, err
 		}
 		comments = append(comments, comment)
@@ -129,7 +131,7 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 	var categories []Categories
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -137,7 +139,7 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 		var category Categories
 		if err := rows.Scan(&category.Category_id, &category.Category_Name, &category.Closed); // Fetch the record
 		err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), false)
 			return categories, err
 		}
 		categories = append(categories, category)
@@ -146,7 +148,11 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 }
 
 // get reaction from db
-func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error) {
+func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, string, error) {
+	uid := reactionData["uid"]
+	delete(reactionData, "uid")
+
+	userReaction := "0"
 	query := "select * from reaction WHERE"
 	count := 0
 	for k, v := range reactionData {
@@ -163,20 +169,25 @@ func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, error)
 	var reactions []Reaction
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
-		return nil, err
+		logger.WTL(err.Error(), false)
+		return nil, userReaction, err
 	}
 	defer rows.Close()
 	for rows.Next() { // Iterate and fetch the records
 		var reaction Reaction
 		if err := rows.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction_id); // Fetch the record
 		err != nil {
-			fmt.Println(err)
-			return reactions, err
+			logger.WTL(err.Error(), false)
+			return reactions, userReaction, err
 		}
+
+		if strconv.Itoa(reaction.User_id) == uid {
+			userReaction = reaction.Reaction_id
+		}
+
 		reactions = append(reactions, reaction)
 	}
-	return reactions, nil
+	return reactions, userReaction, nil
 }
 
 // get post categories from db
@@ -197,7 +208,7 @@ func GetPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]Post
 	var postCategories []PostCategory
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -205,7 +216,7 @@ func GetPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]Post
 		var postCategory PostCategory
 		if err := rows.Scan(&postCategory.Category_id, &postCategory.Post_id); // Fetch the record
 		err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), false)
 			return postCategories, err
 		}
 		postCategories = append(postCategories, postCategory)
@@ -232,7 +243,7 @@ func GetUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, err
 	var userLevels []UserLevel
 	rows, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer rows.Close()
@@ -240,7 +251,7 @@ func GetUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, err
 		var userLevel UserLevel
 		if err := rows.Scan(&userLevel.User_level, &userLevel.value); // Fetch the record
 		err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), false)
 			return userLevels, err
 		}
 		userLevels = append(userLevels, userLevel)

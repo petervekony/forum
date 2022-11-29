@@ -9,15 +9,6 @@ import (
 	"github.com/google/uuid"
 )
 
-type SessionManager struct {
-	sessions map[string]*SessionData
-}
-
-type SessionData struct {
-	UId  string
-	Misc map[string]interface{}
-}
-
 var sessionManager SessionManager
 
 // Check for valid session, if not create a new one. Return session user data
@@ -119,7 +110,7 @@ func (sm *SessionManager) GetSessionVariable(w http.ResponseWriter, r *http.Requ
 	thisSession, err := sm.isSessionSet(w, r)
 	if err != nil {
 		// Something wrong with cookie, return error
-		logger.WTL("Errors while opening session, " + err.Error())
+		logger.WTL("Errors while opening session, "+err.Error(), false)
 		return nil, errors.New("Something is wrong with the session")
 	}
 

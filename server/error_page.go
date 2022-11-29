@@ -6,11 +6,6 @@ import (
 	"text/template"
 )
 
-type ErrorMessage struct {
-	ErrorCode int
-	Message   string
-}
-
 var messages = map[int]ErrorMessage{
 	400: {
 		ErrorCode: 400,

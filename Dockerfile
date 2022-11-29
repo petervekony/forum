@@ -1,19 +1,22 @@
 # syntax=docker/dockerfile:1
-FROM golang:1.18-alpine as builder
+# first stage to install dependencies and create executable
+FROM golang:1.18-buster as builder
 LABEL description="Gritface forum project @grit:lab"
-LABEL creators="oluwatosin, tvntvn, dicarste, adrian1206 and petrus_ambrosius"
-RUN apk update && apk upgrade
-RUN apk add --no-cache sqlite
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
+LABEL creators="adrian1206, dicarste, oluwatosin, petrus_ambrosius and tvntvn"
+WORKDIR /
 COPY . ./
-RUN CGO_ENABLED=0 go build -o gritface
+RUN go mod download
+RUN go build -o gritface main.go
 
-# FROM golang:1.18-alpine
-# WORKDIR /app
-# COPY --from=builder ./gritface ./
-# COPY log localhost.crt localhost.csr localhost.key readme.md ./
-# COPY server/public_html ./
+# second stage with only the executable and necessary files for the web app
+# this stage will not copy the already existing database by default, but will create a new one, if you want to keep the old one,
+# uncomment the line starting with "COPY" below
+FROM golang:1.18-buster as prod
+WORKDIR /app
+COPY --from=builder ./gritface ./
+COPY log ./log
+COPY server/public_html ./server/public_html
+COPY localhost.crt localhost.csr localhost.key readme.md ./
+# COPY forum-db.db ./
 EXPOSE 443
 CMD [ "./gritface" ]

@@ -5,7 +5,8 @@ import (
 	"net/http"
 )
 
-func Logout(w http.ResponseWriter, r *http.Request) {
+// fucntion logouts the user
+func logout(w http.ResponseWriter, r *http.Request) {
 	//check if user is logged in
 	// else nothing to log out
 	// check if session is alive

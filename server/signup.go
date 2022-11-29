@@ -12,9 +12,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// to store the password in the database
-var HashedPassword string
-
 // function to check if email is valid
 func isEmailValid(e string) bool {
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,4}$`)
@@ -58,14 +55,6 @@ func EscapeString(value string) string {
 		}
 	}
 	return sb.String()
-}
-
-type NewUser struct {
-	User_id    int    `json:"user_id"`
-	Name       string `json:"name"`
-	Email      string `json:"email"`
-	Password   string `json:"password"`
-	ConfirmPwd string `json:"confirmPassword"`
 }
 
 // function to sign up a user
@@ -127,7 +116,6 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 			errMsg := "Fill in all the required fields"
 			return errMsg, false
 		}
-
 		// check if email is valid
 		if !isEmailValid(email) {
 			// fmt.Fprintf(w, "Email is not valid")

@@ -61,7 +61,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 	} else if r.URL.Path == "/login" {
 		fmt.Printf("Logging in, path %v\n", r.URL.Path)
-		loginMsg, loginSuccess := Login(w, r)
+		loginMsg, loginSuccess := login(w, r)
 		fmt.Println(loginMsg, loginSuccess)
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
 		w.Write([]byte(writeMsg))
@@ -76,7 +76,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 500)
 		}
-		pic, err := GetProfilePic(uid)
+		pic, err := getProfilePic(uid)
 		if err != nil {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 500)
@@ -101,9 +101,9 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte(writeMsg))
 		}
 	} else if r.URL.Path == "/logout" {
-		Logout(w, r)
+		logout(w, r)
 	} else if r.URL.Path == "/getUser" {
-		userInfo, status := GetUserInfo(w, r)
+		userInfo, status := getUserInfo(w, r)
 		if status {
 			w.Write([]byte(userInfo))
 		} else {
@@ -152,7 +152,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(message))
 	} else if r.URL.Path == "/loadPosts" {
-		lastPostID := GetLastPostID(w, r)
+		lastPostID := getLastPostID(w, r)
 		posts, err := getPosts(r, uid, lastPostID)
 		if err != nil {
 			logger.WTL(err.Error(), true)

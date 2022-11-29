@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
+func getUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {
 		return err.Error(), false

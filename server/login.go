@@ -19,7 +19,8 @@ func passwordMatch(password string, hash string) bool {
 	return err == nil
 }
 
-func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
+// function logs in the user
+func login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {

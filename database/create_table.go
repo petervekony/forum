@@ -2,6 +2,7 @@ package database
 
 import "database/sql"
 
+// function is used to create the database tables
 func createTable(db *sql.DB) error {
 	// users table
 	createUsersTable := `CREATE TABLE users (

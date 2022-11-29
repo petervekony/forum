@@ -95,3 +95,11 @@ type ErrorMessage struct {
 	ErrorCode int
 	Message   string
 }
+
+type NewUser struct {
+	User_id    int    `json:"user_id"`
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	ConfirmPwd string `json:"confirmPassword"`
+}

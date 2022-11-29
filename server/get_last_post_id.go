@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func GetLastPostID(w http.ResponseWriter, r *http.Request) int {
+func getLastPostID(w http.ResponseWriter, r *http.Request) int {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {

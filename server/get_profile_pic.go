@@ -5,7 +5,7 @@ import (
 	d "gritface/database"
 )
 
-func GetProfilePic(uid string) (string, error) {
+func getProfilePic(uid string) (string, error) {
 	userMap := map[string]string{
 		"user_id": uid,
 	}

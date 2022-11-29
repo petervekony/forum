@@ -136,7 +136,9 @@ func DatabaseExist() (*sql.DB, error) {
 	return forumdb, nil
 }
 
+
 // remove this when cleaning up
+// remember to setup first user and hash the password
 func exampleDbData(forumdb *sql.DB) {
 	InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
 	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)

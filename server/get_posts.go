@@ -28,9 +28,12 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 			useFilter = filterValue[0]
 		}
 		switch useFilter {
+		case "postId":
+			// To get one post
+			query += " WHERE posts.post_id=" + r.URL.Query()["id"][0]
 		case "userPosts":
 			// if the user wants to see their own posts
-			query += " WHERE user_id=" + uid
+			query += " WHERE posts.user_id=" + uid
 		case "liked":
 			// if the user wants to see posts liked by them
 			query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction_id='1' AND reaction.user_id=" + uid + " AND reaction.comment_id=0 GROUP BY posts.post_id"

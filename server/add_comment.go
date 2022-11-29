@@ -17,7 +17,6 @@ func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {
 		fmt.Println(err)
 		return "Error: reading json log in request from user", false
 	}
-
 	// Unmarshal
 	var comment Comments
 	err = json.Unmarshal(req, &comment)

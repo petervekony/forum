@@ -65,7 +65,7 @@ func DatabaseExist() (*sql.DB, error) {
 	} else if err != nil {
 		return nil, err
 	}
-	forumdb, err := sql.Open("sqlite3", "./"+databaseFile+"?_auth&_auth_user=forum&_auth_pass=forum&_auth_crypt=sha1")
+	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
 	// Open the created Sqlite3 File
 	if err != nil {
 		logger.WTL("Database could not be opened", false)
@@ -136,6 +136,7 @@ func DatabaseExist() (*sql.DB, error) {
 	return forumdb, nil
 }
 
+// remove this when cleaning up
 func exampleDbData(forumdb *sql.DB) {
 	InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
 	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
@@ -168,22 +169,3 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertReaction(forumdb, 1, 2, 0, "2")
 	InsertPostCategory(forumdb, 1, 1)
 }
-
-// func QueryResultDisplay(db *sql.DB) {
-// 	row, err := db.Query(`
-// 		SELECT users.name, posts.heading
-// 		FROM users
-// 		INNER JOIN posts ON users.user_id=posts.user_id
-// 		WHERE users.user_id == 1;`)
-// 	// Query the Database
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// 	defer row.Close()
-// 	for row.Next() { // Iterate and fetch the records
-// 		var name string
-// 		var heading string
-// 		row.Scan(&name, &heading)                 // Fetch the record
-// 		fmt.Println("user: ", name, "|", heading) // Print the record
-// 	}
-// }

@@ -1,13 +1,16 @@
 window.onload = initPage();
 
 async function initPage(request = "/posts") {
-  console.log("hello from initpage, " + request);
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {
       console.log(json)
-      document.getElementById("container").innerHTML = "";
-      createPosts(json);
+      if(request.startsWith("/filtered?filter=postId")) {
+        createPosts(json, true);
+      } else {
+        document.getElementById("container").innerHTML = "";
+        createPosts(json);
+      }
     });
   if (request != "/posts") {
     document.getElementById("load_more_btn").style.display = "none";
@@ -280,7 +283,7 @@ function createCommentTextArea(userPic, postID) {
   </div>`
 };
 
-function createPosts(json) {
+function createPosts(json, addToTop=false) {
   const container = document.getElementById("container");
   const userPic = document.getElementById("user_pic");
   for (const [key, postJSON] of Object.entries(json)) {
@@ -333,6 +336,10 @@ function createPosts(json) {
     console.log(JSON.stringify(postJSON));
     postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
-    container.append(postDiv);
+    if(addToTop) {
+      container.prepend(postDiv);
+    } else {
+      container.append(postDiv);
+    }
   }
 }

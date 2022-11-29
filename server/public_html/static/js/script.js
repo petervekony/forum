@@ -213,8 +213,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 
 function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0) {
   return `
-  <div class="row ms-2 pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-9 offset-0 offset-md-1 offset-lg-1 col-md-10 col-11 border rounded bg-secondary" id="post_comment_body${postID}${commentID}">
+  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
+    <div class="col-lg-10 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
       <div class="row pb-0 mb-0">
       <div class="col-md-1 col-lg-1 col-2 pt-1 me-4">
         <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
@@ -222,7 +222,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
         <div class="col-5 pb-0 mb-0 h-50">
         <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
         </div>
-        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0" style="position:relative; top: -4px;">${newComment}</p></pre>
+        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
         </div>
   
   
@@ -301,7 +301,7 @@ function createPosts(json) {
 
     // create post div
     const postDiv = document.createElement("div");
-    postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-8", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
+    postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
     postDiv.id = postJSON.post_id;
 
     // loop and create divs of comments

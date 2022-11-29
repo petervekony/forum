@@ -178,7 +178,7 @@ async function addComment(postID) {
     });
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
-  commentDiv.classList.add("row", "mx-auto");
+  // commentDiv.classList.add("row", "mx-auto");
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");

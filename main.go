@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-var limiter = s.NewIPRateLimiter(20, 10)
+var limiter = s.NewIPRateLimiter(50, 40)
 
 func init() {
 	go limiter.CleanUpVisitorMap()

@@ -170,10 +170,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="${postUserPic}">
+      <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
     </div>
     <div class="col-7 mt-4">
-      <h5 class="text-start text-info">${postUsername}</h5>
+      <h5 class="ms-2 text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -220,7 +220,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </section>`
 }
 
-function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0) {
+
+function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0, update_time) {
   let userRection1, userRection2 = false;
   if(userReaction == "1") {
     userRection1 = true;
@@ -240,7 +241,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
           
           </div>
           
-          <p class="ms-auto pt-1 text-secondary ps-n4">{$12.14}</p>
+          <p class="ms-auto pt-1 text-secondary ps-n4">${update_time}</p>
           </div>
           </span>
           

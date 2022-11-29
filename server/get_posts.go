@@ -61,7 +61,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	}
 	if last_post_id != 0 {
 		// if the user wants to load more posts, we need the last post's post_id
-		query = " WHERE post_id < " + strconv.Itoa(last_post_id)
+		query += " WHERE post_id < " + strconv.Itoa(last_post_id)
 	}
 	query += " ORDER BY posts.post_id DESC"
 	if limit {

@@ -14,6 +14,19 @@ async function initPage(request = "/posts") {
   } else {
     document.getElementById("load_more_btn").style.display = "";
   }
+  addClickForPassword("signup_confirmpass", "signup_button");
+  addClickForPassword("login_pass", "login_button");
+}
+
+function addClickForPassword(element, ele_id) {
+  const ele = document.getElementById(element);
+  if (ele) {
+    ele.addEventListener("keyup", function(event) {
+      if (event.key == "Enter") {
+          document.getElementById(ele_id).click()
+    };
+  });
+}
 }
 
 function reactionButton(postId, commentId, reactId, reactCount, setActive=false) {
@@ -65,15 +78,15 @@ async function addReaction(postID, commentID, reactionID, targetButton) {
 }
 
 async function signup() {
-  const username = document.getElementById("signup_name").value;
-  const email = document.getElementById("signup_email").value;
-  const password = document.getElementById("signup_pass").value;
-  const confirmPassword = document.getElementById("signup_confirmpass").value;
+  const username = document.getElementById("signup_name");
+  const email = document.getElementById("signup_email");
+  const password = document.getElementById("signup_pass");
+  const confirmPassword = document.getElementById("signup_confirmpass");
   let newUser = {
-    name: username,
-    email: email,
-    password: password,
-    confirmPassword: confirmPassword,
+    name: username.value,
+    email: email.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
   };
   console.log(newUser);
   await fetch("/signup", {
@@ -95,6 +108,10 @@ async function signup() {
         modalHeading.innerHTML = "Welcome!";
         modalBody.innerHTML = `You are now registered to Gritface!<br />
  You can now login.`;
+        username.value = "";
+        email.value = "";
+        password.value = "";
+        confirmPassword.value = "";
         modalBtn.setAttribute("data-bs-target", "#login_modal");
         modalBtn.textContent = "Log in";
       }
@@ -321,7 +338,6 @@ function createPosts(json) {
     }
     
     // assemble the whole post div
-    console.log(JSON.stringify(postJSON));
     postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
     container.append(postDiv);

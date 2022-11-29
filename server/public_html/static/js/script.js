@@ -232,11 +232,11 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
     <div class="d-flex flex-row comment-row">
-        <div class="p-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
-        <div class="comment-text col-9">
+        <div class="pt-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
+        <div class="comment-text col-9 ps-1">
        
           <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
-          <pre class="pb-0 mb-0"><p class="mb-0 pb-0 text-light">${newComment}</p></pre>
+          <pre><p class="mb-0 pb-0 text-light">${newComment}</p></pre>
           
           </div>
           

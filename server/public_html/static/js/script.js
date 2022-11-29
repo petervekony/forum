@@ -229,22 +229,25 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   }
   return `
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
-    <p class="text-end pe-2 text-secondary">{$12.14}</p>
-      <div class="row pb-0 mb-0">
-      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
-        <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
-        </div>
+    <div class="d-flex flex-row comment-row">
+        <div class="p-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
+        <div class="comment-text col-9">
+       
+          <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
+          <pre class="pb-0 mb-0"><p class="mb-0 pb-0 text-light">${newComment}</p></pre>
+          
+          </div>
+          
+          <p class="ms-auto pt-1 text-secondary ps-n4">{$12.14}</p>
+          </div>
+          </span>
+          
+          
+         
+         
 
-
-        <div class="col-8 pb-0 mb-0 h-50 d-inline">
-        <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
-        </div>
-        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
-        </div>
-  
-  
 
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">

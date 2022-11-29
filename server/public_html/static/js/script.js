@@ -34,7 +34,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
   var setStyle = ""
   if(commentId > 0) {
     setStyle += "height:60%;";
-    addClass += " px-0 py-0";
+    addClass += " ps-1 py-0 pe-0";
   } else {
     addClass += " border";
   }
@@ -237,7 +237,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
         <div class="comment-text col-9 ps-1">
        
           <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
-          <pre><p class="mb-0 pb-0 text-light">${newComment}</p></pre>
+          <pre><p class="mb-0 pb-0 ps-2 text-light">${newComment}</p></pre>
           
           </div>
           

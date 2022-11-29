@@ -244,20 +244,29 @@ function createCommentTextArea(userPic, postID) {
   <img class="rounded-circle" style="max-width: 110%; border: 2px solid #54B4D3" src="${userPic}"></img>
   </div> -->
 
-  <div class="col-12">
-  <textarea
+  
+  <!---- <div class="input-group mb-3">
+  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+</div> ---->
+  
+  
+  
+  
+  
+  
+  <div class="input-group mb-2">
+  <input type="text"
+  class="form-control bg-dark border-info rounded-start text-light pt-1 px-1"
   id="newComment"
-  class="bg-dark border-info rounded text-light pt-1 px-1"
-  class="form-control"
-  style="resize:none; font-size: 0.8em; width: 100%;"
-  id="newComment"
-  placeholder="Write a comment"></textarea>
+  style="resize:none; font-size: 0.8em;"
+  placeholder="Write a comment">
   <button
-  class="btn bg-info text-dark mb-1"
+  class="btn bg-info text-dark"
   type="button"
-  style="font-size: 0.8em; float: right;"
+  style="width: 15%;"
   onclick="addComment(${postID})">
-  Comment
+  <i class="fa-regular fa-comment"></i>
   </button>
   </div>
   </div>

@@ -135,10 +135,13 @@ async function newPost() {
   postDiv.classList.add(
     "border",
     "rounded",
-    "content",
     "mx-auto",
-    "col-8",
-    "mb-2"
+    "col-lg-8",
+    "col-md-10",
+    "col-12",
+    "mb-4",
+    "mb-lg-2",
+    "mb-md-2"
   );
   const username = document.getElementById("user_name").textContent;
   const userPic = document.getElementById("user_pic");

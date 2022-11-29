@@ -151,7 +151,6 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, string, error) {
 	uid := reactionData["uid"]
 	delete(reactionData, "uid")
-
 	userReaction := "0"
 	query := "select * from reaction WHERE"
 	count := 0
@@ -225,7 +224,6 @@ func GetPostCategories(db *sql.DB, postCategoriesData map[string]string) ([]Post
 }
 
 // get user_level from db
-
 func GetUserLevel(db *sql.DB, userLevelData map[string]string) ([]UserLevel, error) {
 	query := "select * from userLevel WHERE"
 	count := 0

@@ -30,11 +30,9 @@ func CheckPasswordHash(password, hash string) bool {
 func DbConnect() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
-
 	if err != nil {
 		return nil, err
 	}
-
 	// Enable foreign key contraints
 	enableContraints := `PRAGMA foreign_keys = ON;`
 
@@ -43,7 +41,6 @@ func DbConnect() (*sql.DB, error) {
 		fmt.Println(err.Error())
 	}
 	enableContraintsQuery.Exec()
-
 	return forumdb, nil
 }
 
@@ -59,7 +56,6 @@ func DatabaseExist() (*sql.DB, error) {
 			return nil, err
 		}
 		file.Close()
-
 		logger.WTL("Database created", true)
 		newDb = true
 	} else if err != nil {

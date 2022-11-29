@@ -5,6 +5,7 @@ import (
 	d "gritface/database"
 )
 
+// function get the profile picture from the database
 func getProfilePic(uid string) (string, error) {
 	userMap := map[string]string{
 		"user_id": uid,

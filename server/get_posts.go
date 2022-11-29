@@ -11,9 +11,7 @@ import (
 
 // getPosts function connects to the database and based on the parameters provided or the r.URL.Query values, returns the result of SQLite queries as a JSON string. It also returns an error if there is any.
 func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
-
 	db, err := d.DbConnect()
-
 	if err != nil {
 		return "", err
 	}
@@ -68,13 +66,11 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		// if there is no filtering, there is a limit of 20 posts loaded at once
 		query += " LIMIT 20"
 	}
-	fmt.Println(query)
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("Query: ", query)
 	defer rows.Close()
 	nextQuery := ""
 	// after the posts' query, the function declares a JSONData object for each of them and assigns the data to the corresponding field

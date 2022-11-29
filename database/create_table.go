@@ -14,7 +14,6 @@ func createTable(db *sql.DB) error {
 		"deactive" INTEGER DEFAULT 0,
 		"user_level" TEXT DEFAULT "user"
 	  );`
-
 	usersStatement, err := db.Prepare(createUsersTable) // Prepare SQL Statement
 	if err != nil {
 		return err

@@ -47,7 +47,6 @@ func UpdateCommentsData(db *sql.DB, body string, comment_id string) error {
 	if err == sql.ErrNoRows {
 		return err
 	}
-
 	query := "UPDATE comments SET body=? WHERE comment_id=?"
 	statement, err := db.Prepare(query)
 	if err != nil {
@@ -106,7 +105,7 @@ func UpdateUserData(db *sql.DB, data map[string]string, user_id string) error {
 	if err == sql.ErrNoRows {
 		return err
 	}
-
+	
 	query := "UPDATE users SET"
 	count := 0
 	for key, val := range data {

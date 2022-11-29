@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"log"
+	logger "gritface/log"
 	"net/http"
 	"os"
 	"strings"
@@ -24,7 +24,8 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		tmpl, err := template.ParseFiles("server/public_html/index.html")
 		if err != nil {
-			return
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		dyn_content := make(map[string]string)
 		dyn_content["name"] = uid
@@ -33,13 +34,15 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Handling %v\n", r.URL.Path[1:])
 		script, err := os.ReadFile(r.URL.Path[1:])
 		if err != nil {
-			log.Fatal(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		w.Write(script)
 	} else if r.URL.Path == "/posts" {
 		posts, err := getPosts(r, uid, 0)
 		if err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		w.Write([]byte(posts))
 	} else if r.URL.Path == "/signup" {
@@ -70,30 +73,27 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("User %v just logged in successfully.\n", r.FormValue("login_email"))
 		templ, err := template.ParseFiles("server/public_html/user.html")
 		if err != nil {
-			log.Fatal(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		pic, err := GetProfilePic(uid)
 		if err != nil {
-			log.Fatal(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		addPageInfo := map[string]string{
 			"user_pic": pic,
 		}
 		templ.Execute(w, addPageInfo)
-		//w.Write(script)
 	} else if r.URL.Path == "/checkSession" {
 		if err != nil {
 			// No session found, show login page
-			//handle error
-			// fmt.Fprintln(w, err.Error())
 			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
 			w.Write([]byte(writeMsg))
 		}
 		// Check if user is logged in
 		if uid != "0" {
 			// User is logged in, redirect to front page
-			// fmt.Fprintf(w, "User is logged in")
-			// http.Redirect(w, r, "/", http.StatusSeeOther)
 			writeMsg := fmt.Sprintf("{\"status\": %v}", true)
 			w.Write([]byte(writeMsg))
 		} else {
@@ -140,20 +140,22 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else if r.URL.Path == "/filtered" {
 		allMyPost, err := getPosts(r, uid, 0)
 		if err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		w.Write([]byte(allMyPost))
 	} else if r.URL.Path == "/add_reaction" {
 		message, err := addReaction(w, r)
 		if err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), true)
+			ErrorPage(w, 500)
 		}
 		w.Write([]byte(message))
 	} else if r.URL.Path == "/loadPosts" {
 		lastPostID := GetLastPostID(w, r)
 		posts, err := getPosts(r, uid, lastPostID)
 		if err != nil {
-			fmt.Println(err)
+			logger.WTL(err.Error(), true)
 		}
 		w.Write([]byte(posts))
 	} else {

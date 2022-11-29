@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// DummyPost returns a JSONData object with the provided body
 func DummyPost(body string) string {
 	min := 1
 	max := 7

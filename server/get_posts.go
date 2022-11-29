@@ -9,6 +9,7 @@ import (
 	"strconv"
 )
 
+// getPosts function connects to the database and based on the parameters provided or the r.URL.Query values, returns the result of SQLite queries as a JSON string. It also returns an error if there is any.
 func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 
 	db, err := d.DbConnect()
@@ -16,6 +17,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	// base query
 	query := "SELECT posts.* from posts"
 	limit := true
 	if len(r.URL.Query()) > 0 {
@@ -27,19 +29,23 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		}
 		switch useFilter {
 		case "userPosts":
+			// if the user wants to see their own posts
 			query += " WHERE user_id=" + uid
 		case "liked":
-			// TODO: change "1" to uid
+			// if the user wants to see posts liked by them
 			query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.reaction_id='1' AND reaction.user_id=" + uid + " AND reaction.comment_id=0 GROUP BY posts.post_id"
 		case "hated":
+			// if the user wants to see posts disliked by them
 			query += " INNER JOIN reaction ON posts.post_id=reaction.post_id WHERE reaction.comment_id=0 AND reaction.reaction_id='2' AND reaction.user_id=" + uid + " GROUP BY posts.post_id"
 		case "category":
+			// if the user wants to see posts in a certain category
 			cat := r.URL.Query()["cat"][0]
-			// catId, err := strconv.Atoi(cat)
 			if err != nil {
+				// if there is an error, we return a dummy post that informs the user of an error, but doesn't break the site
 				return DummyPost("Invalid category"), nil
 			}
 
+			// check if the category_id exists, if not, we return the dummy post
 			catCheck := "SELECT * FROM categories WHERE category_id=" + cat
 			checkRows, err := db.Query(catCheck)
 			if err != nil {
@@ -54,10 +60,12 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		}
 	}
 	if last_post_id != 0 {
-		query = " WHERE post_id < " + strconv.Itoa(last_post_id)
+		// if the user wants to load more posts, we need the last post's post_id
+		query += " WHERE post_id < " + strconv.Itoa(last_post_id)
 	}
 	query += " ORDER BY posts.post_id DESC"
 	if limit {
+		// if there is no filtering, there is a limit of 20 posts loaded at once
 		query += " LIMIT 20"
 	}
 	fmt.Println(query)
@@ -69,6 +77,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	fmt.Println("Query: ", query)
 	defer rows.Close()
 	nextQuery := ""
+	// after the posts' query, the function declares a JSONData object for each of them and assigns the data to the corresponding field
 	for rows.Next() {
 		rD := &JSONData{
 			Comments: make(map[int]JSONComments),
@@ -112,7 +121,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		// getting post's reactions
 		currentPost["comment_id"] = "0"
 		currentPost["uid"] = uid
-		reactions, _, err := d.GetReaction(db, currentPost)
+		reactions, userReaction, err := d.GetReaction(db, currentPost)
 		if err != nil {
 			return "", err
 		}
@@ -123,13 +132,14 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				rD.Reactions = append(rD.Reactions, userReaction)
 			}
 		}
+		rD.UserReaction = userReaction
 
 		structSlice[*postId] = *rD
 
 		thisPostId := &rD.Post_id
 		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
 	}
-	// Query comments
+	// after the posts' query, we need to query for the comments, if there are any
 	if len(nextQuery) > 4 {
 		query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
 		rows, err = db.Query(query)
@@ -150,6 +160,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				return "", err
 			}
 			row.Username = users[0].Name
+			row.Profile_image = users[0].Profile_image
 
 			thisPostId := &row.Post_id
 			thisCommentId := &row.CommentID
@@ -157,7 +168,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 			currentComment := make(map[string]string)
 			currentComment["comment_id"] = strconv.Itoa(*thisCommentId)
 			currentComment["uid"] = uid
-			reactions, _, err := d.GetReaction(db, currentComment)
+			reactions, userReaction, err := d.GetReaction(db, currentComment)
 			if err != nil {
 				return "", err
 			}
@@ -166,11 +177,13 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				userReaction[reaction.User_id] = reaction.Reaction_id
 				row.Reactions = append(row.Reactions, userReaction)
 			}
+			row.UserReaction = userReaction
 
 			structSlice[*thisPostId].Comments[row.CommentID] = *row
 		}
 	}
-	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData
+
+	// The output needs to be in a descending order (by post_id), so we save it into a sorted []JSONData, because marshalling maps into JSON data always ends up in ascending order by the keys
 	sSlice := make([]JSONData, 0, len(structSlice))
 	for _, value := range structSlice {
 		sSlice = append(sSlice, value)
@@ -182,6 +195,5 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		return "", err
 	}
 
-	// fmt.Println(structSlice)
 	return string(res), nil
 }

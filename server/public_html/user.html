@@ -25,7 +25,7 @@
     <ul class="navbar-nav mx-3">
       <li class="nav-item active">
         <a class="nav-link" href="/">
-          <h1 style="font-family: 'Fredoka One', cursive;">GRITFACE</h1>
+          <h1 style="font-family: 'Fredoka One', 'Arial', 'Helvetica';">GRITFACE</h1>
         </a>
       </li>
     </ul>
@@ -34,16 +34,16 @@
       <span><i class="fa-solid fa-bars"></i></span>
     </button>
 
-    <div class="collapse col-8" id="navbar_collapse">
+    <div class="collapse col-12 pe-3 text-end" id="navbar_collapse">
       <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" class="navbar-item nav-link ms-3 mb-2"
-        style="font-family: 'Fredoka One', cursive;">FILTERS</a>
+        style="font-family: 'Fredoka One', 'Arial', 'Helvetica'">FILTERS</a>
       <a href="/logout" class="navbar-item nav-link text-dark ms-3"
-        style="font-family: 'Fredoka One', cursive;">LOG OUT</a>
+        style="font-family: 'Fredoka One', 'Arial', 'Helvetica'">LOG OUT</a>
     </div>
 
     <div class="col-3 text-start d-none d-md-inline">
       <button class="btn bg-dark border-secondary text-info justify-content-center p-2"
-        style="height:40px; font-family: 'Fredoka One', cursive;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
+        style="height:40px; font-family: 'Fredoka One', 'Arial', 'Helvetica'" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample"
         aria-controls="offcanvasExample">
         Filters
       </button>
@@ -51,7 +51,7 @@
 
     <div class="col-3 text-end ms-auto mx-2 d-none d-md-inline">
       <a href="/logout" style="text-decoration: none;"><button class="btn bg-dark border-secondary text-info p-2"
-        style="height:40px; font-family: 'Fredoka One', cursive;">
+        style="height:40px; font-family: 'Fredoka One', 'Arial', 'Helvetica'">
         Log out
         <i class="fa-solid fa-right-from-bracket"></i>
       </button></a>
@@ -183,14 +183,15 @@
 
   <div class="container col-lg-8 offset-lg-2 offset-md-1 mx-auto col-md-10 col-12 col-sm-10 offset-sm-1 offset-0">
     <div class="user_post d-inline">
-      <div class="row mb-4 mt-2">
+      <div class="d-flex flex-row mb-4 mt-2">
         <div class="col-lg-2 offset-lg-2 col-sm-1 col-md-2">
-          <img class="center-block rounded-circle" src="{{.user_pic}}" id="user_pic"
+          <span><img class="center-block rounded-circle" src="{{.user_pic}}" id="user_pic"
             style="border: 2px solid #54B4D3; max-width: 120%;" />
         </div>
-        <h1 class="col-lg-3 text-left text-info" id="user_name"></h1>
+        <h1 class="me-auto text-info" id="user_name" style="font-family: 'Fredoka One', 'Arial', 'Helvetica';"></h1>
       </div>
     </div>
+  </span>
     <style>
       textarea {
         resize: none;
@@ -198,7 +199,7 @@
       }
     </style>
 
-    <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 mb-2" id="post_title">
+    <div class="col-lg-8 offset-lg-2 mx-auto col-sm-12 col-md-10 offset-md-1 mb-2" id="post_title">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_title" id="user_post_title" rows="1"
         placeholder="Add a title" style="font-size: 0.8em;"></textarea>
@@ -211,7 +212,7 @@
       <!-- </form> -->
       <div class="user_post_footer text-end mb-4">
         <div class="dropdown">
-          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-auto-close="outside" data-bs-toggle="dropdown"
             aria-expanded="false" style="font-size: 0.8em;">
             Categories
           </button>
@@ -220,15 +221,15 @@
           <!-- <button type="button" class="btn btn-info" id="add_img_button">
               +IMG
             </button> -->
-          <button type="button" class="btn btn-info" id="add_post_button" style="font-size: 0.8em;">
-            POST
+          <button type="button" class="btn btn-info px-4" id="add_post_button" style="font-size: 0.8em;">
+            <i class="fa-solid fa-paper-plane"></i>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container features col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0" id="container">
+  <div class="container features mx-auto col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0" id="container">
     <!-- <div class="border rounded content mx-auto col-8 mb-2">
             <section class="row" id="post_section">
                 <p class="text-start mx-2 text-info">{$username}</p>
@@ -349,7 +350,7 @@
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
   <footer id="load_more_btn">
-    <div class="col-10 col-lg-6 col-md-6 mx-auto text-center mb-3">
+    <div class="col-10 col-lg-6 col-md-6 mx-auto text-center mb-3" style="max-width: 80%;">
       <button class="btn btn-dark border border-info text-info" style="width: 80%;" id="load_more"
         onclick="loadPosts()">Show more
         posts</button>

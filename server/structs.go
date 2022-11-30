@@ -33,6 +33,7 @@ type JSONComments struct {
 	Post_id       int              `json:"post_id"`
 	User_id       int              `json:"user_id"`
 	Body          string           `json:"body"`
+	Insert_time   string           `json:"insert_time"`
 	Reactions     []map[int]string `json:"reactions"`
 	UserReaction  string           `json:"user_reaction"`
 	Username      string           `json:"username"`

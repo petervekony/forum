@@ -17,6 +17,19 @@ async function initPage(request = "/posts") {
   } else {
     document.getElementById("load_more_btn").style.display = "";
   }
+  addClickForPassword("signup_confirmpass", "signup_button");
+  addClickForPassword("login_pass", "login_button");
+}
+
+function addClickForPassword(element, ele_id) {
+  const ele = document.getElementById(element);
+  if (ele) {
+    ele.addEventListener("keyup", function(event) {
+      if (event.key == "Enter") {
+          document.getElementById(ele_id).click()
+    };
+  });
+}
 }
 
 function reactionButton(postId, commentId, reactId, reactCount, setActive=false) {
@@ -34,12 +47,12 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
   var setStyle = ""
   if(commentId > 0) {
     setStyle += "height:60%;";
-    addClass += " px-0 py-0";
+    addClass += " ps-1 py-0 pe-0";
   } else {
     addClass += " border";
   }
 
-  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
+  returndata += `<button class="btn btn-sm btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
                   <span class="badge text-info" id="rb${postId}_${commentId}_${reactId}">${reactCount}</span>
                   </button>`
   return returndata;
@@ -68,15 +81,15 @@ async function addReaction(postID, commentID, reactionID, targetButton) {
 }
 
 async function signup() {
-  const username = document.getElementById("signup_name").value;
-  const email = document.getElementById("signup_email").value;
-  const password = document.getElementById("signup_pass").value;
-  const confirmPassword = document.getElementById("signup_confirmpass").value;
+  const username = document.getElementById("signup_name");
+  const email = document.getElementById("signup_email");
+  const password = document.getElementById("signup_pass");
+  const confirmPassword = document.getElementById("signup_confirmpass");
   let newUser = {
-    name: username,
-    email: email,
-    password: password,
-    confirmPassword: confirmPassword,
+    name: username.value,
+    email: email.value,
+    password: password.value,
+    confirmPassword: confirmPassword.value,
   };
   console.log(newUser);
   await fetch("/signup", {
@@ -98,6 +111,10 @@ async function signup() {
         modalHeading.innerHTML = "Welcome!";
         modalBody.innerHTML = `You are now registered to Gritface!<br />
  You can now login.`;
+        username.value = "";
+        email.value = "";
+        password.value = "";
+        confirmPassword.value = "";
         modalBtn.setAttribute("data-bs-target", "#login_modal");
         modalBtn.textContent = "Log in";
       }
@@ -170,10 +187,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="${postUserPic}">
+      <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
     </div>
-    <div class="col-7 mt-4">
-      <h5 class="text-start text-info">${postUsername}</h5>
+    <div class="col-7 mt-2">
+      <h5 class="ps-xs-2 ps-sm-2 ps-md-2 ps-1 text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -199,20 +216,21 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         </div>
     </div>
 </div>
-</div>
+
 
 <!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
-    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
+  <!---  <div class="mx-4 mb-4 mb-lg-2 mb-md-2"> ---->
         <div class="row">
-            <div class="mx-3" id="post_reactions_container${postID}">
+            <div class="col-10 offset-1" id="post_reactions_container${postID}">
                 ${reactionButton(postID, 0, 1, likeNum, userRection1)}
                 ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
-                <p class="mx-1 text-info" id="number_of_comments"
+              <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
-                ${commentsLength} Comment</p>
-            </div>
+                  ${commentsLength}  <i class="fa-regular fa-comments pt-1" style="font-size:18px;"></i></p>
+            </div>  
+          </div>
         </div>
-      </div>
+    <!---  </div> --->
       ${document.getElementById("user_name")? createCommentTextArea(postUserPic, postID):""}
   <div class="collapse" id="collapse_post_comments${postID}">
   ${comments}
@@ -220,7 +238,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </section>`
 }
 
-function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0) {
+function createCommentDiv(postID, commentID, commentUserPic, commentUsername, newComment, likeNumComment = 0, dislikeNumComment = 0, userReaction=0, update_time) {
   let userRection1, userRection2 = false;
   if(userReaction == "1") {
     userRection1 = true;
@@ -229,23 +247,27 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   }
   return `
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
-    <p class="text-end pe-2 text-secondary">{$12.14}</p>
-      <div class="row pb-0 mb-0">
-      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
-        <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
+    <div class="row">
+      <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">
+        <img class="rounded-circle" style="border: 2px solid #54B4D3;" src="${commentUserPic}" width="50"><img>
         </div>
-
-
-        <div class="col-8 pb-0 mb-0 h-50 d-inline">
-        <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
+      <div class="col-10 col-lg-11 col-md-11 col-xl-11">
+        <div class="row">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 ps-md-4 text-start">
+            <h5 class="text-info pt-1 mb-0 pb-0">${commentUsername}</h5>
+            </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 text-start text-md-end">
+            <p class="text-secondary" style="font-size: 0.8em;">${update_time}</p>
+          </div>
         </div>
-        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
-        </div>
-  
-  
-
+      
+       <div class="col-12 word-wrap">
+          <p class="mb-0 pb-0 ps-md-2 text-light">${newComment}</p>
+          </div>
+      </div>
+    </div>
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">
   ${reactionButton(postID, commentID, 1, likeNumComment, userRection1)}
@@ -256,7 +278,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2" id="user_comment">
+  return `<div class="col-10 mx-auto ps-2 pe-2 pt-2" id="user_comment">
 
   <!-- <div class="row">
   <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
@@ -266,7 +288,7 @@ function createCommentTextArea(userPic, postID) {
   
   <div class="input-group mb-2">
   <input type="text"
-  class="form-control bg-dark border-info rounded-start text-light pt-1 px-1"
+  class="form-control bg-dark border-info rounded-start text-light pt-1 px-2"
   id="newComment"
   style="resize:none; font-size: 0.8em;"
   placeholder="Write a comment">
@@ -329,11 +351,10 @@ function createPosts(json, addToTop=false) {
           }
         });
       }
-      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment, comment.user_reaction);
+      comments += createCommentDiv(postJSON.post_id, comment.comment_id, comment.profile_image, comment.username, comment.body, likeNumComment, dislikeNumComment, comment.user_reaction, comment.insert_time.substring(0, 19));
     }
     
     // assemble the whole post div
-    console.log(JSON.stringify(postJSON));
     postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
     if(addToTop) {

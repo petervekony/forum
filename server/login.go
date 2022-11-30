@@ -45,13 +45,13 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
-	// // Check if user is logged in
-	/* 	if uid != "0" {
-		// 	// User is logged in, redirect to front page
+	// Check if user is logged in
+	if uid != "0" {
+		// User is logged in, redirect to front page
 		fmt.Fprintf(w, "User is logged in")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return "User is logged in", true
-	} */
+	}
 
 	// parse the form
 	// r.ParseForm()
@@ -99,6 +99,13 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	// }
 
 	num := users[0].User_id
+
+	// Check that no other session is logged in with this user
+	for _, thisSessionData := range sessionManager.sessions {
+		if thisSessionData.UId == strconv.Itoa(num) {
+			thisSessionData.UId = "0"
+		}
+	}
 
 	err = sessionManager.setSessionUID(num, w, r)
 	if err != nil {

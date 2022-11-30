@@ -52,7 +52,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
     addClass += " border";
   }
 
-  returndata += `<button class="btn btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
+  returndata += `<button class="btn btn-sm btn-dark ${addClass}" style="${setStyle}" id="rbc${postId}_${commentId}_${reactId}" onclick="addReaction(${postId}, ${commentId}, ${reactId}, this)"><i class="fa-solid ${reactIcon}"></i>
                   <span class="badge text-info" id="rb${postId}_${commentId}_${reactId}">${reactCount}</span>
                   </button>`
   return returndata;

@@ -37,8 +37,8 @@ async function setCategories() {
         const catsItem = document.createElement("li");
         catsItem.innerHTML = `<a class="dropdown-item" href="#">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="${key}" id="check${key}" />
-            <label class="form-check-label" for="check${key}">${value}</label>
+            <input class="form-check-input" type="checkbox" value="${key}" id="${key}"/>
+            <label class="form-check-label" style="color: #54B4D3;" for="${key}">${value}</label>
         </div>
     </a>`;
         catsList.append(catsItem);
@@ -126,16 +126,19 @@ async function newPost() {
     .then((response) => response.json())
     .then((json) => {
       console.log(json);
+      if (!json.status) {
+        alert("No spamming posts please!")
+        return
+      }
       postID = json.message;
+      initPage('/filtered?filter=postId&id=' + postID);
+      userPost.value = "";
+      userPostHeading.value = ""; 
     });
-
-    initPage('/filtered?filter=postId&id=' + postID);
-    userPost.value = "";
-    userPostHeading.value = ""; 
 }
 
 async function addComment(postID) {
-  const postDiv = document.getElementById(postID);
+  const postDiv = document.getElementById("p" +postID);
   const newComment = postDiv.querySelector("#newComment");
   if (!newComment.value) {
     console.log("Comment is empty");
@@ -163,10 +166,10 @@ async function addComment(postID) {
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0);
+  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0, "Commented just now");
 
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
-  console.log(postDiv);
+  commentsDiv.classList.add("show");
   if (!commentsDiv) {
     console.log("broke down");
   } else {
@@ -175,6 +178,5 @@ async function addComment(postID) {
   newComment.value = "";
   const number_of_comments = postDiv.querySelector("#number_of_comments");
   console.log(number_of_comments);
-  number_of_comments.textContent =
-    parseInt(number_of_comments.textContent) + 1 + " Comments";
+  number_of_comments.innerHTML = `${parseInt(number_of_comments.textContent) + 1} <i class="fa-regular fa-comments pt-1" style="font-size: 17px;"></i>`;
 }

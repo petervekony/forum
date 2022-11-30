@@ -163,7 +163,7 @@ async function resetLoginModal() {
 }
 
 async function loadPosts() {
-  const lastPostID = parseInt(document.getElementById("container").lastChild.id)
+  const lastPostID = parseInt(document.getElementById("container").lastChild.id.substring(1))
   let lastPost = {
     lastPostID: lastPostID,
   };
@@ -173,6 +173,9 @@ async function loadPosts() {
   })
     .then((response) => response.json())
     .then((json) => {
+      if(!json.length) {
+        document.getElementById("load_more").textContent = "No more posts to load";
+      } 
       createPosts(json)
     });
 }

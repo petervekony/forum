@@ -69,7 +69,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	query += " ORDER BY posts.post_id DESC"
 	if limit {
 		// if there is no filtering, there is a limit of 20 posts loaded at once
-		query += " LIMIT 4"
+		query += " LIMIT 20"
 	}
 
 	structSlice := make(map[int]JSONData)

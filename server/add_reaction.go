@@ -27,6 +27,9 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	defer db.Close()
+
 	sComID := r.URL.Query().Get("comment_id")
 	comID, err := strconv.Atoi(sComID)
 	if err != nil {

@@ -37,6 +37,10 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
+	if uid == "0" {
+		return "Not logged in", false
+	}
+
 	// Now timetamp (ts)
 	nowT := time.Now()
 	nowTS := nowT.Unix()
@@ -62,6 +66,9 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return err.Error(), false
 	}
+
+	defer db.Close()
+
 	uID, err := strconv.Atoi(uid)
 	if err != nil {
 		return err.Error(), false

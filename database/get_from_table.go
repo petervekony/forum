@@ -179,7 +179,7 @@ func GetReaction(db *sql.DB, reactionData map[string]string) ([]Reaction, string
 		if err := rows.Scan(&reaction.User_id, &reaction.Post_id, &reaction.Comment_id, &reaction.Reaction_id); // Fetch the record
 		err != nil {
 			logger.WTL(err.Error(), false)
-			return reactions, userReaction, err
+			return nil, userReaction, err
 		}
 
 		if strconv.Itoa(reaction.User_id) == uid {

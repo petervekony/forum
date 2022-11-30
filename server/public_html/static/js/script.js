@@ -163,10 +163,11 @@ async function resetLoginModal() {
 }
 
 async function loadPosts() {
-  const lastPostID = parseInt(document.getElementById("container").lastChild.id)
+  const lastPostID = parseInt(document.getElementById("container").lastChild.id.substring(1))
   let lastPost = {
     lastPostID: lastPostID,
   };
+  console.log(lastPostID);
   await fetch("/loadPosts", {
     method: "POST",
     body: JSON.stringify(lastPost),
@@ -192,10 +193,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
+      <img class="rounded-circle" style="min-width:40px;max-width: 100%; border: 2px solid #54B4D3;" src="${postUserPic}">
     </div>
-    <div class="col-7 mt-4">
-      <h5 class="ms-2 text-start text-info">${postUsername}</h5>
+    <div class="col-7 mt-4 ms-2">
+      <h5 class="text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -221,20 +222,21 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         </div>
     </div>
 </div>
-</div>
+
 
 <!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
-    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
+  <!---  <div class="mx-4 mb-4 mb-lg-2 mb-md-2"> ---->
         <div class="row">
-            <div class="mx-3" id="post_reactions_container${postID}">
-                ${reactionButton(postID, 0, 1, likeNum)}
-                ${reactionButton(postID, 0, 2, dislikeNum)}
-                <p class="mx-1 text-info" id="number_of_comments"
+            <div class="col-10 offset-1" id="post_reactions_container${postID}">
+                ${reactionButton(postID, 0, 1, likeNum, userRection1)}
+                ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
+              <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
-                ${commentsLength} Comment</p>
-            </div>
+                  ${commentsLength}  <i class="fa-regular fa-comments pt-1" style="font-size:18px;"></i></p>
+            </div>  
+          </div>
         </div>
-      </div>
+    <!---  </div> --->
       ${document.getElementById("user_name")? createCommentTextArea(postUserPic, postID):""}
   <div class="collapse" id="collapse_post_comments${postID}">
   ${comments}
@@ -250,27 +252,28 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     userRection2 = true;
   }
   return `
-  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+  <div class="row mx-auto pb-2" id="post_comments_container_${postID}_${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body_${postID}_${commentID}">
     
-    <div class="d-flex flex-row comment-row">
-        <div class="pt-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
-        <div class="comment-text col-9 ps-1">
-       
-          <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
-          <pre><p class="mb-0 pb-0 ps-2 text-light">${newComment}</p></pre>
-          
+    <div class="row">
+      <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">
+        <img class="rounded-circle" style="border: 2px solid #54B4D3;" src="${commentUserPic}" width="50"><img>
+        </div>
+      <div class="col-10 col-lg-11 col-md-11 col-xl-11 ps-md-4">
+        <div class="row">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 ps-md-4 text-start">
+            <h5 class="text-info pt-1 mb-0 pb-0">${commentUsername}</h5>
+            </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 text-start text-md-end">
+            <p class="text-secondary" style="font-size: 0.8em;">${update_time}</p>
           </div>
-          
-          <p class="ms-auto pt-1 text-secondary ps-n4">${update_time}</p>
+        </div>
+      
+       <div class="col-12 word-wrap">
+          <p class="mb-0 pb-0 ps-md-2 text-light">${newComment}</p>
           </div>
-          </span>
-          
-          
-         
-         
-
-
+      </div>
+    </div>
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">
   ${reactionButton(postID, commentID, 1, likeNumComment, userRection1)}
@@ -281,7 +284,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2" id="user_comment">
+  return `<div class="col-10 mx-auto ps-2 pe-2 pt-2" id="user_comment">
 
   <!-- <div class="row">
   <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
@@ -291,7 +294,7 @@ function createCommentTextArea(userPic, postID) {
   
   <div class="input-group mb-2">
   <input type="text"
-  class="form-control bg-dark border-info rounded-start text-light pt-1 px-1"
+  class="form-control bg-dark border-info rounded-start text-light pt-1 px-2"
   id="newComment"
   style="resize:none; font-size: 0.8em;"
   placeholder="Write a comment">
@@ -336,7 +339,7 @@ function createPosts(json, addToTop=false) {
     // create post div
     const postDiv = document.createElement("div");
     postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
-    postDiv.id = postJSON.post_id;
+    postDiv.id = "p" + postJSON.post_id;
 
     // loop and create divs of comments
     let comments = ``;

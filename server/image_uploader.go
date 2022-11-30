@@ -158,6 +158,9 @@ func changeProfilePicture(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		// do something
 	}
+
+	defer db.Close()
+
 	loginUser := make(map[string]string)
 	loginUser["user_id"] = user_id
 	// get user from the database

@@ -180,32 +180,32 @@
       </div>
     </div>
   </div>
+  <div class="row">
+  <style>
+    textarea {
+      resize: none;
+      outline: none;
+    }
+  </style>
+    
 
-  <div class="container col-lg-8 offset-lg-2 offset-md-1 mx-auto col-md-10 col-12 col-sm-10 offset-sm-1 offset-0">
-    <div class="user_post d-inline">
-      <div class="d-flex flex-row mb-4 mt-2">
-        <div class="col-lg-2 offset-lg-2 col-sm-1 col-md-2">
-          <span><img class="center-block rounded-circle" src="{{.user_pic}}" id="user_pic"
+  <div class="container col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-12">
+   
+      
+    <div class="mx-auto col-lg-8 col-md-10 offset-sm-1 col-sm-11 col-12 mt-2 mb-4 mb-lg-2 mb-md-2">
+      <div class="user_post d-inline">
+        <img class="center-block rounded-circle" src="{{.user_pic}}" id="user_pic"
             style="border: 2px solid #54B4D3; max-width: 120%;" />
-        </div>
-        <h1 class="me-auto text-info" id="user_name" style="font-family: 'Fredoka One', 'Arial', 'Helvetica';"></h1>
+            <h1 class="col-lg-3 text-left text-info" id="user_name"></h1>
       </div>
     </div>
-  </span>
-    <style>
-      textarea {
-        resize: none;
-        outline: none;
-      }
-    </style>
-
-    <div class="col-lg-8 offset-lg-2 mx-auto col-sm-12 col-md-10 offset-md-1 mb-2" id="post_title">
+    <div class="mx-auto col-lg-8 col-md-10 offset-sm-1 col-sm-11 col-12 mt-2 mb-4 mb-lg-2 mb-md-2" id="post_title">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_title" id="user_post_title" rows="1"
         placeholder="Add a title" style="font-size: 0.8em;"></textarea>
       <!-- </form> -->
     </div>
-    <div class="col-lg-8 offset-lg-2 col-sm-12 col-md-10 offset-md-1 text-secondary border-info">
+    <div class="mx-auto col-lg-8 col-md-10 offset-sm-1 col-sm-11 col-12 mt-2 mb-4 mb-lg-2 mb-md-2 text-secondary border-info">
       <!-- <form action="/addPost" id="add_post_form"> -->
       <textarea class="form-control text-light bg-dark mb-2 border-info" name="post_content" id="user_post" rows="3"
         placeholder="What's on your mind?" style="font-size: 0.8em;"></textarea>
@@ -221,15 +221,16 @@
           <!-- <button type="button" class="btn btn-info" id="add_img_button">
               +IMG
             </button> -->
-          <button type="button" class="btn btn-info" id="add_post_button" style="font-size: 0.8em;">
-            POST
+          <button type="button" class="btn btn-info px-4" id="add_post_button" style="font-size: 0.8em;">
+            <i class="fa-solid fa-paper-plane"></i>
           </button>
         </div>
       </div>
     </div>
+    
   </div>
 
-  <div class="container features col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0" id="container">
+  <div class="container features mx-auto col-lg-8 offset-lg-2 offset-md-2 col-md-8 col-sm-12 offset-sm-0" id="container">
     <!-- <div class="border rounded content mx-auto col-8 mb-2">
             <section class="row" id="post_section">
                 <p class="text-start mx-2 text-info">{$username}</p>
@@ -350,7 +351,7 @@
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
   <footer id="load_more_btn">
-    <div class="col-10 col-lg-6 col-md-6 mx-auto text-center mb-3">
+    <div class="col-10 col-lg-6 col-md-6 mx-auto text-center mb-3" style="max-width: 80%;">
       <button class="btn btn-dark border border-info text-info" style="width: 80%;" id="load_more"
         onclick="loadPosts()">Show more
         posts</button>

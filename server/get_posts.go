@@ -144,7 +144,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	}
 	// after the posts' query, we need to query for the comments, if there are any
 	if len(nextQuery) > 4 {
-		query = "SELECT comment_id, post_id, user_id, body FROM comments WHERE " + nextQuery[4:]
+		query = "SELECT comment_id, post_id, user_id, body, insert_time FROM comments WHERE " + nextQuery[4:]
 		rows, err = db.Query(query)
 		if err != nil {
 			return "", err
@@ -152,7 +152,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		defer rows.Close()
 		for rows.Next() {
 			row := &JSONComments{}
-			err = rows.Scan(&row.CommentID, &row.Post_id, &row.User_id, &row.Body)
+			err = rows.Scan(&row.CommentID, &row.Post_id, &row.User_id, &row.Body, &row.Insert_time)
 			if err != nil {
 				return "", err
 			}

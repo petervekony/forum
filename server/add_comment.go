@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	d "gritface/database"
+	logger "gritface/log"
 	"io"
 	"net/http"
 	"strconv"
@@ -34,6 +35,12 @@ func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {
 		//handle error
 		// fmt.Fprintln(w, err.Error())
 		return err.Error(), false
+	}
+	numUId, _ := strconv.Atoi(uid)
+	if numUId < 1 {
+		// For some reason the uid is not numeric
+		logger.WTL("Non-logged in user tried to make a comment", true)
+		return "User is not logged in", false
 	}
 
 	db, err := d.DbConnect()

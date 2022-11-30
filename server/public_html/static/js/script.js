@@ -311,7 +311,7 @@ function createPosts(json, addToTop=false) {
     // create post div
     const postDiv = document.createElement("div");
     postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
-    postDiv.id = postJSON.post_id;
+    postDiv.id = "p" + postJSON.post_id;
 
     // loop and create divs of comments
     let comments = ``;

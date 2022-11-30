@@ -135,7 +135,7 @@ async function newPost() {
 }
 
 async function addComment(postID) {
-  const postDiv = document.getElementById(postID);
+  const postDiv = document.getElementById("p" +postID);
   const newComment = postDiv.querySelector("#newComment");
   if (!newComment.value) {
     console.log("Comment is empty");

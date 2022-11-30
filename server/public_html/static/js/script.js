@@ -222,8 +222,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   <!---  <div class="mx-4 mb-4 mb-lg-2 mb-md-2"> ---->
         <div class="row">
             <div class="col-10 offset-1" id="post_reactions_container${postID}">
-                ${reactionButton(postID, 0, 1, likeNum)}
-                ${reactionButton(postID, 0, 2, dislikeNum)}
+                ${reactionButton(postID, 0, 1, likeNum, userRection1)}
+                ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
               <div class=row>
                 <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">

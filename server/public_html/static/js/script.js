@@ -253,7 +253,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
       <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">
         <img class="rounded-circle" style="border: 2px solid #54B4D3;" src="${commentUserPic}" width="50"><img>
         </div>
-      <div class="col-10 col-lg-11 col-md-11 col-xl-11">
+      <div class="col-10 col-lg-11 col-md-11 col-xl-11 ps-md-4">
         <div class="row">
           <div class="col-12 col-md-6 col-lg-6 col-xl-6 ps-md-4 text-start">
             <h5 class="text-info pt-1 mb-0 pb-0">${commentUsername}</h5>

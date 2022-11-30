@@ -189,8 +189,8 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
       <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
     </div>
-    <div class="col-7 mt-4">
-      <h5 class="ms-2 text-start text-info">${postUsername}</h5>
+    <div class="col-7 mt-2">
+      <h5 class="ps-xs-2 ps-sm-2 ps-md-2 ps-1 text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -216,20 +216,21 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         </div>
     </div>
 </div>
-</div>
+
 
 <!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
-    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
+  <!---  <div class="mx-4 mb-4 mb-lg-2 mb-md-2"> ---->
         <div class="row">
-            <div class="mx-3" id="post_reactions_container${postID}">
+            <div class="col-10 offset-1" id="post_reactions_container${postID}">
                 ${reactionButton(postID, 0, 1, likeNum)}
                 ${reactionButton(postID, 0, 2, dislikeNum)}
-                <p class="mx-1 text-info" id="number_of_comments"
+              <p class="mx-1 pt-1 mb-1 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
-                ${commentsLength} Comment</p>
-            </div>
+                  ${commentsLength}  <i class="fa-regular fa-comments pt-1" style="font-size:18px;"></i></p>
+            </div>  
+          </div>
         </div>
-      </div>
+    <!---  </div> --->
       ${document.getElementById("user_name")? createCommentTextArea(postUserPic, postID):""}
   <div class="collapse" id="collapse_post_comments${postID}">
   ${comments}
@@ -248,24 +249,25 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
     <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
-    <div class="d-flex flex-row comment-row">
-        <div class="pt-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
-        <div class="comment-text col-9 ps-1">
-       
-          <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
-          <pre><p class="mb-0 pb-0 ps-2 text-light">${newComment}</p></pre>
-          
+    <div class="row">
+      <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">
+        <img class="rounded-circle" style="border: 2px solid #54B4D3;" src="${commentUserPic}" width="50"><img>
+        </div>
+      <div class="col-10 col-lg-11 col-md-11 col-xl-11">
+        <div class="row">
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 ps-md-4 text-start">
+            <h5 class="text-info pt-1 mb-0 pb-0">${commentUsername}</h5>
+            </div>
+          <div class="col-12 col-md-6 col-lg-6 col-xl-6 text-start text-md-end">
+            <p class="text-secondary" style="font-size: 0.8em;">${update_time}</p>
           </div>
-          
-          <p class="ms-auto pt-1 text-secondary ps-n4">${update_time}</p>
+        </div>
+      
+       <div class="col-12 word-wrap">
+          <p class="mb-0 pb-0 ps-md-2 text-light">${newComment}</p>
           </div>
-          </span>
-          
-          
-         
-         
-
-
+      </div>
+    </div>
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">
   ${reactionButton(postID, commentID, 1, likeNumComment, userRection1)}
@@ -276,7 +278,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2" id="user_comment">
+  return `<div class="col-10 mx-auto ps-2 pe-2 pt-2" id="user_comment">
 
   <!-- <div class="row">
   <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
@@ -286,7 +288,7 @@ function createCommentTextArea(userPic, postID) {
   
   <div class="input-group mb-2">
   <input type="text"
-  class="form-control bg-dark border-info rounded-start text-light pt-1 px-1"
+  class="form-control bg-dark border-info rounded-start text-light pt-1 px-2"
   id="newComment"
   style="resize:none; font-size: 0.8em;"
   placeholder="Write a comment">

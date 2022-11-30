@@ -166,7 +166,7 @@ async function addComment(postID) {
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0, "Commented just now...");
+  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0, "Commented just now");
 
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
   commentsDiv.classList.add("show");
@@ -178,6 +178,5 @@ async function addComment(postID) {
   newComment.value = "";
   const number_of_comments = postDiv.querySelector("#number_of_comments");
   console.log(number_of_comments);
-  number_of_comments.textContent =
-    parseInt(number_of_comments.textContent) + 1 + " Comments";
+  number_of_comments.innerHTML = `${parseInt(number_of_comments.textContent) + 1} <i class="fa-regular fa-comments pt-1" style="font-size: 17px;"></i>`;
 }

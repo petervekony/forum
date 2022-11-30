@@ -265,8 +265,8 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
           </div>
         </div>
       
-       <div class="col-12 word-wrap">
-          <p class="mb-0 pb-0 ps-md-2 text-light">${newComment}</p>
+       <div class="col-12 word-wrap ps-xs-5 ps-md-4 ps-lg-0">
+          <p class="mb-0 pb-0 ps-4 ps-md-2 text-light">${newComment}</p>
           </div>
       </div>
     </div>
@@ -280,7 +280,7 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-10 mx-auto ps-2 pe-2 pt-2" id="user_comment">
+  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2 pt-2" id="user_comment">
 
   <!-- <div class="row">
   <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">

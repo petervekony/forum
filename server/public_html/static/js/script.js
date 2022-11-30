@@ -163,23 +163,17 @@ async function resetLoginModal() {
 }
 
 async function loadPosts() {
-  const lastPostID = parseInt(document.getElementById("container").lastChild.id.substring(1))
+  const lastPostID = parseInt(document.getElementById("container").lastChild.id)
   let lastPost = {
     lastPostID: lastPostID,
   };
-  console.log(lastPostID);
   await fetch("/loadPosts", {
     method: "POST",
     body: JSON.stringify(lastPost),
   })
     .then((response) => response.json())
     .then((json) => {
-      if (!json.length) {
-        const loadMoreBtn = document.getElementById("load_more");
-        loadMoreBtn.textContent = "All posts have been loaded. Come back later for more!"
-      } else {
-        createPosts(json)
-      }
+      createPosts(json)
     });
 }
 
@@ -193,10 +187,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="min-width:40px;max-width: 100%; border: 2px solid #54B4D3;" src="${postUserPic}">
+      <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
     </div>
-    <div class="col-7 mt-4 ms-2">
-      <h5 class="text-start text-info">${postUsername}</h5>
+    <div class="col-7 mt-2">
+      <h5 class="ps-xs-2 ps-sm-2 ps-md-2 ps-1 text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -222,17 +216,19 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         </div>
     </div>
 </div>
-
+</div>
 
 <!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
   <!---  <div class="mx-4 mb-4 mb-lg-2 mb-md-2"> ---->
         <div class="row">
             <div class="col-10 offset-1" id="post_reactions_container${postID}">
-                ${reactionButton(postID, 0, 1, likeNum, userRection1)}
-                ${reactionButton(postID, 0, 2, dislikeNum, userRection2)}
-              <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
+                ${reactionButton(postID, 0, 1, likeNum)}
+                ${reactionButton(postID, 0, 2, dislikeNum)}
+              <div class=row>
+                <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
                   ${commentsLength}  <i class="fa-regular fa-comments pt-1" style="font-size:18px;"></i></p>
+                  </div>
             </div>  
           </div>
         </div>
@@ -252,14 +248,14 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     userRection2 = true;
   }
   return `
-  <div class="row mx-auto pb-2" id="post_comments_container_${postID}_${commentID}">
-    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body_${postID}_${commentID}">
+  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
     <div class="row">
       <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">
         <img class="rounded-circle" style="border: 2px solid #54B4D3;" src="${commentUserPic}" width="50"><img>
         </div>
-      <div class="col-10 col-lg-11 col-md-11 col-xl-11 ps-md-4">
+      <div class="col-10 col-lg-11 col-md-11 col-xl-11">
         <div class="row">
           <div class="col-12 col-md-6 col-lg-6 col-xl-6 ps-md-4 text-start">
             <h5 class="text-info pt-1 mb-0 pb-0">${commentUsername}</h5>
@@ -339,7 +335,7 @@ function createPosts(json, addToTop=false) {
     // create post div
     const postDiv = document.createElement("div");
     postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
-    postDiv.id = "p" + postJSON.post_id;
+    postDiv.id = postJSON.post_id;
 
     // loop and create divs of comments
     let comments = ``;

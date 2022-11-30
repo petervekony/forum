@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
+	logger "gritface/log"
 )
 
 // returns the row affected and error
@@ -14,6 +15,7 @@ func InsertUsers(db *sql.DB, name string, email string, password string, user_le
 	statement, err := db.Prepare(insertUsers) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	min := 1
@@ -22,6 +24,7 @@ func InsertUsers(db *sql.DB, name string, email string, password string, user_le
 	pic := "static/images/raccoon_thumbnail" + strconv.Itoa(randomNum) + ".jpg"
 	val, err := statement.Exec(name, email, password, user_level, pic) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
@@ -35,10 +38,12 @@ func InsertPost(db *sql.DB, user_id int, heading string, body string, insert_tim
 	statement, err := db.Prepare(insertPost) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	val, err := statement.Exec(user_id, heading, body, insert_time, image) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
@@ -52,10 +57,12 @@ func InsertCategory(db *sql.DB, category_name string) (int, error) {
 	statement, err := db.Prepare(insertCategory) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	val, err := statement.Exec(category_name) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
@@ -69,10 +76,12 @@ func InsertComment(db *sql.DB, post_id int, user_id int, body string, insert_tim
 	statement, err := db.Prepare(insertComment) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	val, err := statement.Exec(post_id, user_id, body, insert_time) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
@@ -88,10 +97,12 @@ func InsertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reacti
 	statement, err := db.Prepare(insertReaction) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	val, err := statement.Exec(user_id, post_id, comment_id, reaction_id) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	fmt.Println(val)
@@ -106,25 +117,28 @@ func InsertPostCategory(db *sql.DB, post_id int, category_id int) (int, error) {
 	statement, err := db.Prepare(insertPostCategory) // Prepare statement.
 	// This is good to avoid SQL injections
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	val, err := statement.Exec(post_id, category_id) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
 	return int(insertId), nil                        
 }
-
+ // function is used to delete reaction from the database
 func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id string, reaction_id string) (bool, error) {
 	deleteReaction := "DELETE FROM reaction WHERE user_id =" + user_id + " AND post_id=" + post_id + " AND comment_id=" + comment_id
 	stmt, err := db.Prepare(deleteReaction) // Execute statement with parameters
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return false, err
 	}
 	_, err = stmt.Exec()
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), false)
 		return false, err
 	}
 	return true, nil

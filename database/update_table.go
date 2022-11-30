@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"errors"
+	logger "gritface/log"
 	"time"
 )
 
@@ -14,6 +15,7 @@ func UpdateCategoriesData(db *sql.DB, data map[string]string, category_id string
 	search := "SELECT * FROM categories WHERE category_id=?"
 	err := db.QueryRow(search, category_id).Scan()
 	if err == sql.ErrNoRows {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 
@@ -32,6 +34,7 @@ func UpdateCategoriesData(db *sql.DB, data map[string]string, category_id string
 	query += " WHERE category_id=" + category_id
 	statement, err := db.Prepare(query)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	_, err = statement.Exec()
@@ -45,11 +48,13 @@ func UpdateCommentsData(db *sql.DB, body string, comment_id string) error {
 	search := "SELECT * FROM comments WHERE comment_id=?"
 	err := db.QueryRow(search, comment_id).Scan()
 	if err == sql.ErrNoRows {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	query := "UPDATE comments SET body=? WHERE comment_id=?"
 	statement, err := db.Prepare(query)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	_, err = statement.Exec(body, comment_id)
@@ -64,6 +69,7 @@ func UpdatePostsData(db *sql.DB, data map[string]string, post_id string) error {
 	search := "SELECT * FROM posts WHERE post_id=?"
 	err := db.QueryRow(search, post_id).Scan()
 	if err == sql.ErrNoRows {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 
@@ -90,6 +96,7 @@ func UpdatePostsData(db *sql.DB, data map[string]string, post_id string) error {
 	query += ", update_time='" + time + "' WHERE post_id=" + post_id
 	statement, err := db.Prepare(query)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	_, err = statement.Exec()
@@ -103,9 +110,10 @@ func UpdateUserData(db *sql.DB, data map[string]string, user_id string) error {
 	search := "SELECT * FROM users WHERE user_id=?"
 	err := db.QueryRow(search, user_id).Scan()
 	if err == sql.ErrNoRows {
+		logger.WTL(err.Error(), false)
 		return err
 	}
-	
+
 	query := "UPDATE users SET"
 	count := 0
 	for key, val := range data {
@@ -121,6 +129,7 @@ func UpdateUserData(db *sql.DB, data map[string]string, user_id string) error {
 	query += " WHERE user_id=" + user_id
 	statement, err := db.Prepare(query)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	_, err = statement.Exec()

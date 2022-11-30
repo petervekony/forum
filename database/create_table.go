@@ -1,6 +1,9 @@
 package database
 
-import "database/sql"
+import (
+	"database/sql"
+	logger "gritface/log"
+)
 
 // function is used to create the database tables
 func createTable(db *sql.DB) error {
@@ -16,6 +19,7 @@ func createTable(db *sql.DB) error {
 	  );`
 	usersStatement, err := db.Prepare(createUsersTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	usersStatement.Exec() // Execute SQL Statements
@@ -35,6 +39,7 @@ func createTable(db *sql.DB) error {
 	  );`
 	postsStatement, err := db.Prepare(createPostsTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	postsStatement.Exec() // Execute SQL Statements
@@ -51,6 +56,7 @@ func createTable(db *sql.DB) error {
 
 	commentsStatement, err := db.Prepare(createcommentsTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	commentsStatement.Exec() // Execute SQL Statements
@@ -63,6 +69,7 @@ func createTable(db *sql.DB) error {
 	  );`
 	categoriesStatement, err := db.Prepare(createcategoriesTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	categoriesStatement.Exec() // Execute SQL Statements
@@ -78,6 +85,7 @@ func createTable(db *sql.DB) error {
 	  );`
 	reactionStatement, err := db.Prepare(createreactionTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	reactionStatement.Exec() // Execute SQL Statements
@@ -91,6 +99,7 @@ func createTable(db *sql.DB) error {
 	  );`
 	postcategoryStatement, err := db.Prepare(createpostscategoryTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	postcategoryStatement.Exec() // Execute SQL Statements
@@ -102,6 +111,7 @@ func createTable(db *sql.DB) error {
 	)`
 	userlevelStatement, err := db.Prepare(createUserLevelTable) // Prepare SQL Statement
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return err
 	}
 	userlevelStatement.Exec() // Execute SQL Statements

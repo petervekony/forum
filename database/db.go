@@ -31,6 +31,7 @@ func DbConnect() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	// Enable foreign key contraints
@@ -38,7 +39,8 @@ func DbConnect() (*sql.DB, error) {
 
 	enableContraintsQuery, err := forumdb.Prepare(enableContraints) // Prepare SQL Statement
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WTL(err.Error(), false)
+		return nil, err
 	}
 	enableContraintsQuery.Exec()
 	return forumdb, nil
@@ -53,12 +55,14 @@ func DatabaseExist() (*sql.DB, error) {
 		fmt.Println("Creating the forum database ...")
 		file, err := os.Create(databaseFile) // Create Sqlite file
 		if err != nil {
+			logger.WTL(err.Error(), false)
 			return nil, err
 		}
 		file.Close()
 		logger.WTL("Database created", true)
 		newDb = true
 	} else if err != nil {
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	forumdb, err := sql.Open("sqlite3", "./"+databaseFile)
@@ -69,6 +73,7 @@ func DatabaseExist() (*sql.DB, error) {
 	}
 	conn, err := forumdb.Conn(context.Background())
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return nil, err
 	}
 	defer conn.Close()

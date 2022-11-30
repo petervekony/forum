@@ -101,9 +101,9 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 	num := users[0].User_id
 
 	// Check that no other session is logged in with this user
-	for _, thisSessionData := range sessionManager.sessions {
+	for thisSessionId, thisSessionData := range sessionManager.sessions {
 		if thisSessionData.UId == strconv.Itoa(num) {
-			thisSessionData.UId = "0"
+			delete(sessionManager.sessions, thisSessionId)
 		}
 	}
 

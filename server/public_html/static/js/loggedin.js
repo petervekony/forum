@@ -127,7 +127,7 @@ async function newPost() {
     .then((json) => {
       console.log(json);
       if (!json.status) {
-        alert("No spamming posts please!")
+        alert(json.message)
         return
       }
       postID = json.message;
@@ -151,15 +151,27 @@ async function addComment(postID) {
   };
   console.log(postID);
   let commentID = 1;
+  let status = true;
   await fetch("/addComment", {
     method: "POST",
     body: JSON.stringify(comment),
   })
     .then((response) => response.json())
     .then((json) => {
-      console.log(json);
-      commentID = json.message;
+      if(json.status) {
+        console.log(json);
+        commentID = json.message;
+      } else {
+        alert("You are not logged in");
+        status = false
+        
+      }
     });
+
+
+  if(!status) {
+    return
+  }
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
   // commentDiv.classList.add("row", "mx-auto");

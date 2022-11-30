@@ -37,6 +37,10 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
+	if uid == "0" {
+		return "Not logged in", false
+	}
+
 	// Now timetamp (ts)
 	nowT := time.Now()
 	nowTS := nowT.Unix()

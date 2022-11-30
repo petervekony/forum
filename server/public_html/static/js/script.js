@@ -246,8 +246,8 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     userRection2 = true;
   }
   return `
-  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+  <div class="row mx-auto pb-2" id="post_comments_container_${postID}_${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body_${postID}_${commentID}">
     
     <div class="row">
       <div class="col-2 col-lg-1 col-md-1 col-xl-1 pt-1">

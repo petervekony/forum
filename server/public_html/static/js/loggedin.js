@@ -37,7 +37,7 @@ async function setCategories() {
         const catsItem = document.createElement("li");
         catsItem.innerHTML = `<a class="dropdown-item" href="#">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="${key}" />
+            <input class="form-check-input" type="checkbox" value="${key}" id="${key}"/>
             <label class="form-check-label" for="${key}">${value}</label>
         </div>
     </a>`;

@@ -47,7 +47,7 @@ function reactionButton(postId, commentId, reactId, reactCount, setActive=false)
   var setStyle = ""
   if(commentId > 0) {
     setStyle += "height:60%;";
-    addClass += " px-0 py-0";
+    addClass += " ps-1 py-0 pe-0";
   } else {
     addClass += " border";
   }
@@ -173,7 +173,12 @@ async function loadPosts() {
   })
     .then((response) => response.json())
     .then((json) => {
-      createPosts(json)
+      if (!json.length) {
+        const loadMoreBtn = document.getElementById("load_more");
+        loadMoreBtn.textContent = "All posts have been loaded. Come back later for more!"
+      } else {
+        createPosts(json)
+      }
     });
 }
 
@@ -187,10 +192,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="${postUserPic}">
+      <img class="rounded-circle" style="border: 2px solid #54B4D3;" width="50" src="${postUserPic}">
     </div>
     <div class="col-7 mt-4">
-      <h5 class="text-start text-info">${postUsername}</h5>
+      <h5 class="ms-2 text-start text-info">${postUsername}</h5>
     </div>
   </div>
 <div data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
@@ -246,22 +251,25 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
   }
   return `
   <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    <div class="col-lg-10 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
     
-    <p class="text-end pe-2 text-secondary">${update_time}</p>
-      <div class="row pb-0 mb-0">
-      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
-        <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
-        </div>
+    <div class="d-flex flex-row comment-row">
+        <div class="pt-2"><span><img class="rounded-circle" style="border: 2px solid #54B4D3" src="${commentUserPic}" width="50"></span></div>
+        <div class="comment-text col-9 ps-1">
+       
+          <span class="text-start"><p class="text-info pt-1 pe-3 mb-0 pb-0">${commentUsername}</p>
+          <pre><p class="mb-0 pb-0 ps-2 text-light">${newComment}</p></pre>
+          
+          </div>
+          
+          <p class="ms-auto pt-1 text-secondary ps-n4">${update_time}</p>
+          </div>
+          </span>
+          
+          
+         
+         
 
-
-        <div class="col-8 pb-0 mb-0 h-50 d-inline">
-        <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
-        </div>
-        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
-        </div>
-  
-  
 
 
   <div class="text-end pb-1 my-0" id="comment_reactions_container${postID}${commentID}">

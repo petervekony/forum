@@ -138,7 +138,7 @@ func DatabaseExist() (*sql.DB, error) {
 
 // remove this when cleaning up
 func exampleDbData(forumdb *sql.DB) {
-	InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
+	/* InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
 	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
 	InsertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)
 	InsertUsers(forumdb, "christian", "christain@gritlab.ax", "kingofhanko", 0)
@@ -148,7 +148,7 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertPost(forumdb, 1, "football", "football is a great sport", "2017-01-01 00:00:00", "")
 	InsertPost(forumdb, 3, "Improving Data Science", "I wished to rebuild the whole data science world", "2017-01-01 00:00:45", "")
 	InsertPost(forumdb, 6, "Eating at a restaurants", "Me gusta is the best burger in Mariehamn", "2017-01-01 00:23:00", "")
-	InsertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "")
+	InsertPost(forumdb, 1, "Hiking in the westlands", "Johannes is the best hicker in gritlab", "2017-01-01 00:60:00", "") */
 	InsertCategory(forumdb, "sport")
 	InsertCategory(forumdb, "food")
 	InsertCategory(forumdb, "hiking")
@@ -157,7 +157,7 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertCategory(forumdb, "music")
 	InsertCategory(forumdb, "movies")
 	InsertCategory(forumdb, "books")
-	InsertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
+	/* InsertComment(forumdb, 1, 1, "I agree with you", "2017-01-01 00:00:00")
 	InsertComment(forumdb, 2, 1, "I do not agree with you", "2017-01-01 00:00:00")
 	InsertReaction(forumdb, 1, 1, 1, "1")
 	InsertReaction(forumdb, 1, 2, 2, "1")
@@ -167,5 +167,5 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertReaction(forumdb, 1, 1, 5, "2")
 	InsertReaction(forumdb, 1, 1, 0, "2")
 	InsertReaction(forumdb, 1, 2, 0, "2")
-	InsertPostCategory(forumdb, 1, 1)
+	InsertPostCategory(forumdb, 1, 1) */
 }

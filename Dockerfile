@@ -16,7 +16,7 @@ WORKDIR /app
 COPY --from=builder ./gritface ./
 COPY log ./log
 COPY server/public_html ./server/public_html
-COPY localhost.crt localhost.csr localhost.key readme.md ./
+COPY localhost.crt localhost.csr localhost.key Readme.Md ./
 # COPY forum-db.db ./
 EXPOSE 443
 CMD [ "./gritface" ]

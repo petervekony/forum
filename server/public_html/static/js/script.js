@@ -163,6 +163,11 @@ async function resetLoginModal() {
 }
 
 async function loadPosts() {
+  if(document.getElementById("container").lastChild == undefined) {
+    document.getElementById("load_more").textContent = "No more posts to load";
+    return
+  }
+
   const lastPostID = parseInt(document.getElementById("container").lastChild.id.substring(1))
   let lastPost = {
     lastPostID: lastPostID,

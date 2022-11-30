@@ -1,13 +1,16 @@
 window.onload = initPage();
 
 async function initPage(request = "/posts") {
-  console.log("hello from initpage, " + request);
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {
       console.log(json)
-      document.getElementById("container").innerHTML = "";
-      createPosts(json);
+      if(request.startsWith("/filtered?filter=postId")) {
+        createPosts(json, true);
+      } else {
+        document.getElementById("container").innerHTML = "";
+        createPosts(json);
+      }
     });
   if (request != "/posts") {
     document.getElementById("load_more_btn").style.display = "none";
@@ -198,10 +201,10 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
 </div>
 </div>
 
-<div class="offset-lg-1 offset-md-1 offset-0 py-1">
-    <div class="col-12 mb-4 mb-lg-2 mb-md-2">
+<!----- <div class="offset-lg-1 offset-md-1 offset-0 py-1"> ----->
+    <div class="mx-4 mb-4 mb-lg-2 mb-md-2">
         <div class="row">
-            <div class="mx-2" id="post_reactions_container${postID}">
+            <div class="mx-3" id="post_reactions_container${postID}">
                 ${reactionButton(postID, 0, 1, likeNum)}
                 ${reactionButton(postID, 0, 2, dislikeNum)}
                 <p class="mx-1 text-info" id="number_of_comments"
@@ -225,16 +228,20 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
     userRection2 = true;
   }
   return `
-  <div class="row ms-2 pb-2" id="post_comments_container${postID}${commentID}">
-    <div class="col-lg-9 offset-0 offset-md-1 offset-lg-1 col-md-10 col-11 border rounded bg-secondary" id="post_comment_body${postID}${commentID}">
+  <div class="row mx-auto pb-2" id="post_comments_container${postID}${commentID}">
+    <div class="col-lg-9 offset-lg-1 mx-auto col-md-10 col-11 border rounded" style="background-color: #343a40;" id="post_comment_body${postID}${commentID}">
+    
+    <p class="text-end pe-2 text-secondary">{$12.14}</p>
       <div class="row pb-0 mb-0">
-      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4">
+      <div class="col-md-1 col-lg-1 col-2 pt-1 me-4 d-inline">
         <img class="rounded-circle" style="max-width: 50px; border: 2px solid #54B4D3" src="${commentUserPic}" id="user_pic">
         </div>
-        <div class="col-5 pb-0 mb-0 h-50">
+
+
+        <div class="col-8 pb-0 mb-0 h-50 d-inline">
         <p class="text-info pt-1 mb-0 pb-0">${commentUsername}</p>
         </div>
-        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0" style="position:relative; top: -4px;">${newComment}</p></pre>
+        <pre class="pb-0 mb-0 offset-2"><p class="mb-0 pb-0 text-light" style="position:relative; top: -4px;">${newComment}</p></pre>
         </div>
   
   
@@ -249,23 +256,13 @@ function createCommentDiv(postID, commentID, commentUserPic, commentUsername, ne
 }
 
 function createCommentTextArea(userPic, postID) {
-  return `<div class="col-lg-10 col-md-10 col-12 justify-content-center ps-2 pe-2" id="user_comment">
+  return `<div class="col-lg-10 col-md-10 col-11 mx-auto ps-2 pe-2" id="user_comment">
 
   <!-- <div class="row">
   <div class="col-lg-2 col-md-2 d-none d-md-inline d-lg-inline">
   <img class="rounded-circle" style="max-width: 110%; border: 2px solid #54B4D3" src="${userPic}"></img>
   </div> -->
 
-  
-  <!---- <div class="input-group mb-3">
-  <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button class="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-</div> ---->
-  
-  
-  
-  
-  
   
   <div class="input-group mb-2">
   <input type="text"
@@ -286,7 +283,7 @@ function createCommentTextArea(userPic, postID) {
   </div>`
 };
 
-function createPosts(json) {
+function createPosts(json, addToTop=false) {
   const container = document.getElementById("container");
   const userPic = document.getElementById("user_pic");
   for (const [key, postJSON] of Object.entries(json)) {
@@ -313,7 +310,7 @@ function createPosts(json) {
 
     // create post div
     const postDiv = document.createElement("div");
-    postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-8", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
+    postDiv.classList.add("border", "rounded", "mx-auto", "col-lg-8", "col-md-10", "offset-sm-1", "col-sm-11", "col-12", "mt-2", "mb-4", "mb-lg-2", "mb-md-2");
     postDiv.id = postJSON.post_id;
 
     // loop and create divs of comments
@@ -339,6 +336,10 @@ function createPosts(json) {
     console.log(JSON.stringify(postJSON));
     postDiv.innerHTML = createPostDiv(postJSON.profile_image, postJSON.username, postJSON.post_id, postJSON.heading, postJSON.body, categories, postJSON.insert_time, postJSON.update_time, Object.keys(postJSON.comments).length, comments, likeNum, dislikeNum, postJSON.user_reaction);
     
-    container.append(postDiv);
+    if(addToTop) {
+      container.prepend(postDiv);
+    } else {
+      container.append(postDiv);
+    }
   }
 }

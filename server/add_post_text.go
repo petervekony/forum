@@ -72,10 +72,14 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	}
 	for _, category := range post.Categories {
 		catMap := make(map[string]string)
-		catMap["category_name"] = category
+		catMap["category_id"] = category
 		categoryArr, err := d.GetCategories(db, catMap)
 		if err != nil {
 			return err.Error(), false
+		}
+		if len(categoryArr) < 1 {
+			// Category does not exist
+			continue
 		}
 		_, err = d.InsertPostCategory(db, postID, categoryArr[0].Category_id)
 		if err != nil {

@@ -55,17 +55,18 @@
   <div id="login_modal" class="modal fade" role="dialog">
     <div class="modal-dialog bg-dark rounded text-info" role="document">
       <div class="modal-content bg-dark text-secondary">
+        <i class="fa-regular fa-circle-xmark text-info text-end p-2" style="font-size: 25px;" data-bs-dismiss="modal" aria-label="Close"></i>
         <div class="modal-header justify-content-center border-0 text-info">
           <h4 class="modal-title font-weight-bold">Login</h4>
         </div>
         <form action="/loginSuccess" id="login_success" method="POST">
           <div class="modal-body mx-5 border-info">
-            <div class="md-form mb-3">
+            <div class="md-form mb-2">
               <input type="email" id="login_email" class="form-control validate border-info bg-dark text-info"
                 name="login_email" />
               <label data-error="wrong" data-success="right" for="orangeForm-email" id="login_email_label">email</label>
             </div>
-            <div class="md-form mb-3">
+            <div class="md-form mb-2">
               <input type="password" id="login_pass" class="form-control validate bg-dark border-info text-info"
                 name="login_pass" />
               <label data-error="wrong" data-success="right" for="orangeForm-pass"
@@ -89,28 +90,29 @@
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content bg-dark text-secondary">
+        <i class="fa-regular fa-circle-xmark text-info text-end p-2" style="font-size: 25px;" data-bs-dismiss="modal" aria-label="Close"></i>
         <div class="modal-header text-center border-0 text-info">
           <h4 class="modal-title w-100 font-weight-bold">Sign up</h4>
         </div>
         <div class="modal-body mx-5 bg-dark border-info">
-          <div class="md-form mb-3">
+          <div class="md-form mb-2">
             <input type="text" id="signup_name" name="username"
               class="form-control validate bg-dark border-info text-info" />
             <label data-error="wrong" data-success="right">user name</label>
           </div>
-          <div class="md-form mb-3">
+          <div class="md-form mb-2">
             <input type="email" id="signup_email" name="email"
               class="form-control validate bg-dark border-info text-info" />
             <label data-error="wrong" data-success="right">email</label>
           </div>
 
-          <div class="md-form mb-3">
+          <div class="md-form mb-2">
             <input type="password" id="signup_pass" name="password"
               class="form-control validate bg-dark border-info text-info" />
             <label data-error="wrong" data-success="right">password</label>
           </div>
 
-          <div class="md-form mb-3">
+          <div class="md-form mb-2">
             <input type="password" id="signup_confirmpass" name="Confirm Password"
               class="form-control validate bg-dark border-info text-info" />
             <label data-error="wrong" data-success="right">

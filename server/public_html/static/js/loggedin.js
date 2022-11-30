@@ -37,15 +37,15 @@ async function setCategories() {
         const catsItem = document.createElement("li");
         catsItem.innerHTML = `<a class="dropdown-item" href="#">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="${value}" id="check1" />
-            <label class="form-check-label" for="check1">${value}</label>
+            <input class="form-check-input" type="checkbox" value="${key}" id="check${key}" />
+            <label class="form-check-label" for="check${key}">${value}</label>
         </div>
     </a>`;
         catsList.append(catsItem);
         const filterCatsItem = document.createElement("li");
         filterCatsItem.innerHTML = `<a class="dropdown-item bg-dark" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
         <div class="col-12">
-            <button class="col-12 btn btn-dark text-info border-info" value="${value}" id="check2">${value}</button>
+            <button class="col-12 btn btn-dark text-info border-info" value="${value}" id="fcheck${key}">${value}</button>
         </div>
     </a>`;
         filterCatsList.append(filterCatsItem);
@@ -129,28 +129,9 @@ async function newPost() {
       postID = json.message;
     });
 
-  // create new post in DOM
-  const postDiv = document.createElement("div");
-  postDiv.id = postID;
-  postDiv.classList.add(
-    "border",
-    "rounded",
-    "mx-auto",
-    "col-lg-8",
-    "col-md-10",
-    "col-12",
-    "mb-4",
-    "mb-lg-2",
-    "mb-md-2"
-  );
-  const username = document.getElementById("user_name").textContent;
-  const userPic = document.getElementById("user_pic");
-
-  postDiv.innerHTML = createPostDiv(userPic.getAttribute("src"), username, postID, userPostHeading.value, userPost.value, catInnerHTML, "Created just now...", "", "0", "", 0, 0, 0);
-  const container = document.getElementById("container");
-  container.prepend(postDiv);
-  userPost.value = "";
-  userPostHeading.value = "";
+    initPage('/filtered?filter=postId&id=' + postID);
+    userPost.value = "";
+    userPostHeading.value = ""; 
 }
 
 async function addComment(postID) {
@@ -178,11 +159,11 @@ async function addComment(postID) {
     });
   // create new comment in DOM (old)
   const commentDiv = document.createElement("div");
-  commentDiv.classList.add("row", "ms-auto");
+  // commentDiv.classList.add("row", "mx-auto");
   commentDiv.postID = commentID;
   const userPic = document.getElementById("user_pic");
   const userName = document.getElementById("user_name");
-  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0, 0);
+  commentDiv.innerHTML = createCommentDiv(postID, commentID, userPic.getAttribute("src"), userName.textContent, newComment.value, 0, 0);
 
   const commentsDiv = postDiv.querySelector(`#collapse_post_comments${postID}`);
   console.log(postDiv);

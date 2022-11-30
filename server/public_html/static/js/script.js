@@ -224,7 +224,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
             <div class="col-10 offset-1" id="post_reactions_container${postID}">
                 ${reactionButton(postID, 0, 1, likeNum)}
                 ${reactionButton(postID, 0, 2, dislikeNum)}
-              <p class="mx-1 pt-1 mb-1 text-info" id="number_of_comments"
+              <p class="mx-1 pt-1 mb-2 text-info" id="number_of_comments"
                   data-bs-target="#collapse_post_comments${postID}" data-bs-toggle="collapse">
                   ${commentsLength}  <i class="fa-regular fa-comments pt-1" style="font-size:18px;"></i></p>
             </div>  

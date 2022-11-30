@@ -170,9 +170,9 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
   return `<section class="row" id="post_section">
   <div class="row">
     <div class="col-2 col-md-1 col-lg-1 ms-2 mt-2">
-      <img class="rounded-circle" style="max-width: 150%; border: 2px solid #54B4D3;" src="${postUserPic}">
+      <img class="rounded-circle" style="min-width:40px;max-width: 100%; border: 2px solid #54B4D3;" src="${postUserPic}">
     </div>
-    <div class="col-7 mt-4">
+    <div class="col-7 mt-4 ms-2">
       <h5 class="text-start text-info">${postUsername}</h5>
     </div>
   </div>

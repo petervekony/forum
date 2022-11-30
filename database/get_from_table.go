@@ -129,7 +129,7 @@ func GetCategories(db *sql.DB, categoryData map[string]string) ([]Categories, er
 		count++
 	}
 	var categories []Categories
-	fmt.Println(query)
+
 	rows, err := db.Query(query)
 	if err != nil {
 		logger.WTL(err.Error(), false)

@@ -37,7 +37,7 @@ func WTL(logString string, toStdOut bool) {
 
 	defer fh.Close()
 
-	logString = time.Now().String()[0:19] + ": " + logString
+	logString = time.Now().String()[0:19] + ": " + logString + "\n"
 
 	if _, err := fh.WriteString(logString); err != nil {
 		fmt.Println(err.Error())

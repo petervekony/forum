@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	d "gritface/database"
+	logger "gritface/log"
 	"net/http"
 	"sort"
 	"strconv"
@@ -79,7 +80,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Println("Query: ", query)
+
 	defer rows.Close()
 	nextQuery := ""
 	// after the posts' query, the function declares a JSONData object for each of them and assigns the data to the corresponding field
@@ -90,6 +91,11 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		err = rows.Scan(&rD.Post_id, &rD.User_id, &rD.Heading, &rD.Body, &rD.Closed_user, &rD.Closed_admin, &rD.Closed_date, &rD.Insert_time, &rD.Update_time, &rD.Image)
 		if err != nil {
 			return "", err
+		}
+
+		if rD.User_id < 1 {
+			logger.WTL("Post (id = "+strconv.Itoa(rD.Post_id)+") found with user id 0", true)
+			continue
 		}
 
 		postId := &rD.Post_id

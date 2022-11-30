@@ -38,7 +38,7 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return err.Error(), false
 	}
-	fmt.Println(string(jsonInfo))
+
 	return string(jsonInfo), true
 }
 

@@ -69,9 +69,9 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	query += " ORDER BY posts.post_id DESC"
 	if limit {
 		// if there is no filtering, there is a limit of 20 posts loaded at once
-		query += " LIMIT 20"
+		query += " LIMIT 4"
 	}
-	fmt.Println(query)
+
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)
 	if err != nil {
@@ -124,7 +124,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		// getting post's reactions
 		currentPost["comment_id"] = "0"
 		currentPost["uid"] = uid
-		reactions, userReaction, err := d.GetReaction(db, currentPost)
+		reactions, myReaction, err := d.GetReaction(db, currentPost)
 		if err != nil {
 			return "", err
 		}
@@ -135,12 +135,12 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 				rD.Reactions = append(rD.Reactions, userReaction)
 			}
 		}
-		rD.UserReaction = userReaction
+		rD.UserReaction = myReaction
 
 		structSlice[*postId] = *rD
 
-		thisPostId := &rD.Post_id
-		nextQuery += " OR post_id=" + strconv.Itoa(*thisPostId)
+		// thisPostId := &rD.Post_id
+		nextQuery += " OR post_id=" + strconv.Itoa(*postId)
 	}
 	// after the posts' query, we need to query for the comments, if there are any
 	if len(nextQuery) > 4 {

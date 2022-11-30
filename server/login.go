@@ -72,6 +72,8 @@ func Login(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
+	defer db.Close()
+
 	LoginUser := make(map[string]string)
 	LoginUser["email"] = email
 	users, err := d.GetUsers(db, LoginUser)

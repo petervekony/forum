@@ -167,6 +167,9 @@ func SignUp(w http.ResponseWriter, r *http.Request) (string, bool) {
 		if err != nil {
 			return err.Error(), false
 		}
+
+		defer db.Close()
+
 		// check if username is already taken
 		user := make(map[string]string)
 		user["name"] = name

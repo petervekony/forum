@@ -13,6 +13,9 @@ func GetProfilePic(uid string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	defer forumdb.Close()
+
 	user, err := d.GetUsers(forumdb, userMap)
 	if err != nil {
 		return "", err

@@ -47,6 +47,9 @@ func addComment(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		return err.Error(), false
 	}
+
+	defer db.Close()
+
 	uID, err := strconv.Atoi(uid)
 	if err != nil {
 		return err.Error(), false

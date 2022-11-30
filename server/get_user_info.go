@@ -21,6 +21,8 @@ func GetUserInfo(w http.ResponseWriter, r *http.Request) (string, bool) {
 		return err.Error(), false
 	}
 
+	defer db.Close()
+
 	user := make(map[string]string)
 	user["user_id"] = uid
 	users, err := d.GetUsers(db, user)

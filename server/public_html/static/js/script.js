@@ -163,17 +163,19 @@ async function resetLoginModal() {
 }
 
 async function loadPosts() {
-  const lastPostID = parseInt(document.getElementById("container").lastChild.id)
+  const lastPostID = parseInt(document.getElementById("container").lastChild.id.substring(1))
   let lastPost = {
     lastPostID: lastPostID,
   };
+  console.log(lastPostID);
   await fetch("/loadPosts", {
     method: "POST",
     body: JSON.stringify(lastPost),
   })
     .then((response) => response.json())
     .then((json) => {
-      createPosts(json)
+      console.log(json);
+      createPosts(json);
     });
 }
 

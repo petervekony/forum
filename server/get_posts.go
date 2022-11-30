@@ -17,6 +17,8 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	defer db.Close()
 	// base query
 	query := "SELECT posts.* from posts"
 	limit := true

@@ -131,13 +131,17 @@ func DatabaseExist() (*sql.DB, error) {
 			}
 		}
 	} else {
-		fmt.Println("table not there")
+		logger.WTL("table not there", true)
 	}
 	return forumdb, nil
 }
 
 // remove this when cleaning up
 func exampleDbData(forumdb *sql.DB) {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte("123"), 12)
+	InsertUsers(forumdb, "admin", "admin@gritface.ax", string(bytes), 1)
+	logger.WTL("Admin created as 'admin@gritface.ax', password 123", true)
+	InsertPost(forumdb, 1, "Welcome to gritface", "Feel free to discuss anything regarding gritlab or anything else you can come up with. Go wild!", "2022-12-01 00:00:00", "")
 	/* InsertUsers(forumdb, "peter", "'; DROP TABLE users;'", "bachelor", 0)
 	InsertUsers(forumdb, "aidran", "aidran@gritlab.ax", "younger", 1)
 	InsertUsers(forumdb, "tosin", "tosin@gritlab.ax", "kakkalla", 1)

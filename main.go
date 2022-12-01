@@ -26,7 +26,6 @@ func main() {
 
 	// setup page handlers
 	http.HandleFunc("/", s.FrontPage)
-	fmt.Println()
 
 	// create server struct
 	ser := &http.Server{
@@ -39,7 +38,7 @@ func main() {
 
 	err = ser.ListenAndServe()
 	if err != nil {
-		logger.WTL(err.Error(), true)
+		logger.WTL(err.Error(), false)
 	}
 
 }

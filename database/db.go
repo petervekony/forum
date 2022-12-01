@@ -40,7 +40,7 @@ func DbConnect() (*sql.DB, error) {
 
 	enableContraintsQuery, err := forumdb.Prepare(enableContraints) // Prepare SQL Statement
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WTL(err.Error(), true)
 	}
 	enableContraintsQuery.Exec()
 
@@ -53,7 +53,7 @@ func DatabaseExist() (*sql.DB, error) {
 	databaseFile := "forum-db.db"
 	_, err := os.Stat(databaseFile)
 	if os.IsNotExist(err) {
-		fmt.Println("Creating the forum database ...")
+		logger.WTL("Creating the forum database ...", true)
 		file, err := os.Create(databaseFile) // Create Sqlite file
 		if err != nil {
 			return nil, err
@@ -79,7 +79,7 @@ func DatabaseExist() (*sql.DB, error) {
 	if newDb {
 		err = createTable(forumdb) // Create Database Tables
 		if err != nil {
-			fmt.Println(err.Error())
+			logger.WTL(err.Error(), true)
 		} else {
 			// INSERT RECORDS
 			exampleDbData(forumdb)
@@ -100,7 +100,7 @@ func DatabaseExist() (*sql.DB, error) {
 				forumdb.Close() // Close connection to current database
 				reader := bufio.NewReader(os.Stdin)
 			handleInvalidDatabase:
-				fmt.Println("Existing database is not working with this version of forum.\nWould you like to delete current database (y) or rename current database (r), quit (q)?:")
+				logger.WTL("Existing database is not working with this version of forum.\nWould you like to delete current database (y) or rename current database (r), quit (q)?:", true)
 				uinput, _ := reader.ReadString('\n')
 				uinput = strings.Trim(uinput, "\n")
 
@@ -150,5 +150,4 @@ func exampleDbData(forumdb *sql.DB) {
 	InsertCategory(forumdb, "music")
 	InsertCategory(forumdb, "movies")
 	InsertCategory(forumdb, "books")
-	
 }

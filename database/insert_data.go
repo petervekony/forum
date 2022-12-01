@@ -2,7 +2,7 @@ package database
 
 import (
 	"database/sql"
-	"fmt"
+	logger "gritface/log"
 	"math/rand"
 	"strconv"
 )
@@ -94,7 +94,6 @@ func InsertReaction(db *sql.DB, user_id int, post_id int, comment_id int, reacti
 	if err != nil {
 		return 0, err
 	}
-	fmt.Println(val)
 
 	insertId, _ := val.LastInsertId()
 	return int(insertId), nil
@@ -113,7 +112,7 @@ func InsertPostCategory(db *sql.DB, post_id int, category_id int) (int, error) {
 		return 0, err
 	}
 	insertId, _ := val.LastInsertId()
-	return int(insertId), nil                        
+	return int(insertId), nil
 }
 
 func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id string, reaction_id string) (bool, error) {
@@ -124,7 +123,7 @@ func DeleteReaction(db *sql.DB, user_id string, post_id string, comment_id strin
 	}
 	_, err = stmt.Exec()
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), true)
 		return false, err
 	}
 	return true, nil

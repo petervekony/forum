@@ -209,7 +209,7 @@ function createPostDiv(postUserPic, postUsername, postID, postHeading, postBody,
         <div class="col-10 offset-1" id="post_body">
             <div class="border-top border-info bg-dark text-center" id="post_image"></div>
             <div class="text-justify my-2">
-                <pre>${postBody}</pre>
+                <p>${postBody}</p>
             </div>
             <div class="text-secondary">
             <p>${postCats}</p>

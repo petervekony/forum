@@ -7,5 +7,5 @@ docker image build -f Dockerfile -t forum .
 docker image prune -f
 docker container prune -f
 
-# Running the container on port 443 named gritface
-docker container run -p 443:443 --detach --name gritface forum
+# Running the container on port 80 named gritface
+docker container run -p 80:80 --detach --name gritface forum

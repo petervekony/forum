@@ -2,8 +2,8 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	d "gritface/database"
+	logger "gritface/log"
 	"io"
 	"net/http"
 	"strconv"
@@ -14,7 +14,7 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), true)
 		return "Error: reading json log in request from user", false
 	}
 
@@ -22,22 +22,26 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	var post newPosts
 	err = json.Unmarshal(req, &post)
 	if err != nil {
+		logger.WTL(err.Error(), true)
 		return "Error: unsuccessful in unmarshaling log in data from user", false
 	}
-	fmt.Println(post)
-	// If logged in, redirect to front page
-	// If not logged in, show sign up page
-	// check if session is alive
+
+	// Get session id
 	uid, err := sessionManager.checkSession(w, r)
-	fmt.Println("Adding post, check session uid is", uid)
 	if err != nil {
-		// No session found, show login page
-		//handle error
-		// fmt.Fprintln(w, err.Error())
+		// No session found,
+		logger.WTL(err.Error(), true)
 		return err.Error(), false
 	}
 
-	if uid == "0" {
+	uID, err := strconv.Atoi(uid)
+	if err != nil {
+		logger.WTL(err.Error(), true)
+		return err.Error(), false
+	}
+	// Check for active session
+	if uID < 1 {
+		logger.WTL("User without active session tried to add post", false)
 		return "Not logged in", false
 	}
 
@@ -50,33 +54,38 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 	if err != nil {
 		if err.Error() != "Value not set" {
 			// Something went extremely wrong
+			logger.WTL(err.Error(), true)
 			return err.Error(), false
 		}
+		// Else value was not set which is okay
 	}
 
+	// Check when last post was created (bot-spam prevention)
 	if lastInsertTS != nil {
 		// This is okay
-		if lastInsertTS.(int64)+12 > nowTS {
-			fmt.Println("User " + uid + " tried to create a new post during cooldown")
+		if lastInsertTS.(int64)+5 > nowTS {
+			logger.WTL("User "+uid+" tried to create a new post during cooldown", false)
 			return "Add new post cooldown!", false
 		}
 	}
 
+	// Get database connection
 	db, err := d.DbConnect()
 	if err != nil {
+		logger.WTL(err.Error(), true)
 		return err.Error(), false
 	}
 
 	defer db.Close()
 
-	uID, err := strconv.Atoi(uid)
-	if err != nil {
-		return err.Error(), false
-	}
+	// Insert post to database
 	postID, err := d.InsertPost(db, uID, post.Heading, post.Body, time.Now().String()[0:19], "new post image")
 	if err != nil {
+		logger.WTL(err.Error(), true)
 		return err.Error(), false
 	}
+
+	// Add category connection to post
 	for _, category := range post.Categories {
 		catMap := make(map[string]string)
 		catMap["category_id"] = category
@@ -93,6 +102,8 @@ func addPostText(w http.ResponseWriter, r *http.Request) (string, bool) {
 			return err.Error(), false
 		}
 	}
+
+	// Prepare return of post id
 	postID_str := strconv.Itoa(postID)
 
 	// Store last post insert ts

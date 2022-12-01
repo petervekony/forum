@@ -1,7 +1,7 @@
 package server
 
 import (
-	"fmt"
+	logger "gritface/log"
 	"io"
 	"text/template"
 )
@@ -25,7 +25,7 @@ var messages = map[int]ErrorMessage{
 func ErrorPage(wr io.Writer, error_code int) {
 	templ, err := template.ParseFiles("server/public_html/error.html")
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), true)
 		return
 	}
 	templ.Execute(wr, messages[error_code])

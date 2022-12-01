@@ -4,62 +4,60 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
-	"fmt"
 	d "gritface/database"
+	logger "gritface/log"
 	"net/http"
 	"strconv"
 	"strings"
 )
 
-func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
+func addReaction(w http.ResponseWriter, r *http.Request) (string, error) {
 	var recID string
 	var count int
 	retData := make(map[string]interface{})
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	if uid == "0" {
-		return nil, errors.New("invalid session")
+	nUID, err := strconv.Atoi(strings.TrimSpace(uid))
+	if err != nil {
+		return "", errors.New("Uid could not be converted from string to int : " + err.Error())
+	}
+	if nUID < 1 {
+		return "", errors.New("No active session found for adding reaction")
 	}
 
 	db, err := d.DbConnect()
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	defer db.Close()
 
+	// Gather received data
 	sComID := r.URL.Query().Get("comment_id")
 	comID, err := strconv.Atoi(sComID)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	reactID := r.URL.Query().Get("reaction_id")
 	sPostID := r.URL.Query().Get("post_id")
 	postID, err := strconv.Atoi(sPostID)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	nreactID, err := strconv.Atoi(reactID)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 	if postID == 0 || nreactID < 1 || nreactID > 2 {
-		return nil, errors.New("invalid request")
-	}
-	nUID, err := strconv.Atoi(strings.TrimSpace(uid))
-	if err != nil {
-		return nil, err
-	}
-	if nUID == 0 {
-		return nil, errors.New("invalid session")
+		return "", errors.New("Invalid reaction request from user " + uid + " trying to add reaction id of " + reactID)
 	}
 
 	queryStr := "SELECT count(post_id) as rowCount FROM reaction WHERE user_id=? AND post_id = ? AND comment_id = ? AND reaction_id = ?"
 	queryChk, err := db.Prepare(queryStr)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	defer queryChk.Close()
@@ -67,29 +65,31 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	var rowCount string
 	err = queryChk.QueryRow(nUID, postID, comID, reactID).Scan(&rowCount)
 
+	// Determin if a reaction is made or should be deleted
 	if (err == sql.ErrNoRows || err == nil) && rowCount == "0" {
 		// If no rows where found
 		_, err = d.InsertReaction(db, nUID, postID, comID, reactID)
 		if err != nil {
-			return nil, err
+			logger.WTL(err.Error(), true)
+			return "", err
 		}
 	} else if rowCount == "1" {
 		// There is exactly a line like this allready, delete it
 		_, err = d.DeleteReaction(db, uid, sPostID, sComID, reactID)
 		if err != nil {
-			return nil, err
+			return "", err
 		}
 		reactID = "0"
 	} else { // Something went wrong
-		return nil, err
+		return "", err
 	}
 
-	// sends data to the frontend from here
+	// Gather data to be sent to the frontend
 
 	query := "SELECT reaction_id, COUNT (reaction_id) AS rCount FROM reaction WHERE post_id = " + sPostID + " AND comment_id = " + sComID + " GROUP BY reaction_id"
 	res, err := db.Query(query)
 	if err != nil {
-		fmt.Println(err.Error())
+		logger.WTL("Continue with error : "+err.Error(), true)
 	}
 	defer res.Close()
 
@@ -98,7 +98,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	for res.Next() {
 		err = res.Scan(&recID, &count)
 		if err != nil {
-			fmt.Println(err)
+			logger.WTL("Continue with error : "+err.Error(), true)
 		}
 		retData["rb"+recID] = count
 	}
@@ -107,7 +107,7 @@ func addReaction(w http.ResponseWriter, r *http.Request) ([]byte, error) {
 	retData["userReaction"] = reactID
 	strLine, err := json.Marshal(retData)
 	if err != nil {
-		return nil, err
+		return "", err
 	}
-	return strLine, nil
+	return string(strLine), nil
 }

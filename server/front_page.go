@@ -4,20 +4,18 @@ import (
 	"fmt"
 	logger "gritface/log"
 	"net/http"
-	"os"
-	"strings"
 	"text/template"
 )
 
 // function handles the front page
 func FrontPage(w http.ResponseWriter, r *http.Request) {
-	fmt.Printf("Handling %v\n", r.URL.Path)
+
 	uid, err := sessionManager.checkSession(w, r)
 	if err != nil {
-		fmt.Println("error, session fucked up")
+		logger.WTL(err.Error(), true)
 	}
+
 	if r.URL.Path == "/" { // TBC for session check
-		fmt.Println("cookies handling.")
 		if uid != "0" && r.Method == "POST" {
 			// user is logged in redirect to front page with posts
 			http.Redirect(w, r, "/", http.StatusSeeOther)
@@ -30,14 +28,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		dyn_content := make(map[string]string)
 		dyn_content["name"] = uid
 		tmpl.Execute(w, dyn_content)
-	} else if strings.Index(r.URL.Path, "/server/") == 0 {
-		fmt.Printf("Handling %v\n", r.URL.Path[1:])
-		script, err := os.ReadFile(r.URL.Path[1:])
-		if err != nil {
-			logger.WTL(err.Error(), true)
-			ErrorPage(w, 500)
-		}
-		w.Write(script)
 	} else if r.URL.Path == "/posts" {
 		posts, err := getPosts(r, uid, 0)
 		if err != nil {
@@ -46,31 +36,21 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(posts))
 	} else if r.URL.Path == "/signup" {
-		fmt.Printf("Signing up, path %v\n", r.URL.Path)
 		signupMsg, signupSuccess := SignUp(w, r)
-		if signupSuccess {
-			fmt.Println(signupMsg)
-			writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", signupMsg, true)
-			w.Write([]byte(writeMsg))
-		} else {
-			// w.WriteHeader(400)
-			fmt.Println(signupMsg)
-			writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", signupMsg, false)
-			w.Write([]byte(writeMsg))
-			// w.Write([]byte(signupMsg))
-		}
+		// Format response json
+		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", signupMsg, signupSuccess)
+		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/login" {
-		fmt.Printf("Logging in, path %v\n", r.URL.Path)
 		loginMsg, loginSuccess := Login(w, r)
-		fmt.Println(loginMsg, loginSuccess)
+		// Format response json
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
 		w.Write([]byte(writeMsg))
-	} else if r.URL.Path == "/loginSuccess" {
+	} else if r.URL.Path == "/loginSuccess" { // Active session front page
 		if uid == "0" {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
-		fmt.Printf("User %v just logged in successfully.\n", r.FormValue("login_email"))
+
 		templ, err := template.ParseFiles("server/public_html/user.html")
 		if err != nil {
 			logger.WTL(err.Error(), true)
@@ -90,6 +70,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			// No session found, show login page
 			writeMsg := fmt.Sprintf("{\"status\": %v}", false)
 			w.Write([]byte(writeMsg))
+			return
 		}
 		// Check if user is logged in
 		if uid != "0" {
@@ -103,11 +84,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else if r.URL.Path == "/logout" {
 		Logout(w, r)
 	} else if r.URL.Path == "/getUser" {
-		userInfo, status := GetUserInfo(w, r)
+		data, status := GetUserInfo(w, r)
 		if status {
-			w.Write([]byte(userInfo))
+			w.Write([]byte(data))
 		} else {
-			fmt.Println(userInfo)
+			logger.WTL(data, true)
 			w.Write([]byte("{\"Username\": 0}"))
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 		}
@@ -117,6 +98,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			ErrorPage(w, 400)
 		}
 		message, status := addPostText(w, r)
+		// Format response json
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/addComment" {
@@ -125,6 +107,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 			ErrorPage(w, 400)
 		}
 		message, status := addComment(w, r)
+		// Format response json
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/getCategories" {
@@ -148,7 +131,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		message, err := addReaction(w, r)
 		if err != nil {
 			logger.WTL(err.Error(), true)
-			ErrorPage(w, 500)
+			ErrorPage(w, 400)
 		}
 		w.Write([]byte(message))
 	} else if r.URL.Path == "/loadPosts" {

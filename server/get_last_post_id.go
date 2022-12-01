@@ -2,7 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
+	logger "gritface/log"
 	"io"
 	"net/http"
 )
@@ -11,7 +11,7 @@ func GetLastPostID(w http.ResponseWriter, r *http.Request) int {
 	req, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
 	if err != nil {
-		fmt.Println(err)
+		logger.WTL(err.Error(), true)
 		return 0
 	}
 
@@ -19,6 +19,7 @@ func GetLastPostID(w http.ResponseWriter, r *http.Request) int {
 	var lastPost LastPost
 	err = json.Unmarshal(req, &lastPost)
 	if err != nil {
+		logger.WTL(err.Error(), false)
 		return 0
 	}
 

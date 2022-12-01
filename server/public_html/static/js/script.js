@@ -1,6 +1,6 @@
-window.onload = initPage();
+window.onload = getPosts();
 
-async function initPage(request = "/posts") {
+async function getPosts(request = "/posts") {
   await fetch(request)
     .then((response) => response.json())
     .then(function (json) {

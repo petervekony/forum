@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	d "gritface/database"
 	logger "gritface/log"
 	"net/http"
@@ -55,7 +54,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 			catCheck := "SELECT * FROM categories WHERE category_id=" + cat
 			checkRows, err := db.Query(catCheck)
 			if err != nil {
-				fmt.Println(err)
+				logger.WTL("Error qith query "+catCheck, false)
 			}
 			if d.QueryRows(checkRows) < 1 {
 				return DummyPost("Invalid category"), nil
@@ -78,6 +77,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 	structSlice := make(map[int]JSONData)
 	rows, err := db.Query(query)
 	if err != nil {
+		logger.WTL("Error with query "+query, false)
 		return "", err
 	}
 
@@ -155,6 +155,7 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		query = "SELECT comment_id, post_id, user_id, body, insert_time FROM comments WHERE " + nextQuery[4:]
 		rows, err = db.Query(query)
 		if err != nil {
+			logger.WTL("Error for query "+query, false)
 			return "", err
 		}
 		defer rows.Close()

@@ -43,7 +43,7 @@ async function setCategories() {
     </a>`;
         catsList.append(catsItem);
         const filterCatsItem = document.createElement("li");
-        filterCatsItem.innerHTML = `<a class="dropdown-item bg-dark" href="#" onclick="initPage('/filtered?filter=category&cat=${key}')">
+        filterCatsItem.innerHTML = `<a class="dropdown-item bg-dark" href="#" onclick="getPosts('/filtered?filter=category&cat=${key}')">
         <div class="col-12">
             <button class="col-12 btn btn-dark text-info border-info" value="${value}" id="fcheck${key}">${value}</button>
         </div>
@@ -131,7 +131,7 @@ async function newPost() {
         return
       }
       postID = json.message;
-      initPage('/filtered?filter=postId&id=' + postID);
+      getPosts('/filtered?filter=postId&id=' + postID);
       userPost.value = "";
       userPostHeading.value = "";
       postCats.forEach((x) => x.checked = false);

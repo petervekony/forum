@@ -17,8 +17,6 @@
     ```
     After that, when you see the *Server listening on ':443'* output on your terminal, you can access the site on the *https://localhost* adress.
 
-    ## Website Link
-    // this should be in a list
     ## Technologies
     The backend of the app is written in Go, using only the allowed packages, which consist of the standard library and the following:
     - [go-sqlite3](https://github.com/mattn/go-sqlite3)
@@ -27,7 +25,12 @@
 
     The frontend is written using Javascript, CSS, HTML and [Bootstrap](https://getbootstrap.com/).
     ### Docker
-    If you want to run the app in a Docker container, you can use the Dockerfile in the root directory. To create the image, you can run the following:
+    If you want to run the app in a Docker container, you can use the Dockerfile in the root directory. 
+    There is a bash script in the root directory, which builds the Docker image and runs it in a container. You can execute it using the following command:
+    ```
+    ./docker.sh
+    ```
+    To create the image manually, you can run the following:
     ```
     docker image build -f Dockerfile -t forum .
     ```

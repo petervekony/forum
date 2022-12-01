@@ -18,5 +18,5 @@ COPY log ./log
 COPY server/public_html ./server/public_html
 COPY localhost.crt localhost.csr localhost.key Readme.Md ./
 # COPY forum-db.db ./
-EXPOSE 80
+EXPOSE 443
 CMD [ "./gritface" ]

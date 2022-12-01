@@ -29,6 +29,11 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		dyn_content["name"] = uid
 		tmpl.Execute(w, dyn_content)
 	} else if r.URL.Path == "/posts" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+			return
+		}
 		posts, err := getPosts(r, uid, 0)
 		if err != nil {
 			logger.WTL(err.Error(), true)
@@ -36,11 +41,21 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(posts))
 	} else if r.URL.Path == "/signup" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+			return
+		}
 		signupMsg, signupSuccess := SignUp(w, r)
 		// Format response json
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", signupMsg, signupSuccess)
 		w.Write([]byte(writeMsg))
 	} else if r.URL.Path == "/login" {
+		if r.Method != "POST" {
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+			return
+		}
 		loginMsg, loginSuccess := Login(w, r)
 		// Format response json
 		writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", loginMsg, loginSuccess)
@@ -55,11 +70,13 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 500)
+			return
 		}
 		pic, err := GetProfilePic(uid)
 		if err != nil {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 500)
+			return
 		}
 		addPageInfo := map[string]string{
 			"user_pic": pic,
@@ -96,6 +113,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.WriteHeader(400)
 			ErrorPage(w, 400)
+			return
 		}
 		message, status := addPostText(w, r)
 		// Format response json
@@ -105,6 +123,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.WriteHeader(400)
 			ErrorPage(w, 400)
+			return
 		}
 		message, status := addComment(w, r)
 		// Format response json
@@ -114,10 +133,15 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if r.Method != "POST" {
 			w.WriteHeader(400)
 			ErrorPage(w, 400)
+			return
 		}
 		message, status := GetCategories(w, r)
-		fmt.Println(message, status)
-		// writeMsg := fmt.Sprintf("{\"message\": \"%v\", \"status\": %v}", message, status)
+		if !status {
+			logger.WTL(message, true)
+			w.WriteHeader(400)
+			ErrorPage(w, 400)
+			return
+		}
 		w.Write([]byte(message))
 		// For users choice of filtering posts
 	} else if r.URL.Path == "/filtered" {
@@ -125,6 +149,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 500)
+			return
 		}
 		w.Write([]byte(allMyPost))
 	} else if r.URL.Path == "/add_reaction" {
@@ -132,6 +157,7 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			logger.WTL(err.Error(), true)
 			ErrorPage(w, 400)
+			return
 		}
 		w.Write([]byte(message))
 	} else if r.URL.Path == "/loadPosts" {
@@ -144,5 +170,6 @@ func FrontPage(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(404)
 		ErrorPage(w, 404)
+		return
 	}
 }

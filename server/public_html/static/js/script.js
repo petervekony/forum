@@ -1,7 +1,7 @@
 window.onload = getPosts();
 
 async function getPosts(request = "/posts") {
-  await fetch(request)
+  await fetch(request, {method:"post"})
     .then((response) => response.json())
     .then(function (json) {
       console.log(json)

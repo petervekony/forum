@@ -26,7 +26,6 @@ func main() {
 
 	// setup page handlers
 	http.HandleFunc("/", s.FrontPage)
-	fmt.Println()
 
 	// create server struct
 	ser := &http.Server{

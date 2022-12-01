@@ -15,7 +15,7 @@
     ```
     go run main.go
     ```
-    After that, when you see the *Server listening on ':80'* output on your terminal, you can access the site on the *https://localhost* adress.
+    After that, when you see the *Server listening on ':443'* output on your terminal, you can access the site on the *https://localhost* adress.
 
     ## Technologies
     The backend of the app is written in Go, using only the allowed packages, which consist of the standard library and the following:
@@ -36,7 +36,7 @@
     ```
     After that, to run the container:
     ```
-    docker container run -p 80:80 --detach --name gritface forum
+    docker container run -p 443:443 --detach --name gritface forum
     ```
 
     ### File structure

@@ -29,7 +29,7 @@ func main() {
 
 	// create server struct
 	ser := &http.Server{
-		Addr:    ":80",
+		Addr:    ":443",
 		Handler: limiter.LimitMiddleware(http.DefaultServeMux),
 	}
 

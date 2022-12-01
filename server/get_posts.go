@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"sort"
 	"strconv"
+	"strings"
 )
 
 // getPosts function connects to the database and based on the parameters provided or the r.URL.Query values, returns the result of SQLite queries as a JSON string. It also returns an error if there is any.
@@ -92,6 +93,8 @@ func getPosts(r *http.Request, uid string, last_post_id int) (string, error) {
 		if err != nil {
 			return "", err
 		}
+
+		rD.Body = strings.Replace(rD.Body, "\n", "<br>", -1)
 
 		if rD.User_id < 1 {
 			logger.WTL("Post (id = "+strconv.Itoa(rD.Post_id)+") found with user id 0", true)

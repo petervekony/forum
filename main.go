@@ -26,19 +26,23 @@ func main() {
 
 	// setup page handlers
 	http.HandleFunc("/", s.FrontPage)
+	fmt.Println()
 
 	// create server struct
 	ser := &http.Server{
 		Addr:    ":443",
 		Handler: limiter.LimitMiddleware(http.DefaultServeMux),
 	}
-
 	// start server
+	//	fmt.Println("Server is running on port 443...")
 	logger.WTL("Server listening on '"+ser.Addr+"'", true)
 
-	err = ser.ListenAndServe()
+	// localhost.crt and localhost.key files were created using the following CLI commands:
+	// openssl req  -new  -newkey rsa:2048  -nodes  -keyout localhost.key  -out localhost.csr
+	// openssl  x509  -req  -days 365  -in localhost.csr  -signkey localhost.key  -out localhost.crt
+	err = ser.ListenAndServeTLS("localhost.crt", "localhost.key")
 	if err != nil {
-		logger.WTL(err.Error(), false)
+		logger.WTL(err.Error(), true)
 	}
 
 }
